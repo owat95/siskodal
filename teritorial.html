@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teritorial — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb { display: flex; align-items: center; gap: 8px; padding: 16px 0; font-size: 0.8rem; color: #94a3b8; font-family: 'Courier New', monospace; }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .ter-header { text-align: center; padding: 20px 0 40px; }
+    .ter-header .icon-big { font-size: 4rem; margin-bottom: 16px; filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.5)); }
+    .ter-header h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; color: #fff; }
+    .ter-header .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .ter-header .desc { color: #94a3b8; margin-top: 16px; max-width: 780px; margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem; }
+
+    .ter-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 40px; }
+    .ter-stat { padding: 20px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 12px; border-left: 3px solid; }
+    .ter-stat .value { font-size: 2rem; font-weight: 900; color: #fff; font-family: 'Courier New', monospace; line-height: 1; }
+    .ter-stat .label { font-size: 0.7rem; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+    .ter-stat .sub { font-size: 0.7rem; color: #64748b; margin-top: 4px; }
+
+    .region-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 40px; }
+    .region-card { padding: 18px; background: rgba(15, 23, 42, 0.5); border: 2px solid; border-radius: 12px; transition: all 0.2s; }
+    .region-card:hover { transform: translateY(-3px); }
+    .region-card .rc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .region-card .rc-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 900; color: #fff; }
+    .region-card .rc-title { font-size: 0.85rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+    .region-card .rc-count { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
+    .region-card .rc-stats { display: flex; gap: 14px; font-size: 0.7rem; color: #cbd5e1; font-family: 'Courier New', monospace; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(51,65,85,0.5); }
+
+    .ter-cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: linear-gradient(135deg, #00e5ff, #00ff9d); color: #04121a; font-weight: 800; font-size: 1rem; border-radius: 12px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.5px; }
+    .ter-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 229, 255, 0.4); }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Teritorial</span>
+  </div>
+
+  <header class="ter-header">
+    <div class="icon-big" style="color:#22c55e;">🗺️</div>
+    <h1>TERITORIAL</h1>
+    <p class="sub">PETA WILAYAH KOMANDO TNI ANGKATAN DARAT</p>
+    <p class="desc">
+      Visualisasi 27 Kodam yang tersebar di 38 provinsi Indonesia. Data per Oktober 2026 —
+      termasuk 6 Kodam baru (2025) dan 6 Kodam baru (2026) sesuai Perpres No. 84/2025.
+      Setiap Kodam menaungi Korem, Kodim, dan Koramil dengan total <strong>259.000 personel</strong>.
+    </p>
+  </header>
+
+  <!-- STATS -->
+  <div class="ter-stats" id="ter-stats"></div>
+
+  <!-- REGIONS -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>DISTRIBUSI REGIONAL</h2>
+    <p>Sebaran Kodam per wilayah geografis</p>
+  </div>
+  <div class="region-cards" id="region-cards"></div>
+
+  <!-- CTA -->
+  <div style="text-align:center; margin-top:40px;">
+    <a href="/joc/teritorial-dashboard.html" class="ter-cta">
+      <i class="fas fa-map-location-dot"></i> Buka Peta Teritorial →
+    </a>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · Teritorial</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (async function init() {
+    const resp = await fetch('/joc/data/teritorial-data.json');
+    const data = await resp.json();
+
+    // Stats
+    const stats = document.getElementById('ter-stats');
+    const totalPersonel = data.kodam.reduce((s, k) => s + k.personnel, 0);
+    const totalKorem = data.kodam.reduce((s, k) => s + k.korem.length, 0);
+    const totalKodim = data.kodam.reduce((s, k) => s + k.kodimCount, 0);
+    const totalKoramil = data.kodam.reduce((s, k) => s + k.koramilCount, 0);
+
+    const statsList = [
+      { color: '#22c55e', value: data.kodam.length, label: 'Kodam', sub: `Target 2029: 37` },
+      { color: '#3b82f6', value: totalKorem, label: 'Korem', sub: `Di seluruh NKRI` },
+      { color: '#eab308', value: totalKodim, label: 'Kodim', sub: `Distrik Militer` },
+      { color: '#a855f7', value: totalKoramil.toLocaleString('id-ID'), label: 'Koramil', sub: `Tingkat Kecamatan` },
+      { color: '#ef4444', value: `${Math.round(totalPersonel/1000)}K`, label: 'Personel', sub: `Total aktif` }
+    ];
+
+    stats.innerHTML = statsList.map(s => `
+      <div class="ter-stat" style="border-left-color:${s.color};">
+        <div class="value" style="color:${s.color};">${s.value}</div>
+        <div class="label">${s.label}</div>
+        <div class="sub">${s.sub}</div>
+      </div>
+    `).join('');
+
+    // Regions
+    const regions = document.getElementById('region-cards');
+    regions.innerHTML = Object.entries(data.regions).map(([code, r]) => {
+      const k = data.summary.byRegion[code];
+      if (!k) return '';
+      return `
+        <div class="region-card" style="border-color:${r.color}55;">
+          <div class="rc-head">
+            <div class="rc-icon" style="background:${r.color};">${code[0]}</div>
+            <div>
+              <div class="rc-title">${r.label.toUpperCase()}</div>
+              <div class="rc-count">${k.kodamCount} Kodam</div>
+            </div>
+          </div>
+          <div class="rc-stats">
+            <span>👥 ${k.personnel.toLocaleString('id-ID')}</span>
+            <span>🎯 ${k.assets}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    console.log('[TERITORIAL] Sub-portal loaded');
+  })();
+</script>
+
+</body>
+</html>

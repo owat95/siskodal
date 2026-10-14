@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analitik &amp; AI — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <link rel="stylesheet" href="/joc/css/analitik.css">
+<style>
+/* ===== AI ASSET ROLES SECTION ===== */
+.ai-assets-section { margin-bottom: 20px; }
+.ai-assets-header { margin: 20px 0 12px; text-align: left; }
+.ai-assets-header h2 {
+  font-size: 0.85rem; letter-spacing: 1.5px;
+  color: #c084fc; margin: 0 0 4px;
+}
+.ai-assets-header p {
+  font-size: 0.72rem; color: #94a3b8; margin: 0;
+}
+.ai-assets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+.ai-asset-card {
+  background: linear-gradient(135deg, rgba(30,41,59,0.7), rgba(15,23,42,0.9));
+  border: 1px solid rgba(148,163,184,0.15);
+  border-left: 3px solid var(--asset-color, #3b82f6);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.ai-asset-card:hover {
+  border-color: var(--asset-color, #3b82f6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.ai-asset-head {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.ai-asset-icon {
+  font-size: 1.4rem; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(148,163,184,0.08); border-radius: 8px; flex-shrink: 0;
+}
+.ai-asset-title { flex: 1; }
+.ai-asset-title h3 {
+  font-size: 0.82rem; margin: 0 0 2px;
+  color: #e2e8f0; letter-spacing: 0.5px;
+}
+.ai-asset-title .model {
+  font-size: 0.62rem; color: #64748b;
+  font-family: 'Courier New', monospace;
+}
+.ai-asset-body { font-size: 0.7rem; line-height: 1.5; color: #cbd5e1; }
+.ai-asset-row { display: flex; gap: 8px; margin-bottom: 4px; }
+.ai-asset-row .label {
+  color: #94a3b8; font-weight: 600; min-width: 60px;
+  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.ai-asset-row .value { flex: 1; }
+.ai-asset-output {
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px dashed rgba(148,163,184,0.15);
+  font-size: 0.65rem; color: #94a3b8;
+}
+.ai-asset-output code {
+  background: rgba(148,163,184,0.1); padding: 1px 5px;
+  border-radius: 3px; color: #4ade80;
+  font-family: 'Courier New', monospace; font-size: 0.62rem;
+}
+@media (max-width: 768px) {
+  .ai-assets-grid { grid-template-columns: 1fr; }
+}
+.ai-asset-card[onclick] { cursor: pointer; }
+.ai-asset-card[onclick]:hover {
+  border-color: var(--asset-color);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="ana-layout">
+
+  <!-- HEADER -->
+  <header class="ana-header">
+    <div class="brand">
+      <span class="brand-mark">📊</span>
+      <div class="title-block">
+        <h1>ANALITIK &amp; AI</h1>
+        <p>Strategic Analytics Center</p>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div id="freshness-indicator"></div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="label">AI Status</span>
+          <span class="value" style="color:#4ade80;">● ACTIVE</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Live Time</span>
+          <span class="value live-clock">--:--:--</span>
+        </div>
+      </div>
+      <button class="btn-ops secondary" id="btn-refresh" style="padding:6px 12px; font-size:0.7rem;">
+        <i class="fas fa-sync"></i> Refresh
+      </button>
+      <button class="btn-ops" id="btn-export" style="padding:6px 12px; font-size:0.7rem;">
+        <i class="fas fa-download"></i> Export
+      </button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="ana-sidebar">
+    <div class="sb-section">Analytics</div>
+    <a href="#" class="sb-item active"><i class="fas fa-chart-line"></i> Overview</a>
+    <a href="#" class="sb-item"><i class="fas fa-users"></i> Personnel</a>
+    <a href="#" class="sb-item"><i class="fas fa-boxes"></i> Logistics</a>
+    <a href="#" class="sb-item"><i class="fas fa-shield-virus"></i> Threat Intel</a>
+    <a href="#" class="sb-item"><i class="fas fa-brain"></i> Predictive AI</a>
+
+    <div class="sb-section">Reports</div>
+    <a href="#" class="sb-item"><i class="fas fa-file-pdf"></i> Daily Brief</a>
+    <a href="#" class="sb-item"><i class="fas fa-file-csv"></i> Data Export</a>
+    <a href="#" class="sb-item"><i class="fas fa-history"></i> Historical</a>
+
+    <div class="sb-section">Navigate</div>
+    <a href="/joc/" class="sb-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <a href="/joc/map.html" class="sb-item"><i class="fas fa-globe"></i> Peta NKRI</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="ana-main">
+
+    <!-- AI INSIGHT TOP -->
+    <section class="ai-insight-panel" id="ai-insight-top"></section>
+
+    <!-- SUMMARY STATS -->
+    <div class="ana-stats" id="summary-stats"></div>
+
+    <!-- MAIN CHART ROW -->
+    <div class="charts-grid">
+      <div class="chart-panel">
+        <div class="cp-header">
+          <div class="cp-title">
+            <span class="dot" style="background:#22c55e;"></span>
+            KPI TREND — 7 HARI TERAKHIR
+          </div>
+          <div class="cp-badges">
+            <span class="admiralty-code" data-reliability="A" title="Source: Internal sensor network">
+              <span class="ac-reliability">A</span>
+              <span class="ac-slash">/</span>
+              <span class="ac-accuracy">1</span>
+            </span>
+          </div>
+        </div>
+        <div class="cp-body">
+          <canvas id="chart-kpi-trend"></canvas>
+        </div>
+        <div class="ai-mini-bar">
+          <span>◈ Auto-sync 5 min</span>
+          <span class="amb-conf" style="color:#4ade80;">🤖 92% HIGH</span>
+        </div>
+      </div>
+
+      <div class="chart-panel">
+        <div class="cp-header">
+          <div class="cp-title">
+            <span class="dot" style="background:#3b82f6;"></span>
+            PERSONNEL DISTRIBUTION
+          </div>
+        </div>
+        <div class="cp-body">
+          <canvas id="chart-personnel"></canvas>
+        </div>
+        <div class="ai-mini-bar">
+          <span>◈ 259K active</span>
+          <span class="amb-conf" style="color:#4ade80;">🤖 89% HIGH</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECOND CHART ROW -->
+    <div class="charts-grid-3">
+      <div class="chart-panel">
+        <div class="cp-header">
+          <div class="cp-title">
+            <span class="dot" style="background:#eab308;"></span>
+            LOGISTICS STOCK
+          </div>
+        </div>
+        <div class="cp-body">
+          <canvas id="chart-logistics"></canvas>
+        </div>
+        <div class="ai-mini-bar">
+          <span>◈ 3 matra</span>
+          <span class="amb-conf" style="color:#4ade80;">🤖 91% HIGH</span>
+        </div>
+      </div>
+
+      <div class="chart-panel">
+        <div class="cp-header">
+          <div class="cp-title">
+            <span class="dot" style="background:#ef4444;"></span>
+            THREAT RADAR
+          </div>
+        </div>
+        <div class="cp-body">
+          <canvas id="chart-threat"></canvas>
+        </div>
+        <div class="ai-mini-bar">
+          <span>◈ 7 dimensions</span>
+          <span class="amb-conf" style="color:#4ade80;">🤖 87% HIGH</span>
+        </div>
+      </div>
+
+      <div class="chart-panel">
+        <div class="cp-header">
+          <div class="cp-title">
+            <span class="dot" style="background:#a855f7;"></span>
+            REALTIME METRICS
+          </div>
+        </div>
+        <div class="cp-body" style="padding:16px;">
+          <div id="gauges-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREDICTIVE CHART -->
+    <div class="chart-panel" style="margin-bottom:20px;">
+      <div class="cp-header">
+        <div class="cp-title">
+          <span class="dot" style="background:#a855f7;"></span>
+          PREDICTIVE FORECAST — READINESS 7 HARI KE DEPAN
+        </div>
+        <div class="cp-badges">
+          <span class="admiralty-code" data-reliability="B" title="Predictive model — moderate reliability">
+            <span class="ac-reliability">B</span>
+            <span class="ac-slash">/</span>
+            <span class="ac-accuracy">2</span>
+          </span>
+          <span style="font-size:0.65rem; color:#c084fc; font-family:'Courier New',monospace;">
+            🤖 AI CONFIDENCE: 78% MEDIUM
+          </span>
+        </div>
+      </div>
+      <div class="cp-body" style="min-height:280px;">
+        <canvas id="chart-predictive"></canvas>
+      </div>
+      <div class="ai-mini-bar" style="justify-content:flex-start; gap:20px;">
+        <span>⚠ <strong style="color:#facc15;">Prediction disclaimer:</strong> Hasil forecast berbasis model statistik. Human review required untuk keputusan operasional.</span>
+      </div>
+    </div>
+    <!-- AI ASSET ROLES -->
+    <section class="ai-assets-section">
+      <div class="ai-assets-header">
+        <h2>◤ PERAN AI DI ASET STRATEGIS</h2>
+        <p>Edge intelligence — 8 domain aset, distributed inference, metadata-only uplink</p>
+        <p style="font-size:0.65rem;color:#4ade80;margin-top:4px;">◈ Klik card bergaris warna untuk melihat topologi network</p>
+      </div>
+      <div class="ai-assets-grid" id="ai-assets-grid"></div>
+    </section>
+
+    <!-- TOP PERFORMERS -->
+    <!-- AI INSIGHTS GRID -->
+    <div class="menu-header" style="margin:20px 0 12px; text-align:left;">
+      <h2 style="font-size:0.85rem; letter-spacing:1.5px;">◤ AI GENERATED INSIGHTS</h2>
+    </div>
+    <div class="insights-grid" id="insights-grid"></div>
+
+    <!-- TOP PERFORMERS -->
+    <div class="chart-panel" style="margin-top:20px;">
+      <div class="cp-header">
+        <div class="cp-title">
+          <span class="dot" style="background:#22c55e;"></span>
+          TOP PERFORMING KODAM
+        </div>
+      </div>
+      <div class="cp-body" style="padding:0;">
+        <table class="data-table" style="font-size:0.8rem;">
+          <thead>
+            <tr>
+              <th style="text-align:center; width:40px;">#</th>
+              <th>Kodam</th>
+              <th style="width:80px;">KPI</th>
+              <th style="width:180px;">Readiness</th>
+              <th style="width:80px;">Assets</th>
+              <th style="width:60px; text-align:center;">Trend</th>
+            </tr>
+          </thead>
+          <tbody id="top-performers-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- Infrastructure -->
+<script src="/joc/js/data-freshness.js"></script>
+<script src="/joc/js/ai-confidence.js"></script>
+<script src="/joc/js/classification.js"></script>
+
+<!-- Analytics -->
+<script src="/joc/js/analitik-data.js"></script>
+<script src="/joc/js/analitik-dashboard.js"></script>
+
+<script>
+  // Init infrastructure
+  DataFreshness.init();
+  Classification.init({ level: 'CONFIDENTIAL', user: { name: 'Analis SOC', clearance: 'SECRET' } });
+  DataFreshness.onOfflineChange((evt) => {
+    console.log('[ANA] Network changed:', evt.mode);
+  });
+// ===== AI ASSET ROLES — render =====
+(function renderAIAssetRoles() {
+  const grid = document.getElementById('ai-assets-grid');
+  if (!grid) return;
+
+  const assets = [
+    {
+      icon: '🚢',
+      title: 'Kapal Laut & Sekoci',
+      model: 'YOLOv8-maritime (fine-tuned)',
+      color: '#3b82f6',
+      link: '/joc/analitik-aset-kapal.html',   // ← TAMBAH INI
+      fungsi: 'Deteksi & klasifikasi kapal, fusi AIS+radar, dark ship detection, tracking probabilistik',
+      output: 'CoT metadata (posisi, kecepatan, kelas, confidence)',
+      bw: '~50 Kbps per track'
+    },
+    {
+      icon: '✈️',
+      title: 'Pesawat Udara',
+      model: 'YOLOv8-ATR (Airborne Target Recognition)',
+      color: '#0ea5e9',
+      link: '/joc/analitik-aset-pesawat.html',
+      fungsi: 'Aided Target Recognition, MUM-T dengan drone wingman, sensor fusion FLIR/EO',
+      output: 'Target metadata via Link 16 / VMF',
+      bw: '~30 Kbps per target'
+    },
+    {
+      icon: '🛸',
+      title: 'Drone (UAV)',
+      model: 'YOLOv8-HawkEye',
+      color: '#8b5cf6',
+      link: '/joc/analitik-aset-drone.html',   // ← TAMBAH
+      fungsi: 'Reconnaissance >60km, autonomous tracking, coordinate lock, perimeter sweep',
+      output: 'STANAG 4609 KLV + CoT',
+      bw: '~40 Kbps per track'
+    },
+    {
+      icon: '📹',
+      title: 'CCTV/FLIR Perbatasan',
+      model: 'InfraVisNet-L (YOLOv11n) / InfraVisNet-H (RT-DETR)',
+      color: '#ef4444',
+      link: '/joc/analitik-aset-cctv.html',
+      fungsi: 'Deteksi multispektral (visible+thermal), klasifikasi manusia/kendaraan, perimeter alert otomatis',
+      output: 'Alert real-time + bounding box + snapshot',
+      bw: '~20 Kbps per event'
+    },
+    {
+      icon: '🏢',
+      title: 'Datacenter IKN',
+      model: 'Video AI berbasis LLM',
+      color: '#14b8a6',
+      link: '/joc/analitik-aset-datacenter.html',
+      fungsi: 'Physical security, tailgating detection, akses rack, suhu/asap anomali',
+      output: 'Event log + snapshot + classification tag',
+      bw: 'On-demand'
+    },
+    {
+      icon: '📦',
+      title: 'Bangunan Logistik & HO',
+      model: 'Video AI analytics (LLM-based)',
+      color: '#eab308',
+      link: '/joc/analitik-aset-logistik.html',
+      fungsi: 'Operational compliance, anomaly detection, akses control, prosedur monitoring',
+      output: 'Event log terstruktur',
+      bw: 'On-demand'
+    },
+    {
+      icon: '🎖️',
+      title: 'Kodam Regional',
+      model: 'Edge AI Gateway (Jetson Orin AGX 64GB)',
+      color: '#22c55e',
+      link: '/joc/analitik-aset-kodam.html',
+      fungsi: 'Agregasi multi-sensor, YOLOv8n inference, format normalization, filter & prioritization',
+      output: 'Metadata CoT ke Middleware Hub (bukan video mentah)',
+      bw: '~200 Kbps aggregate'
+    },
+    {
+      icon: '🛰️',
+      title: 'IKN Central Fusion',
+      model: 'MiniMax M3 / DeepSeek V4 (L40S cluster)',
+      color: '#a855f7',
+      link: '/joc/analitik-aset-ikn.html',   // ← TAMBAH
+      fungsi: 'Multi-INT fusion, strategic pattern analysis, predictive modeling, cross-region correlation',
+      output: 'Strategic summary ke COP nasional',
+      bw: '~5 Mbps aggregate'
+    }
+  ];
+
+  grid.innerHTML = assets.map(a => `
+    <div class="ai-asset-card" style="--asset-color: ${a.color}"${a.link ? ` onclick="location.href='${a.link}'"` : ''}>
+      <div class="ai-asset-head">
+        <div class="ai-asset-icon">${a.icon}</div>
+        <div class="ai-asset-title">
+          <h3>${a.title}</h3>
+          <div class="model">${a.model}</div>
+        </div>
+      </div>
+      <div class="ai-asset-body">
+        <div class="ai-asset-row">
+          <span class="label">Fungsi</span>
+          <span class="value">${a.fungsi}</span>
+        </div>
+        <div class="ai-asset-row">
+          <span class="label">Output</span>
+          <span class="value">${a.output}</span>
+        </div>
+      </div>
+      <div class="ai-asset-output">
+        ◈ Uplink: <code>${a.bw}</code>
+      </div>
+    </div>
+  `).join('');
+})();
+</script>
+
+</body>
+</html>

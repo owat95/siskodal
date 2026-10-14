@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SISKODAL Tactical — C2 Mobile</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --accent: #22d3ee;
+  --accent-dim: rgba(34,211,238,0.15);
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --friendly: #3b82f6;
+  --hostile: #ef4444;
+  --unknown: #f59e0b;
+  --bg-dark: #0a0f1e;
+  --bg-panel: #0f172a;
+  --bg-elevated: #1e293b;
+  --bg-highlight: #334155;
+  --border: rgba(34,211,238,0.18);
+  --border-soft: rgba(148,163,184,0.1);
+  --text: #e2e8f0;
+  --text-dim: #64748b;
+  --text-bright: #f8fafc;
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.6);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  background: #000;
+  color: var(--text);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============ DESKTOP STAGE ============ */
+.stage {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 480px) 1fr;
+  align-items: center;
+  gap: 32px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(34,211,238,0.08), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(59,130,246,0.05), transparent 50%),
+    #050810;
+  position: relative;
+}
+.stage::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(34,211,238,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,211,238,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.side-panel { position: relative; z-index: 1; max-width: 380px; }
+.side-panel.left { justify-self: end; text-align: right; }
+.side-panel.right { justify-self: start; }
+.side-panel h1 {
+  font-size: 1.6rem;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.side-panel .subtitle {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.side-panel .feature-list {
+  list-style: none;
+  margin-bottom: 24px;
+}
+.side-panel .feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+.side-panel.right .feature-list li { flex-direction: row-reverse; text-align: right; }
+.side-panel .feature-list .fi {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(34,211,238,0.1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--accent);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.side-panel .badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.3);
+  margin-bottom: 12px;
+}
+.side-panel .spec-block {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.side-panel.right .spec-block { text-align: left; }
+.side-panel .spec-block .spec-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.72rem;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+.side-panel .spec-block .spec-row:last-child { border-bottom: none; }
+.side-panel .spec-block .spec-row .sk { color: var(--text-dim); }
+.side-panel .spec-block .spec-row .sv {
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+.side-panel .actions { display: flex; flex-direction: column; gap: 8px; }
+.side-panel.right .actions { align-items: flex-start; }
+.side-panel.left .actions { align-items: flex-end; }
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(34,211,238,0.1);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.action-btn:hover { background: rgba(34,211,238,0.2); }
+.action-btn.primary {
+  background: var(--accent);
+  color: #0a0f1e;
+}
+.action-btn.primary:hover { background: #06b6d4; }
+
+/* ============ PHONE DEVICE ============ */
+.device {
+  width: 390px;
+  height: 844px;
+  background: #000;
+  border-radius: 44px;
+  padding: 10px;
+  position: relative;
+  box-shadow:
+    0 0 0 2px #1e293b,
+    0 0 0 6px #0f172a,
+    0 30px 80px rgba(0,0,0,0.9),
+    0 0 100px rgba(34,211,238,0.15);
+  z-index: 2;
+  justify-self: center;
+}
+.device::before,
+  content: '';
+  position: absolute;
+  top: 10px; left: 50%;
+  transform: translateX(-50%);
+  width: 120px; height: 32px;
+  background: #000;
+  border-radius: 0 0 20px 20px;
+  z-index: 10;
+}
+.device::after { display: none; }
+  content: '';
+  position: absolute;
+  top: 14px; left: calc(50% + 30px);
+  width: 8px; height: 8px;
+  background: #1e293b;
+  border-radius: 50%;
+  box-shadow: -20px 0 0 #1e293b;
+  z-index: 11;
+}
+.screen {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-dark);
+  border-radius: 36px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============ SYSTEM STATUS BAR ============ */
+.sys-status {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px 0 28px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+  padding-top: 8px;
+}
+.sys-status .right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sys-status .signal {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  height: 10px;
+}
+.sys-status .signal span {
+  width: 2.5px;
+  background: var(--text-bright);
+  border-radius: 1px;
+}
+.sys-status .signal span:nth-child(1) { height: 4px; }
+.sys-status .signal span:nth-child(2) { height: 6px; }
+.sys-status .signal span:nth-child(3) { height: 8px; }
+.sys-status .signal span:nth-child(4) { height: 10px; }
+.sys-status .battery {
+  width: 22px; height: 11px;
+  border: 1px solid var(--text-bright);
+  border-radius: 3px;
+  position: relative;
+  padding: 1.5px;
+}
+.sys-status .battery::after {
+  content: '';
+  position: absolute;
+  right: -3px; top: 50%;
+  transform: translateY(-50%);
+  width: 2px; height: 5px;
+  background: var(--text-bright);
+  border-radius: 0 1px 1px 0;
+}
+.sys-status .battery-fill {
+  height: 100%;
+  background: var(--text-bright);
+  border-radius: 1px;
+  width: 78%;
+}
+
+/* ============ APP HEADER ============ */
+.app-header {
+  padding: 8px 16px 10px;
+  background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(10,15,30,0.9));
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.app-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+}
+.app-header .brand .logo {
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(34,211,238,0.15);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 0.7rem;
+}
+.app-header .right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.classification-chip {
+  font-size: 0.55rem;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+  padding: 3px 7px;
+  background: rgba(239,68,68,0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.4);
+  border-radius: 3px;
+}
+.sync-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.58rem;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  color: var(--success);
+  padding: 3px 7px;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.25);
+  border-radius: 3px;
+}
+.sync-chip .dot {
+  width: 5px; height: 5px;
+  background: var(--success);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--success);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ============ TACTICAL STATUS BAR ============ */
+.tactical-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px;
+  background: rgba(30,41,59,0.6);
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.6rem;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.tactical-bar .item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.tactical-bar .item .val {
+  color: var(--accent);
+  font-weight: 700;
+}
+.tactical-bar .item.warn .val { color: var(--warning); }
+.tactical-bar .item.ok .val { color: var(--success); }
+
+/* ============ MAP CONTAINER ============ */
+.map-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #0a0f1e;
+}
+svg.tactical-map {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Map overlays */
+.map-overlay {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--accent);
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  background: rgba(10,15,30,0.75);
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+.map-overlay.tl { top: 10px; left: 10px; }
+.map-overlay.tr { top: 10px; right: 10px; }
+.map-overlay.bl { bottom: 10px; left: 10px; }
+.map-overlay.br { bottom: 10px; right: 10px; }
+
+.compass {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 44px; height: 44px;
+  background: rgba(10,15,30,0.85);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.compass svg { width: 100%; height: 100%; }
+
+.scale-bar {
+  position: absolute;
+  bottom: 10px; right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  font-size: 0.55rem;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(10,15,30,0.75);
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.scale-bar .bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.scale-bar .bar .seg {
+  width: 30px;
+  height: 4px;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-right: none;
+}
+.scale-bar .bar .seg:first-child { border-radius: 2px 0 0 2px; }
+.scale-bar .bar .seg:last-child { border-radius: 0 2px 2px 0; border-right: 1px solid var(--accent); }
+.scale-bar .bar .seg.alt { background: transparent; }
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav {
+  display: flex;
+  align-items: stretch;
+  background: rgba(15,23,42,0.98);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  padding-bottom: 8px;
+  backdrop-filter: blur(10px);
+}
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 4px 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.55rem;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s;
+}
+.nav-btn i { font-size: 1.05rem; margin-bottom: 1px; }
+.nav-btn.active { color: var(--accent); }
+.nav-btn.active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 32px; height: 2px;
+  background: var(--accent);
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 0 8px var(--accent);
+}
+.nav-btn .badge {
+  position: absolute;
+  top: 6px; right: 22%;
+  min-width: 14px; height: 14px;
+  padding: 0 4px;
+  background: var(--danger);
+  color: #fff;
+  border-radius: 7px;
+  font-size: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* ============ SLIDE-UP SHEETS ============ */
+.sheet {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 60px;
+  background: rgba(15,23,42,0.98);
+  border-top: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  max-height: 75%;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+}
+.sheet.open { transform: translateY(0); }
+.sheet-handle {
+  width: 40px; height: 4px;
+  background: var(--bg-highlight);
+  border-radius: 2px;
+  margin: 10px auto 8px;
+  flex-shrink: 0;
+}
+.sheet-header {
+  padding: 4px 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+.sheet-header h2 {
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.sheet-header .count {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+.sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+  min-height: 0;
+}
+
+/* Chat sheet */
+.chat-channel-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+.chat-channel-tabs button {
+  flex: 1;
+  padding: 6px 8px;
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.chat-channel-tabs button.active {
+  background: rgba(34,211,238,0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.chat-msg {
+  max-width: 85%;
+  padding: 8px 11px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  position: relative;
+}
+.chat-msg .from {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin-bottom: 3px;
+  display: block;
+}
+.chat-msg .time {
+  font-size: 0.5rem;
+  opacity: 0.6;
+  margin-top: 3px;
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+}
+.chat-msg.own {
+  align-self: flex-end;
+  background: rgba(34,211,238,0.12);
+  border: 1px solid rgba(34,211,238,0.3);
+}
+.chat-msg.own .from { color: var(--accent); }
+.chat-msg.friendly {
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.25);
+}
+.chat-msg.friendly .from { color: #93c5fd; }
+.chat-msg.hq {
+  background: rgba(168,85,247,0.1);
+  border: 1px solid rgba(168,85,247,0.3);
+}
+.chat-msg.hq .from { color: #c084fc; }
+.chat-msg.priority {
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.4);
+}
+.chat-msg.priority .from { color: #fca5a5; }
+.chat-msg.priority::before {
+  content: 'PRIORITY';
+  position: absolute;
+  top: -6px; right: 8px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.45rem;
+  padding: 1px 5px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  border-radius: 2px;
+}
+.chat-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 14px;
+  border-top: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+.chat-input input {
+  flex: 1;
+  background: rgba(30,41,59,0.6);
+  border: 1px solid var(--border-soft);
+  color: var(--text);
+  padding: 9px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-family: inherit;
+  outline: none;
+}
+.chat-input input:focus { border-color: var(--accent); }
+.chat-input button {
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #0a0f1e;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* Units sheet */
+.unit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.unit-item:hover { background: rgba(34,211,238,0.05); }
+.unit-item .unit-icon {
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.unit-item .unit-icon.friendly {
+  background: rgba(59,130,246,0.15);
+  border: 1px solid var(--friendly);
+  color: var(--friendly);
+}
+.unit-item .unit-icon.hostile {
+  background: rgba(239,68,68,0.15);
+  border: 1px solid var(--hostile);
+  color: var(--hostile);
+  transform: rotate(45deg);
+}
+.unit-item .unit-icon.hostile i { transform: rotate(-45deg); }
+.unit-item .unit-icon.unknown {
+  background: rgba(245,158,11,0.15);
+  border: 1px solid var(--unknown);
+  color: var(--unknown);
+}
+.unit-item .info { flex: 1; }
+.unit-item .info .callsign {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text-bright);
+  margin-bottom: 2px;
+}
+.unit-item .info .meta {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+.unit-item .info .meta .dot { 
+  display: inline-block; 
+  width: 5px; height: 5px; 
+  background: var(--success); 
+  border-radius: 50%; 
+  margin-right: 4px; 
+  vertical-align: middle;
+}
+.unit-item .info .meta .dot.warn { background: var(--warning); }
+.unit-item .distance {
+  font-size: 0.68rem;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  text-align: right;
+}
+.unit-item .distance .unit-label {
+  display: block;
+  font-size: 0.52rem;
+  color: var(--text-dim);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Orders sheet */
+.order-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.order-item .order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.order-item .order-id {
+  font-size: 0.62rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--warning);
+  font-family: 'JetBrains Mono', monospace;
+}
+.order-item .order-status {
+  font-size: 0.55rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.order-item .order-status.active {
+  background: rgba(34,197,94,0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34,197,94,0.3);
+}
+.order-item .order-status.pending {
+  background: rgba(245,158,11,0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245,158,11,0.3);
+}
+.order-item .order-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+  letter-spacing: 0.3px;
+}
+.order-item .order-desc {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+.order-item .order-meta {
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+  display: flex;
+  gap: 12px;
+}
+.order-item .order-meta i { margin-right: 3px; }
+
+/* Nav sheet (waypoint) */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 0.72rem;
+}
+.nav-item .idx {
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(34,211,238,0.15);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+}
+.nav-item .wp-info { flex: 1; }
+.nav-item .wp-info .name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.nav-item .wp-info .coord {
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+.nav-item .dist {
+  font-size: 0.68rem;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ============ NIGHT VISION MODE ============ */
+body.nv .screen {
+  filter: hue-rotate(-30deg) saturate(0.4) contrast(1.15) brightness(0.95);
+}
+body.nv .screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(34,197,94,0.05), rgba(16,185,129,0.08));
+  pointer-events: none;
+  z-index: 200;
+  mix-blend-mode: overlay;
+}
+body.nv {
+  --accent: #4ade80;
+}
+body.nv .device {
+  box-shadow:
+    0 0 0 2px #1e293b,
+    0 0 0 6px #0f172a,
+    0 30px 80px rgba(0,0,0,0.9),
+    0 0 100px rgba(34,197,94,0.2);
+}
+
+/* ============ INFO BANNER TOAST ============ */
+.toast {
+  position: absolute;
+  top: 92px;
+  left: 20px;
+  right: 20px;
+  padding: 10px 14px;
+  background: rgba(239,68,68,0.9);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 300;
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast i { font-size: 1rem; }
+
+/* ============ MISC ============ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(34,211,238,0.3); border-radius: 2px; }
+
+@media (max-width: 1200px) {
+  .stage { grid-template-columns: 1fr; padding: 16px; }
+  .side-panel { display: none; }
+  .device { width: 100%; max-width: 390px; }
+}
+/* ============ MOBILE FINAL FIX ============ */
+@media (max-width: 768px) {
+  /* Bottom nav harus selalu di atas sheet */
+  .bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 2000 !important;
+    padding-bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    background: rgba(10,15,30,0.98) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(34,211,238,0.3) !important;
+  }
+  
+  /* Sheet harus DI ATAS nav, bukan nutupin nav */
+  .sheet {
+    position: fixed !important;
+    bottom: 72px !important;   /* tinggi bottom nav */
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1500 !important;  /* di bawah nav, di atas map */
+    max-height: calc(100dvh - 200px) !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+  
+  .sheet-body {
+    max-height: calc(100dvh - 320px) !important;
+  }
+  
+  /* Floating controls — pindah ke bawah kanan biar nggak nutup header */
+  .mobile-controls {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 100px !important;   /* di atas bottom nav + sheet */
+    right: 12px !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    z-index: 1800 !important;
+  }
+  
+  /* Safe area untuk HP dengan notch */
+  .sys-status {
+    padding-top: max(12px, env(safe-area-inset-top)) !important;
+  }
+  
+  /* Map overlay nggak ketutup floating controls */
+  .map-overlay.tr {
+    display: none;  /* hide "tr" overlay yang nutupin controls */
+  }
+}
+
+/* ============ iOS SAFARI SPECIFIC ============ */
+@supports (-webkit-touch-callout: none) {
+  .bottom-nav {
+    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  }
+  body {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- LEFT SIDE PANEL -->
+  <div class="side-panel left">
+    <div class="badge">CLASSIFIED · ON-PREM</div>
+    <h1>SISKODAL TACTICAL</h1>
+    <p class="subtitle">
+      Android C2 mobile untuk prajurit lapangan.<br>
+      Offline-first · mesh network · decentralized execution.
+    </p>
+
+    <div class="spec-block">
+      <div class="spec-row"><span class="sk">Server</span><span class="sv">IKN Central</span></div>
+      <div class="spec-row"><span class="sk">Endpoint</span><span class="sv">10.90.1.10</span></div>
+      <div class="spec-row"><span class="sk">Sync</span><span class="sv">2s ago · auto</span></div>
+      <div class="spec-row"><span class="sk">Mesh Peers</span><span class="sv">4 aktif</span></div>
+      <div class="spec-row"><span class="sk">Local Cache</span><span class="sv">4.2 GB</span></div>
+      <div class="spec-row"><span class="sk">Clearance</span><span class="sv">SECRET</span></div>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn" id="nv-btn">
+        <i class="fas fa-eye"></i> Night Vision Mode
+      </button>
+      <button class="action-btn" id="alert-btn">
+        <i class="fas fa-exclamation-triangle"></i> Simulate Alert
+      </button>
+    </div>
+  </div>
+<!-- Mobile floating controls (hanya muncul di HP) -->
+<div class="mobile-controls" id="mobile-controls" style="display: none;">
+  <button id="mobile-nv-btn" title="Night Vision">
+    <i class="fas fa-eye"></i>
+  </button>
+  <button id="mobile-alert-btn" title="Simulate Alert">
+    <i class="fas fa-exclamation-triangle"></i>
+  </button>
+</div>
+
+  <!-- PHONE DEVICE -->
+  <div class="device">
+    <div class="screen" id="screen">
+
+      <!-- SYSTEM STATUS BAR -->
+      <div class="sys-status">
+        <span id="clock">05:42</span>
+        <div class="right">
+          <div class="signal"><span></span><span></span><span></span><span></span></div>
+          <span>4G</span>
+          <div class="battery"><div class="battery-fill"></div></div>
+        </div>
+      </div>
+
+      <!-- APP HEADER -->
+      <div class="app-header">
+        <div class="brand">
+          <div class="logo">◈</div>
+          <span>SISKODAL TACTICAL</span>
+        </div>
+        <div class="right">
+          <div class="classification-chip">RAHASIA</div>
+          <div class="sync-chip">
+            <span class="dot"></span>
+            SYNCED
+          </div>
+        </div>
+      </div>
+
+      <!-- TACTICAL STATUS -->
+      <div class="tactical-bar">
+        <div class="item">
+          <i class="fas fa-wifi"></i>
+          <span class="val">MESH 4</span>
+        </div>
+        <div class="item ok">
+          <i class="fas fa-satellite-dish"></i>
+          <span class="val">GPS 12</span>
+        </div>
+        <div class="item">
+          <i class="fas fa-battery-three-quarters"></i>
+          <span class="val">78%</span>
+        </div>
+        <div class="item warn">
+          <i class="fas fa-clock"></i>
+          <span class="val" id="zulu-time">05:42:18Z</span>
+        </div>
+      </div>
+
+      <!-- MAP -->
+      <div class="map-container">
+        <svg class="tactical-map" viewBox="0 0 390 500" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(34,211,238,0.08)" stroke-width="0.5"/>
+            </pattern>
+            <pattern id="grid-fine" width="8" height="8" patternUnits="userSpaceOnUse">
+              <path d="M 8 0 L 0 0 0 8" fill="none" stroke="rgba(34,211,238,0.04)" stroke-width="0.3"/>
+            </pattern>
+            <radialGradient id="terrain-grad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#0f172a" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#050810" stop-opacity="0.8"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Background -->
+          <rect width="390" height="500" fill="#0a1420"/>
+          <rect width="390" height="500" fill="url(#grid-fine)"/>
+          <rect width="390" height="500" fill="url(#grid)"/>
+
+          <!-- Terrain: forest area -->
+          <path d="M 20 80 Q 60 60, 120 90 T 200 100 Q 180 160, 120 180 T 30 160 Z" 
+                fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.2)" stroke-width="0.8" stroke-dasharray="2 3"/>
+          <text x="70" y="130" fill="rgba(74,222,128,0.5)" font-size="7" font-family="JetBrains Mono" letter-spacing="1">FOREST</text>
+
+          <!-- Terrain: hill contours -->
+          <path d="M 240 320 Q 280 300, 320 330 T 380 340" fill="none" stroke="rgba(245,158,11,0.25)" stroke-width="0.8"/>
+          <path d="M 250 340 Q 285 322, 320 348 T 375 356" fill="none" stroke="rgba(245,158,11,0.2)" stroke-width="0.8"/>
+          <path d="M 260 360 Q 290 346, 320 366 T 370 372" fill="none" stroke="rgba(245,158,11,0.15)" stroke-width="0.8"/>
+          <text x="290" y="355" fill="rgba(245,158,11,0.4)" font-size="7" font-family="JetBrains Mono" letter-spacing="1">HILL 428m</text>
+
+          <!-- Road utama -->
+          <path d="M 0 250 Q 100 240, 180 260 T 390 240" 
+                fill="none" stroke="rgba(245,158,11,0.5)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 0 250 Q 100 240, 180 260 T 390 240" 
+                fill="none" stroke="rgba(245,158,11,0.9)" stroke-width="0.8" stroke-dasharray="6 4"/>
+
+          <!-- Road sekunder -->
+          <path d="M 180 260 L 200 180 L 240 140" 
+                fill="none" stroke="rgba(245,158,11,0.3)" stroke-width="1.5"/>
+          <path d="M 200 180 L 120 200" 
+                fill="none" stroke="rgba(245,158,11,0.3)" stroke-width="1.5"/>
+
+          <!-- River -->
+          <path d="M 30 0 Q 60 80, 40 180 T 80 320 Q 90 400, 60 500" 
+                fill="none" stroke="rgba(59,130,246,0.4)" stroke-width="2"/>
+          <text x="70" y="300" fill="rgba(96,165,250,0.4)" font-size="7" font-family="JetBrains Mono" letter-spacing="1">RIVER</text>
+
+          <!-- Bridge -->
+          <circle cx="180" cy="260" r="5" fill="rgba(34,211,238,0.15)" stroke="#22d3ee" stroke-width="1"/>
+          <text x="188" y="263" fill="#22d3ee" font-size="6" font-family="JetBrains Mono" letter-spacing="0.5">BRIDGE</text>
+
+          <!-- Village -->
+          <rect x="280" y="180" width="30" height="20" fill="rgba(148,163,184,0.1)" stroke="rgba(148,163,184,0.3)" stroke-width="0.5"/>
+          <text x="285" y="193" fill="rgba(148,163,184,0.6)" font-size="5" font-family="JetBrains Mono">VIL-A</text>
+
+          <!-- FRIENDLY UNITS (Blue force) -->
+          <!-- ALPHA-01 (Squad Leader) - center -->
+          <g class="marker-friendly" data-unit="ALPHA-01">
+            <circle cx="195" cy="340" r="14" fill="none" stroke="rgba(59,130,246,0.3)" stroke-width="0.8" stroke-dasharray="2 2">
+              <animateTransform attributeName="transform" type="rotate" from="0 195 340" to="360 195 340" dur="8s" repeatCount="indefinite"/>
+            </circle>
+            <rect x="185" y="331" width="20" height="16" fill="rgba(59,130,246,0.9)" stroke="#93c5fd" stroke-width="1"/>
+            <line x1="185" y1="331" x2="205" y2="347" stroke="#fff" stroke-width="0.8"/>
+            <line x1="185" y1="347" x2="205" y2="331" stroke="#fff" stroke-width="0.8"/>
+            <text x="195" y="360" text-anchor="middle" fill="#93c5fd" font-size="7" font-weight="700" font-family="JetBrains Mono" letter-spacing="0.5">ALPHA-01</text>
+            <text x="195" y="368" text-anchor="middle" fill="rgba(147,197,253,0.6)" font-size="5" font-family="JetBrains Mono">SL · 4 PAX</text>
+          </g>
+
+          <!-- ALPHA-02 -->
+          <g class="marker-friendly" data-unit="ALPHA-02">
+            <rect x="165" y="355" width="16" height="12" fill="rgba(59,130,246,0.85)" stroke="#93c5fd" stroke-width="0.8"/>
+            <text x="173" y="377" text-anchor="middle" fill="#93c5fd" font-size="6" font-family="JetBrains Mono">A-02</text>
+          </g>
+
+          <!-- ALPHA-03 -->
+          <g class="marker-friendly" data-unit="ALPHA-03">
+            <rect x="215" y="357" width="16" height="12" fill="rgba(59,130,246,0.85)" stroke="#93c5fd" stroke-width="0.8"/>
+            <text x="223" y="380" text-anchor="middle" fill="#93c5fd" font-size="6" font-family="JetBrains Mono">A-03</text>
+          </g>
+
+          <!-- ALPHA-04 -->
+          <g class="marker-friendly" data-unit="ALPHA-04">
+            <rect x="190" y="370" width="16" height="12" fill="rgba(59,130,246,0.85)" stroke="#93c5fd" stroke-width="0.8"/>
+            <text x="198" y="392" text-anchor="middle" fill="#93c5fd" font-size="6" font-family="JetBrains Mono">A-04</text>
+          </g>
+
+          <!-- BRAVO-01 (Support weapon) -->
+          <g class="marker-friendly" data-unit="BRAVO-01">
+            <circle cx="280" cy="380" r="11" fill="rgba(34,197,94,0.15)" stroke="#22c55e" stroke-width="0.8" stroke-dasharray="2 2"/>
+            <ellipse cx="280" cy="380" rx="10" ry="7" fill="rgba(34,197,94,0.8)" stroke="#4ade80" stroke-width="1"/>
+            <text x="280" y="399" text-anchor="middle" fill="#4ade80" font-size="6" font-weight="700" font-family="JetBrains Mono">BRAVO-01</text>
+            <text x="280" y="407" text-anchor="middle" fill="rgba(74,222,128,0.6)" font-size="5" font-family="JetBrains Mono">MG · 2 PAX</text>
+          </g>
+
+          <!-- HQ -->
+          <g class="marker-friendly" data-unit="HQ">
+            <circle cx="60" cy="440" r="12" fill="rgba(168,85,247,0.15)" stroke="#a855f7" stroke-width="0.8" stroke-dasharray="2 2"/>
+            <rect x="52" y="434" width="16" height="12" fill="rgba(168,85,247,0.85)" stroke="#c084fc" stroke-width="1"/>
+            <text x="60" y="453" text-anchor="middle" fill="#c084fc" font-size="6" font-weight="700" font-family="JetBrains Mono">HQ</text>
+            <text x="60" y="461" text-anchor="middle" fill="rgba(192,132,252,0.6)" font-size="5" font-family="JetBrains Mono">COMPANY</text>
+          </g>
+
+          <!-- HOSTILE units (Red force) -->
+          <!-- HOSTILE-1 -->
+          <g class="marker-hostile" data-unit="HOSTILE-1">
+            <circle cx="140" cy="180" r="14" fill="none" stroke="rgba(239,68,68,0.4)" stroke-width="0.8" stroke-dasharray="2 2">
+              <animateTransform attributeName="transform" type="rotate" from="0 140 180" to="360 140 180" dur="6s" repeatCount="indefinite"/>
+            </circle>
+            <polygon points="140,171 149,180 140,189 131,180" fill="rgba(239,68,68,0.85)" stroke="#fca5a5" stroke-width="1"/>
+            <text x="140" y="204" text-anchor="middle" fill="#fca5a5" font-size="6" font-weight="700" font-family="JetBrains Mono">HOSTILE-1</text>
+            <text x="140" y="212" text-anchor="middle" fill="rgba(252,165,165,0.6)" font-size="5" font-family="JetBrains Mono">INF · 3-4 PAX</text>
+          </g>
+
+          <!-- HOSTILE-2 -->
+          <g class="marker-hostile" data-unit="HOSTILE-2">
+            <polygon points="120,150 128,158 120,166 112,158" fill="rgba(239,68,68,0.7)" stroke="#fca5a5" stroke-width="0.8"/>
+            <text x="120" y="178" text-anchor="middle" fill="#fca5a5" font-size="6" font-family="JetBrains Mono">H-2</text>
+          </g>
+
+          <!-- UNKNOWN -->
+          <g class="marker-unknown" data-unit="UNK-01">
+            <path d="M 320 130 Q 328 120, 336 130 Q 346 138, 336 146 Q 328 156, 320 146 Q 310 138, 320 130 Z" 
+                  fill="rgba(245,158,11,0.7)" stroke="#fbbf24" stroke-width="0.8"/>
+            <text x="328" y="168" text-anchor="middle" fill="#fbbf24" font-size="6" font-family="JetBrains Mono">UNK-01</text>
+          </g>
+
+          <!-- Waypoint routes -->
+          <path d="M 195 340 L 195 300 L 180 260" 
+                fill="none" stroke="rgba(34,211,238,0.4)" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="M 280 380 L 240 340 L 195 340" 
+                fill="none" stroke="rgba(34,211,238,0.4)" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+          <!-- Own position (center) -->
+          <circle cx="195" cy="340" r="4" fill="#22d3ee"/>
+          <circle cx="195" cy="340" r="8" fill="none" stroke="#22d3ee" stroke-width="0.8" opacity="0.6">
+            <animate attributeName="r" values="8;14;8" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6;0;0.6" dur="2s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Vignette -->
+          <rect width="390" height="500" fill="url(#terrain-grad)" pointer-events="none"/>
+        </svg>
+
+        <!-- Overlays -->
+        <div class="map-overlay tl">
+          <div>◈ MGRS 48M YC 45<span style="color:#fff">2</span> 34<span style="color:#fff">7</span></div>
+          <div style="color:#64748b;margin-top:2px;font-size:0.55rem">ALT 428m · SECTOR 3</div>
+        </div>
+
+        <div class="compass">
+          <svg viewBox="0 0 44 44">
+            <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(34,211,238,0.2)" stroke-width="0.5"/>
+            <polygon points="22,6 25,22 22,20 19,22" fill="#22d3ee"/>
+            <polygon points="22,38 25,22 22,24 19,22" fill="rgba(34,211,238,0.3)"/>
+            <text x="22" y="5" text-anchor="middle" fill="#22d3ee" font-size="6" font-weight="700" font-family="JetBrains Mono">N</text>
+          </svg>
+        </div>
+
+        <div class="scale-bar">
+          <span>0 &nbsp;&nbsp; 500m</span>
+          <div class="bar">
+            <div class="seg"></div>
+            <div class="seg alt"></div>
+            <div class="seg"></div>
+            <div class="seg alt"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM NAV -->
+      <nav class="bottom-nav">
+        <button class="nav-btn active" data-sheet="map">
+          <i class="fas fa-map"></i>
+          <span>MAP</span>
+        </button>
+        <button class="nav-btn" data-sheet="chat">
+          <i class="fas fa-comments"></i>
+          <span>CHAT</span>
+          <span class="badge">2</span>
+        </button>
+        <button class="nav-btn" data-sheet="units">
+          <i class="fas fa-users"></i>
+          <span>UNITS</span>
+        </button>
+        <button class="nav-btn" data-sheet="orders">
+          <i class="fas fa-clipboard-list"></i>
+          <span>ORDERS</span>
+          <span class="badge">1</span>
+        </button>
+        <button class="nav-btn" data-sheet="nav">
+          <i class="fas fa-route"></i>
+          <span>NAV</span>
+        </button>
+      </nav>
+
+      <!-- SHEET: CHAT -->
+      <div class="sheet" id="sheet-chat">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h2>◈ TACTICAL CHAT</h2>
+          <span class="count">ENCRYPTED · AES-256</span>
+        </div>
+        <div class="chat-channel-tabs">
+          <button class="active">SQUAD</button>
+          <button>PLATOON</button>
+          <button>HQ</button>
+        </div>
+        <div class="chat-messages">
+          <div class="chat-msg hq">
+            <span class="from">HQ · COMPANY</span>
+            ALL STATIONS, THIS IS ACTUAL. FRAGO 02 ATTACHED. ACKNOWLEDGE.
+            <span class="time">05:38Z</span>
+          </div>
+          <div class="chat-msg friendly">
+            <span class="from">BRAVO-01</span>
+            COPY HQ. MOVING TO FLANK POSITION.
+            <span class="time">05:39Z</span>
+          </div>
+          <div class="chat-msg priority">
+            <span class="from">ALPHA-02</span>
+            CONTACT FRONT 500M, 3-4 PAX, MOVING EAST.
+            <span class="time">05:41Z</span>
+          </div>
+          <div class="chat-msg friendly">
+            <span class="from">ALPHA-01</span>
+            ALPHA-02, HOLD POSITION. BRAVO FLANKING. AWAIT MY SIGNAL.
+            <span class="time">05:41Z</span>
+          </div>
+          <div class="chat-msg own">
+            <span class="from">ALPHA-01 (YOU)</span>
+            ALL ALPHA, WEAPONS TIGHT. RULES OF ENGAGEMENT HOT.
+            <span class="time">05:42Z</span>
+          </div>
+        </div>
+        <div class="chat-input">
+          <input type="text" placeholder="Type tactical message…" id="chat-input-field">
+          <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+
+      <!-- SHEET: UNITS -->
+      <div class="sheet" id="sheet-units">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h2>◈ ORDER OF BATTLE</h2>
+          <span class="count">8 UNITS · 6 FRIENDLY · 2 HOSTILE</span>
+        </div>
+        <div class="sheet-body">
+          <div class="unit-item">
+            <div class="unit-icon friendly"><i class="fas fa-user-shield"></i></div>
+            <div class="info">
+              <div class="callsign">ALPHA-01 (YOU)</div>
+              <div class="meta"><span class="dot"></span>SL · 4 PAX · SEC</div>
+            </div>
+            <div class="distance">0 m<span class="unit-label">OWN POS</span></div>
+          </div>
+          <div class="unit-item">
+            <div class="unit-icon friendly"><i class="fas fa-user"></i></div>
+            <div class="info">
+              <div class="callsign">ALPHA-02</div>
+              <div class="meta"><span class="dot"></span>RIFLEMAN · RTO</div>
+            </div>
+            <div class="distance">32 m<span class="unit-label">NE</span></div>
+          </div>
+          <div class="unit-item">
+            <div class="unit-icon friendly"><i class="fas fa-user"></i></div>
+            <div class="info">
+              <div class="callsign">ALPHA-03</div>
+              <div class="meta"><span class="dot"></span>RIFLEMAN · GRENADIER</div>
+            </div>
+            <div class="distance">35 m<span class="unit-label">SE</span></div>
+          </div>
+          <div class="unit-item">
+            <div class="unit-icon friendly"><i class="fas fa-user"></i></div>
+            <div class="info">
+              <div class="callsign">ALPHA-04</div>
+              <div class="meta"><span class="dot"></span>RIFLEMAN · MEDIC</div>
+            </div>
+            <div class="distance">30 m<span class="unit-label">S</span></div>
+          </div>
+          <div class="unit-item">
+            <div class="unit-icon friendly"><i class="fas fa-bullseye"></i></div>
+            <div class="info">
+              <div class="callsign">BRAVO-01</div>
+              <div class="meta"><span class="dot"></span>MG TEAM · 2 PAX</div>
+            </div>
+            <div class="distance">120 m<span class="unit-label">SE</span></div>
+          </div>
+          <div class="unit-item">
+            <div class="unit-icon friendly"><i class="fas fa-tent"></i></div>
+            <div class="info">
+              <div class="callsign">HQ · COMPANY</div>
+              <div class="meta"><span class="dot"></span>COMMAND POST</div>
+            </div>
+            <div class="distance">380 m<span class="unit-label">SW</span></div>
+          </div>
+          <div class="unit-item">
+            <div class="unit-icon hostile"><i class="fas fa-user-ninja"></i></div>
+            <div class="info">
+              <div class="callsign">HOSTILE-1</div>
+              <div class="meta"><span class="dot warn"></span>INF · 3-4 PAX</div>
+            </div>
+            <div class="distance">230 m<span class="unit-label">N</span></div>
+          </div>
+          <div class="unit-item">
+            <div class="unit-icon hostile"><i class="fas fa-user-ninja"></i></div>
+            <div class="info">
+              <div class="callsign">HOSTILE-2</div>
+              <div class="meta"><span class="dot warn"></span>INF · 2 PAX</div>
+            </div>
+            <div class="distance">290 m<span class="unit-label">N</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHEET: ORDERS -->
+      <div class="sheet" id="sheet-orders">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h2>◈ FRAGO / ORDERS</h2>
+          <span class="count">3 ACTIVE · 1 PENDING</span>
+        </div>
+        <div class="sheet-body">
+          <div class="order-item">
+            <div class="order-header">
+              <span class="order-id">FRAGO-02 · PRIORITY</span>
+              <span class="order-status active">ACTIVE</span>
+            </div>
+            <div class="order-title">DEFEND BRIDGE AT GRID 4527</div>
+            <div class="order-desc">Alpha squad defend bridge at coord 12.5-08.2. Establish 360° perimeter. Report contact to HQ immediately.</div>
+            <div class="order-meta">
+              <span><i class="fas fa-clock"></i>05:38Z</span>
+              <span><i class="fas fa-user"></i>HQ-ACTUAL</span>
+            </div>
+          </div>
+          <div class="order-item">
+            <div class="order-header">
+              <span class="order-id">FRAGO-01</span>
+              <span class="order-status active">ACTIVE</span>
+            </div>
+            <div class="order-title">RECON GRID 12-08</div>
+            <div class="order-desc">Conduct reconnaissance patrol sector 12-08. Report enemy strength, disposition, and terrain.</div>
+            <div class="order-meta">
+              <span><i class="fas fa-clock"></i>04:15Z</span>
+              <span><i class="fas fa-user"></i>HQ-ACTUAL</span>
+            </div>
+          </div>
+          <div class="order-item">
+            <div class="order-header">
+              <span class="order-id">OPORD-01</span>
+              <span class="order-status active">ACTIVE</span>
+            </div>
+            <div class="order-title">ESTABLISH OBSERVATION POST</div>
+            <div class="order-desc">Establish OP at Hill 428. Maintain visual on approach route. Report all movement.</div>
+            <div class="order-meta">
+              <span><i class="fas fa-clock"></i>03:00Z</span>
+              <span><i class="fas fa-user"></i>HQ-ACTUAL</span>
+            </div>
+          </div>
+          <div class="order-item">
+            <div class="order-header">
+              <span class="order-id">FRAGO-03</span>
+              <span class="order-status pending">PENDING</span>
+            </div>
+            <div class="order-title">CASEVAC BRIEF</div>
+            <div class="order-desc">Casevac procedure update. LZ coordinates and 9-line format attached. Review before next patrol.</div>
+            <div class="order-meta">
+              <span><i class="fas fa-clock"></i>05:42Z</span>
+              <span><i class="fas fa-user"></i>HQ-MED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHEET: NAV -->
+      <div class="sheet" id="sheet-nav">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h2>◈ NAVIGATION · ROUTE</h2>
+          <span class="count">4 WAYPOINTS · 1.8 KM</span>
+        </div>
+        <div class="sheet-body">
+          <div class="nav-item">
+            <div class="idx">1</div>
+            <div class="wp-info">
+              <div class="name">START · Current Position</div>
+              <div class="coord">MGRS 48M YC 452 347</div>
+            </div>
+            <div class="dist">0 m</div>
+          </div>
+          <div class="nav-item">
+            <div class="idx">2</div>
+            <div class="wp-info">
+              <div class="name">WP-1 · Bridge Crossing</div>
+              <div class="coord">MGRS 48M YC 462 358</div>
+            </div>
+            <div class="dist">320 m</div>
+          </div>
+          <div class="nav-item">
+            <div class="idx">3</div>
+            <div class="wp-info">
+              <div class="name">WP-2 · Hill 428 OP</div>
+              <div class="coord">MGRS 48M YC 478 372</div>
+            </div>
+            <div class="dist">780 m</div>
+          </div>
+          <div class="nav-item">
+            <div class="idx">4</div>
+            <div class="wp-info">
+              <div class="name">WP-3 · Link-up Point Bravo</div>
+              <div class="coord">MGRS 48M YC 490 380</div>
+            </div>
+            <div class="dist">1.8 km</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOAST -->
+      <div class="toast" id="toast">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="toast-text">CONTACT DETECTED — SECTOR 3</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE PANEL -->
+  <div class="side-panel right">
+    <div class="badge">MIL-STD-2525 · STANAG 4677</div>
+    <h1>DECENTRALIZED</h1>
+    <p class="subtitle">
+      Offline-first · mesh network · store-and-forward.<br>
+      Koneksi terputus ≠ operasi terhenti.
+    </p>
+
+    <div class="spec-block">
+      <div class="spec-row"><span class="sk">Platform</span><span class="sv">Android 12+</span></div>
+      <div class="spec-row"><span class="sk">UI Standard</span><span class="sv">MIL-STD-2525</span></div>
+      <div class="spec-row"><span class="sk">Messaging</span><span class="sv">CoT · STANAG 4677</span></div>
+      <div class="spec-row"><span class="sk">Map</span><span class="sv">Topografi · offline</span></div>
+      <div class="spec-row"><span class="sk">Encryption</span><span class="sv">AES-256-GCM</span></div>
+      <div class="spec-row"><span class="sk">Source code</span><span class="sv">Milik TNI-AD</span></div>
+    </div>
+
+    <ul class="feature-list">
+      <li>
+        <div class="fi"><i class="fas fa-map"></i></div>
+        <span>Peta topografi offline — vektor & tile lokal</span>
+      </li>
+      <li>
+        <div class="fi"><i class="fas fa-users"></i></div>
+        <span>Blue Force Tracking real-time via mesh</span>
+      </li>
+      <li>
+        <div class="fi"><i class="fas fa-comments"></i></div>
+        <span>Tactical chat + CoT messaging</span>
+      </li>
+      <li>
+        <div class="fi"><i class="fas fa-route"></i></div>
+        <span>Route planning + live nav guidance</span>
+      </li>
+      <li>
+        <div class="fi"><i class="fas fa-shield-halved"></i></div>
+        <span>RBAC · audit log · remote wipe</span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+
+<script src="/joc/js/tactical-c2.js?v=1.0" data-cfasync="false"></script>
+</body>
+</html>

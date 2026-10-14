@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intelijen — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <link rel="stylesheet" href="/joc/css/intel.css">
+</head>
+<body>
+
+<div class="intel-layout">
+
+  <!-- HEADER -->
+  <header class="intel-header">
+    <div class="brand">
+      <span class="brand-mark">🛰️</span>
+      <div class="title-block">
+        <h1>INTELIJEN</h1>
+        <p>Strategic Intelligence Center</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div id="freshness-indicator"></div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <span class="label">Threat Level</span>
+          <span class="value" style="color:#ef4444;">● ELEVATED</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Live Time</span>
+          <span class="value live-clock">--:--:--</span>
+        </div>
+      </div>
+      <button class="action-btn verify" id="btn-auto-verify" style="padding:6px 14px;">
+        <i class="fas fa-robot"></i> Auto-Verify
+      </button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="intel-sidebar">
+    <div class="sb-section">Intelligence</div>
+    <a href="#" class="sb-item active" data-tab="overview"><i class="fas fa-chart-line"></i> Overview</a>
+    <a href="#" class="sb-item" data-tab="feed">
+      <i class="fas fa-stream"></i> OSINT Feed
+      <span class="badge" id="badge-pending">0</span>
+    </a>
+
+    <div class="sb-section">Analysis</div>
+    <a href="#" class="sb-item" data-tab="countries"><i class="fas fa-globe"></i> Country Profiles</a>
+    <a href="#" class="sb-item" data-tab="matrix"><i class="fas fa-crosshairs"></i> Threat Matrix</a>
+
+    <div class="sb-section">Sources</div>
+    <a href="#" class="sb-item" data-tab="sources"><i class="fas fa-list-check"></i> Source Registry</a>
+
+    <div class="sb-section">Navigate</div>
+    <a href="/joc/intel.html" class="sb-item"><i class="fas fa-chevron-left"></i> Sub-Portal</a>
+    <a href="/joc/" class="sb-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <a href="/joc/icr-dashboard.html" class="sb-item"><i class="fas fa-satellite-dish"></i> ICR Dashboard</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="intel-main">
+
+    <!-- TAB: OVERVIEW -->
+    <section class="tab-content active" id="tab-overview">
+      <div class="intel-stats" id="intel-stats"></div>
+
+      <div class="intel-panel">
+        <h3>◤ Admirability Distribution — Source Reliability</h3>
+        <div style="height: 240px;">
+          <canvas id="chart-admiralty"></canvas>
+        </div>
+      </div>
+
+      <div class="intel-panel">
+        <h3>◤ Recent Intel — 3 Latest</h3>
+        <table class="intel-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Adm</th><th>Title / Content</th><th>Source</th>
+              <th>Country</th><th>Status</th><th>Time</th><th style="text-align:right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="overview-feed"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB: OSINT FEED -->
+    <section class="tab-content" id="tab-feed">
+      <div class="intel-panel">
+        <h3>◤ OSINT Feed — All Intelligence Items</h3>
+        <table class="intel-table">
+          <thead>
+            <tr>
+              <th style="width:130px;">ID</th>
+              <th style="width:70px;">Adm</th>
+              <th>Title / Content</th>
+              <th style="width:160px;">Source</th>
+              <th style="width:120px;">Country</th>
+              <th style="width:100px;">Status</th>
+              <th style="width:130px;">Time</th>
+              <th style="width:160px; text-align:right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="intel-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB: COUNTRIES -->
+    <section class="tab-content" id="tab-countries">
+      <div class="intel-panel">
+        <h3>◤ Country Profiles — Strategic Assessment</h3>
+        <div class="country-grid" id="country-grid"></div>
+      </div>
+    </section>
+
+    <!-- TAB: THREAT MATRIX -->
+    <section class="tab-content" id="tab-matrix">
+      <div class="matrix-container">
+        <h3>◤ Threat Matrix — Probability vs Impact</h3>
+        <div class="matrix-canvas-wrap">
+          <canvas id="chart-threat-matrix"></canvas>
+        </div>
+        <div class="matrix-legend">
+          <span><span class="dot" style="background:#ef4444;"></span> CRITICAL</span>
+          <span><span class="dot" style="background:#f97316;"></span> HIGH</span>
+          <span><span class="dot" style="background:#eab308;"></span> MEDIUM</span>
+          <span><span class="dot" style="background:#22c55e;"></span> LOW</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: SOURCES -->
+    <section class="tab-content" id="tab-sources">
+      <div class="intel-panel">
+        <h3>◤ Source Registry — Credibility Tracking</h3>
+        <div id="sources-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" data-cfasync="false"></script>
+
+<!-- Infrastructure -->
+<script src="/joc/js/data-freshness.js" data-cfasync="false"></script>
+<script src="/joc/js/ai-confidence.js" data-cfasync="false"></script>
+<script src="/joc/js/classification.js" data-cfasync="false"></script>
+
+<!-- Intel -->
+<script src="/joc/js/intel-data.js" data-cfasync="false"></script>
+<script src="/joc/js/intel-core.js" data-cfasync="false"></script>
+<script src="/joc/js/intel-dashboard.js" data-cfasync="false"></script>
+
+<script>
+  // Init infrastructure
+  DataFreshness.init();
+  Classification.init({ level: 'SECRET', user: { name: 'Analis Intel', clearance: 'TOP_SECRET' } });
+  DataFreshness.onOfflineChange((evt) => console.log('[INTEL] Network:', evt.mode));
+</script>
+
+</body>
+</html>

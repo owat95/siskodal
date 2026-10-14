@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operasi — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb { display: flex; align-items: center; gap: 8px; padding: 16px 0; font-size: 0.8rem; color: #94a3b8; font-family: 'Courier New', monospace; }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .ops-header-page { text-align: center; padding: 20px 0 40px; }
+    .ops-header-page .icon-big { font-size: 4rem; margin-bottom: 16px; filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.5)); }
+    .ops-header-page h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; color: #fff; }
+    .ops-header-page .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .ops-header-page .desc { color: #94a3b8; margin-top: 16px; max-width: 780px; margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem; }
+
+    .live-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 40px; }
+    .live-stat { padding: 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 10px; border-left: 3px solid; }
+    .live-stat .value { font-size: 1.6rem; font-weight: 900; color: #fff; font-family: 'Courier New', monospace; line-height: 1; }
+    .live-stat .label { font-size: 0.65rem; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+
+    .mission-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 40px; }
+    .mission-type-card { padding: 16px 18px; background: rgba(15, 23, 42, 0.5); border: 2px solid; border-radius: 12px; transition: all 0.2s; }
+    .mission-type-card:hover { transform: translateY(-3px); }
+    .mission-type-card .mt-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .mission-type-card .mt-name { font-size: 0.85rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+    .mission-type-card .mt-desc { font-size: 0.7rem; color: #94a3b8; margin-top: 4px; }
+
+    .cta-primary { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: linear-gradient(135deg, #00e5ff, #00ff9d); color: #04121a; font-weight: 800; font-size: 1rem; border-radius: 12px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.5px; }
+    .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 229, 255, 0.4); }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Operasi</span>
+  </div>
+
+  <header class="ops-header-page">
+    <div class="icon-big" style="color:#3b82f6;">🎯</div>
+    <h1>OPERASI C2</h1>
+    <p class="sub">COMMAND &amp; CONTROL OPERATIONS CENTER</p>
+    <p class="desc">
+      Pusat perencanaan, pelaksanaan, dan monitoring operasi militer TNI.
+      Kanban board untuk mission planning, unit assignment dari database personel,
+      target assignment dari feed ICR, dan timeline operasi multi-fase.
+    </p>
+  </header>
+
+  <!-- LIVE STATS -->
+  <div class="live-stats" id="live-stats"></div>
+
+  <!-- MISSION TYPES -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>JENIS OPERASI</h2>
+    <p>7 kategori operasi militer</p>
+  </div>
+
+  <div class="mission-types" id="mission-types"></div>
+
+  <!-- CTA -->
+  <div style="text-align:center; margin-top:40px;">
+    <a href="/joc/operasi-dashboard.html" class="cta-primary">
+      <i class="fas fa-columns"></i> Buka Mission Board →
+    </a>
+    <div style="margin-top:20px;">
+      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal
+      </a>
+    </div>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · Operasi C2</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script src="/joc/js/operasi-data.js" data-cfasync="false"></script>
+<script src="/joc/js/operasi-core.js" data-cfasync="false"></script>
+<script>
+  (function init() {
+    OperasiCore.init();
+    const stats = OperasiCore.getStats();
+
+    // Live stats
+    const liveStatsEl = document.getElementById('live-stats');
+    const statList = [
+      { color: '#eab308', value: stats.planning,   label: 'Planning' },
+      { color: '#60a5fa', value: stats.approved,   label: 'Approved' },
+      { color: '#4ade80', value: stats.executing,  label: 'Executing' },
+      { color: '#94a3b8', value: stats.completed,  label: 'Completed' },
+      { color: '#a855f7', value: stats.totalUnitsDeployed, label: 'Units Deployed' },
+      { color: '#ef4444', value: stats.totalTargetsEngaged, label: 'Targets Engaged' }
+    ];
+
+    liveStatsEl.innerHTML = statList.map(s => `
+      <div class="live-stat" style="border-left-color:${s.color};">
+        <div class="value" style="color:${s.color};">${s.value}</div>
+        <div class="label">${s.label}</div>
+      </div>
+    `).join('');
+
+    // Mission types
+    const typesEl = document.getElementById('mission-types');
+    const typeDescriptions = {
+      MARITIME_DEFENSE:  'Patroli & pertahanan ZEE',
+      BORDER_SECURITY:   'Pengamanan perbatasan darat',
+      AIR_PATROL:        'Patroli udara & air superiority',
+      COUNTER_TERRORISM: 'Operasi kontra terorisme',
+      SAR:               'Search and rescue',
+      HUMANITARIAN:      'Bantuan kemanusiaan',
+      CYBER_DEFENSE:     'Pertahanan siber nasional'
+    };
+
+    typesEl.innerHTML = Object.entries(OperasiData.MISSION_TYPES).map(([code, t]) => `
+      <div class="mission-type-card" style="border-color:${t.color}55;">
+        <div class="mt-icon">${t.icon}</div>
+        <div class="mt-name">${t.label}</div>
+        <div class="mt-desc">${typeDescriptions[code] || ''}</div>
+      </div>
+    `).join('');
+
+    console.log('[OPERASI] Sub-portal loaded');
+  })();
+</script>
+
+</body>
+</html>

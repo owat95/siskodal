@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ICR Dashboard — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <style>
+    /* ICR Specific */
+    .clearance-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px; background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.7); border-radius: 8px;
+    }
+    .clearance-bar label {
+      font-size: 0.65rem; color: #64748b;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .clearance-bar select {
+      background: rgba(15, 23, 42, 0.9); color: #e2e8f0;
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      padding: 4px 8px; border-radius: 6px;
+      font-family: inherit; font-size: 0.8rem;
+    }
+
+    /* PIR Table */
+    .pir-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .pir-badge.p1 { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.4); }
+    .pir-badge.p2 { background: rgba(234,179,8,0.2); color: #facc15; border: 1px solid rgba(234,179,8,0.4); }
+    .pir-badge.p3 { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.4); }
+
+    /* Edge site card */
+    .edge-card {
+      padding: 14px 16px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 12px;
+      border-left: 3px solid;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+    .edge-card:hover { border-color: rgba(59,130,246,0.5); }
+    .edge-card.ad { border-left-color: #059669; }
+    .edge-card.al { border-left-color: #1e40af; }
+    .edge-card.au { border-left-color: #2563eb; }
+
+    .edge-card .ec-head {
+      display: flex; justify-content: space-between; align-items: start;
+      margin-bottom: 8px;
+    }
+    .edge-card .ec-name { font-size: 0.9rem; font-weight: 700; color: #fff; }
+    .edge-card .ec-loc { font-size: 0.7rem; color: #94a3b8; margin-top: 2px; }
+    .edge-card .ec-badge {
+      padding: 3px 8px; border-radius: 4px;
+      font-size: 0.6rem; font-weight: 800; letter-spacing: 1px;
+      background: rgba(34,197,94,0.15); color: #4ade80;
+      border: 1px solid rgba(34,197,94,0.4);
+    }
+    .edge-card .ec-meta {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 8px; margin-top: 10px;
+      font-size: 0.7rem; color: #94a3b8;
+      font-family: 'Courier New', monospace;
+    }
+    .edge-card .ec-meta strong { color: #e2e8f0; display: block; }
+
+    /* INT Feed */
+    .int-event {
+      padding: 10px 14px;
+      background: rgba(15, 23, 42, 0.7);
+      border-left: 3px solid;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .int-event:hover { background: rgba(30, 41, 59, 0.9); }
+
+    .int-event .ie-head {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-bottom: 6px;
+    }
+    .int-event .ie-source {
+      font-size: 0.7rem; font-family: 'Courier New', monospace;
+      color: #94a3b8; letter-spacing: 0.5px;
+    }
+    .int-event .ie-class {
+      padding: 2px 8px; border-radius: 3px;
+      font-size: 0.6rem; font-weight: 800;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .int-event .ie-msg { color: #e2e8f0; margin-bottom: 4px; }
+    .int-event .ie-meta {
+      font-size: 0.65rem; color: #64748b;
+      font-family: 'Courier New', monospace;
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+
+    /* Stats grid */
+    .icr-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .icr-stat {
+      padding: 14px 16px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 10px;
+      border-left: 3px solid;
+    }
+    .icr-stat .label {
+      font-size: 0.65rem; color: #94a3b8;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .icr-stat .value {
+      font-size: 1.4rem; font-weight: 900; color: #fff;
+      font-family: 'Courier New', monospace; line-height: 1;
+    }
+    .icr-stat .meta {
+      font-size: 0.7rem; color: #64748b; margin-top: 4px;
+    }
+
+    /* Scenario buttons */
+    .scenario-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 12px 16px;
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+    .scenario-bar .sb-label {
+      font-size: 0.7rem; color: #64748b;
+      letter-spacing: 1px; text-transform: uppercase;
+      align-self: center; font-weight: 700; margin-right: 8px;
+    }
+    .scenario-btn {
+      padding: 6px 14px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: #22d3ee;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: inherit;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .scenario-btn:hover {
+      background: rgba(6, 182, 212, 0.3);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard" data-matra="icr">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="brand">
+      <span class="brand-mark" style="color:#06b6d4;">🛰️</span>
+      <div class="brand-text">
+        <strong>ICR</strong>
+        <span>Siskodal</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Intelligence</div>
+    <a href="#" class="nav-item active" data-tab="overview"><i class="fas fa-chart-line"></i> Overview</a>
+    <a href="#" class="nav-item" data-tab="pir"><i class="fas fa-bullseye"></i> PIR Matrix</a>
+
+    <div class="nav-section">Collection</div>
+    <a href="#" class="nav-item" data-tab="edge"><i class="fas fa-microchip"></i> Edge AI Sites</a>
+    <a href="#" class="nav-item" data-tab="feed">
+      <i class="fas fa-satellite-dish"></i> INT Feed
+      <span style="margin-left:auto;font-size:0.65rem;background:#22c55e;color:#000;padding:1px 6px;border-radius:4px;font-weight:800;">LIVE</span>
+    </a>
+
+    <div class="nav-section">Analytics</div>
+    <a href="#" class="nav-item" data-tab="matra"><i class="fas fa-layer-group"></i> Matra Profiles</a>
+    <a href="#" class="nav-item" data-tab="nato"><i class="fas fa-shield-halved"></i> NATO Formats</a>
+
+    <div class="nav-section">Navigasi</div>
+    <a href="/joc/icr.html" class="nav-item"><i class="fas fa-chevron-left"></i> Sub-Portal ICR</a>
+    <a href="/joc/" class="nav-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <a href="/joc/map.html" class="nav-item"><i class="fas fa-globe"></i> Peta NKRI</a>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="dash-header">
+    <div class="title-block">
+      <h1>INTEGRASI ICR</h1>
+      <p id="page-subtitle">Intelligence, Surveillance &amp; Reconnaissance Operations Center</p>
+    </div>
+    <div class="header-stats">
+      <div class="clearance-bar">
+        <label><i class="fas fa-user-shield"></i> CLEARANCE</label>
+        <select id="clearance-select">
+          <option value="UNCLASS">UNCLASSIFIED</option>
+          <option value="RESTRICTED">RESTRICTED</option>
+          <option value="CONFIDENTIAL" selected>CONFIDENTIAL</option>
+          <option value="SECRET">SECRET</option>
+          <option value="TOP_SECRET">TOP SECRET</option>
+        </select>
+      </div>
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value" id="live-clock">--:--:--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Status</span>
+        <span class="value" style="color:#4ade80;">● OPERATIONAL</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- TAB OVERVIEW -->
+    <section class="tab-content active" id="tab-overview">
+      <div class="icr-stats">
+        <div class="icr-stat" style="border-left-color:#3b82f6;">
+          <div class="label">Raw Events</div>
+          <div class="value" id="stat-raw">--</div>
+          <div class="meta">Sensor detections</div>
+        </div>
+        <div class="icr-stat" style="border-left-color:#22c55e;">
+          <div class="label">Transmitted</div>
+          <div class="value" id="stat-transmitted">--</div>
+          <div class="meta">Setelah edge filter</div>
+        </div>
+        <div class="icr-stat" style="border-left-color:#eab308;">
+          <div class="label">Event Filter Rate</div>
+          <div class="value" id="stat-reduction">--</div>
+          <div class="meta">Raw → Transmitted</div>
+        </div>
+
+        <div class="icr-stat" style="border-left-color:#22c55e;">
+          <div class="label">BW Reduction</div>
+          <div class="value" id="stat-bw">--</div>
+          <div class="meta">Bandwidth saved ratio</div>
+        </div>
+        <div class="icr-stat" style="border-left-color:#a855f7;">
+          <div class="label">Edge Sites</div>
+          <div class="value" id="stat-sites">--</div>
+          <div class="meta">Jetson Orin active</div>
+        </div>
+        <div class="icr-stat" style="border-left-color:#ef4444;">
+          <div class="label">High Priority</div>
+          <div class="value" id="stat-alerts">--</div>
+          <div class="meta">SECRET+ alerts</div>
+        </div>
+        <div class="icr-stat" style="border-left-color:#06b6d4;">
+          <div class="label">Bandwidth Saved</div>
+          <div class="value" id="stat-bandwidth">--</div>
+          <div class="meta">MB cumulative</div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Recent Intel Feed</h3>
+          <span style="font-size:0.7rem;color:#22c55e;font-family:monospace;">● LIVE</span>
+        </div>
+        <div class="panel-body">
+          <div class="scenario-bar">
+            <div class="sb-label"><i class="fas fa-play-circle"></i> Trigger Scenario:</div>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('intrusion')">🛡️ Border Intrusion</button>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('hostile_radar')">📡 Hostile Radar</button>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('vessel_anomaly')">⚓ Vessel Anomaly</button>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('thermal_contact')">🌡️ Thermal Contact</button>
+          </div>
+          <div id="feed-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB PIR -->
+    <section class="tab-content" id="tab-pir">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Priority Intelligence Requirements</h3>
+        </div>
+        <div class="panel-body">
+          <div id="pir-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB EDGE -->
+    <section class="tab-content" id="tab-edge">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Edge AI Sites — Jetson Orin Fleet</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;" id="edge-count">-- sites</span>
+        </div>
+        <div class="panel-body">
+          <div id="edge-sites-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB FEED (full) -->
+    <section class="tab-content" id="tab-feed">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Multi-INT Feed</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;" id="feed-count">0 events</span>
+        </div>
+        <div class="panel-body">
+          <div id="feed-full"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB MATRA -->
+    <section class="tab-content" id="tab-matra">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Matra Profiling &amp; Capabilities</h3>
+        </div>
+        <div class="panel-body">
+          <div id="matra-grid"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB NATO -->
+    <section class="tab-content" id="tab-nato">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ NATO Standards &amp; Formats</h3>
+        </div>
+        <div class="panel-body">
+          <div id="nato-list"></div>
+        </div>
+      </section>
+    </section>
+
+  </main>
+
+</div>
+
+<script src="/joc/js/icr-core.js" data-cfasync="false"></script>
+<script src="/joc/js/icr-sensor-topology.js" data-cfasync="false"></script>
+<script src="/joc/js/icr-edge-ai.js" data-cfasync="false"></script>
+<script>
+  (function init() {
+    // Clock
+    setInterval(() => {
+      const t = new Date().toISOString().substr(11, 8);
+      const el = document.getElementById('live-clock');
+      if (el) el.textContent = t;
+    }, 1000);
+
+    // Start edge AI
+    ICREdgeAI.start((event) => {
+      appendEvent(event);
+      updateStats();
+    }, 2500);
+
+    // Initial render
+    renderPIR();
+    renderEdgeSites();
+    renderMatraGrid();
+    renderNATO();
+
+    // Tabs
+    document.querySelectorAll('.nav-item[data-tab]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = el.dataset.tab;
+        document.querySelectorAll('.tab-content').forEach(t => {
+          t.classList.toggle('active', t.id === `tab-${tab}`);
+        });
+        document.querySelectorAll('.nav-item[data-tab]').forEach(n => {
+          n.classList.toggle('active', n.dataset.tab === tab);
+        });
+      });
+    });
+
+    // Clearance filter
+    document.getElementById('clearance-select').addEventListener('change', applyClearance);
+    applyClearance();
+
+    console.log('[ICR] Dashboard initialized');
+  })();
+
+  // ============================================
+  // RENDER: PIR
+  // ============================================
+  function renderPIR() {
+    const container = document.getElementById('pir-list');
+    let html = '';
+    ['ad', 'al', 'au'].forEach(matra => {
+      const p = ICRCore.getProfile(matra);
+      const pirs = ICRCore.getPIR(matra);
+      html += `<h4 style="font-size:0.85rem; color:${p.color}; margin:16px 0 10px; letter-spacing:1px;">◤ ${p.code} — ${p.name}</h4>`;
+      html += `<table class="data-table" style="margin-bottom:20px;">
+        <thead><tr>
+          <th>ID</th><th>Priority</th><th>Domain</th><th>Requirement</th><th>Status</th>
+        </tr></thead><tbody>`;
+      pirs.forEach(pir => {
+        html += `<tr>
+          <td class="mono" style="font-size:0.75rem;">${pir.id}</td>
+          <td><span class="pir-badge ${pir.priority.toLowerCase()}">${pir.priority}</span></td>
+          <td style="font-size:0.75rem;color:#94a3b8;">${pir.domain}</td>
+          <td style="font-size:0.8rem;">${pir.text}</td>
+          <td>${pir.active
+            ? '<span style="color:#4ade80;font-weight:700;font-size:0.75rem;">● ACTIVE</span>'
+            : '<span style="color:#64748b;font-size:0.75rem;">○ INACTIVE</span>'}</td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    });
+    container.innerHTML = html;
+  }
+
+  // ============================================
+  // RENDER: Edge Sites
+  // ============================================
+  function renderEdgeSites() {
+    const container = document.getElementById('edge-sites-list');
+    const sites = ICRSensorTopology.EDGE_SITES;
+    document.getElementById('edge-count').textContent = `${sites.length} sites online`;
+
+    container.innerHTML = sites.map(s => `
+      <div class="edge-card ${s.matra}">
+        <div class="ec-head">
+          <div>
+            <div class="ec-name">${s.name}</div>
+            <div class="ec-loc">📍 ${s.location}</div>
+          </div>
+          <span class="ec-badge">● ONLINE</span>
+        </div>
+        <div class="ec-meta">
+          <div><strong>${s.jetsonModel}</strong>Jetson</div>
+          <div><strong>${s.processedFPS} FPS</strong>YOLO</div>
+          <div><strong>${s.bufferHours} jam</strong>Buffer</div>
+          <div><strong>${s.uplinkBandwidth}</strong>Uplink</div>
+          <div><strong>${s.sensors.length}</strong>Sensors</div>
+          <div><strong>${s.coverage.radius} km</strong>Coverage</div>
+        </div>
+        <div style="margin-top:10px; display:flex; gap:4px; flex-wrap:wrap;">
+          ${s.sensors.map(sensor => {
+            const st = ICRSensorTopology.getSensorType(sensor);
+            return `<span style="font-size:0.65rem; padding:2px 8px; border-radius:4px; background:${st.color}22; color:${st.color}; border:1px solid ${st.color}55; font-family:monospace;">
+              ${st.icon} ${st.code}
+            </span>`;
+          }).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================
+  // RENDER: Matra Grid (in dashboard)
+  // ============================================
+  function renderMatraGrid() {
+    const container = document.getElementById('matra-grid');
+    container.innerHTML = ['ad', 'al', 'au'].map(matra => {
+      const p = ICRCore.getProfile(matra);
+      const siteCount = ICRSensorTopology.getSitesByMatra(matra).length;
+      const pirCount = ICRCore.getActivePIR(matra).length;
+      return `
+        <div style="padding:20px; background:rgba(15,23,42,0.7); border:2px solid ${p.color}55; border-radius:12px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+            <div style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; background:${p.color}; color:#fff; border-radius:10px; font-size:1.4rem; font-weight:900;">${p.icon}</div>
+            <div>
+              <div style="font-size:1rem; font-weight:800; color:#fff;">${p.name}</div>
+              <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">${siteCount} edge sites · ${pirCount} active PIR</div>
+            </div>
+          </div>
+          <ul style="list-style:none; padding:0; margin:0;">
+            ${p.strength.map(s => `<li style="font-size:0.8rem; color:#cbd5e1; padding:5px 0 5px 20px; position:relative;">
+              <span style="position:absolute; left:6px; color:${p.color};">▸</span>${s}
+            </li>`).join('')}
+          </ul>
+          <div style="margin-top:14px; font-size:0.7rem; color:#64748b; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:6px;">NATO Formats</div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            ${p.natoFormats.map(f => `<span style="font-size:0.65rem; padding:3px 10px; border-radius:4px; background:rgba(168,85,247,0.15); color:#c084fc; border:1px solid rgba(168,85,247,0.3); font-family:monospace;">${f.replace('_',' ')}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ============================================
+  // RENDER: NATO Formats
+  // ============================================
+  function renderNATO() {
+    const container = document.getElementById('nato-list');
+    const formats = Object.entries(ICRCore.NATO_FORMATS);
+    container.innerHTML = `
+      <table class="data-table">
+        <thead><tr>
+          <th>Key</th><th>STANAG</th><th>Code</th><th>Name</th><th>Description</th>
+        </tr></thead>
+        <tbody>
+          ${formats.map(([key, f]) => `
+            <tr>
+              <td class="mono" style="font-size:0.7rem;color:#94a3b8;">${key}</td>
+              <td class="mono" style="font-size:0.8rem;font-weight:700;color:#22d3ee;">${f.code}</td>
+              <td style="font-size:0.8rem;color:#60a5fa;">${f.name}</td>
+              <td style="font-size:0.8rem;color:#fff;">${f.desc}</td>
+              <td style="font-size:0.75rem;color:#94a3b8;">Standard NATO untuk interoperabilitas ISR</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:20px; padding:16px; background:rgba(30,41,59,0.4); border-left:3px solid #a855f7; border-radius:0 8px 8px 0;">
+        <div style="font-size:0.75rem; color:#c084fc; letter-spacing:1px; font-weight:700; margin-bottom:8px;">◤ NATO ISR STACK</div>
+        <div style="font-size:0.8rem; color:#cbd5e1; line-height:1.6;">
+          R2 JOC mengadopsi standar NATO untuk interoperabilitas dengan sekutu dan
+          joint operations. Data link menggunakan Link-16 (STANAG 5516), ISR produk
+          via NSILI (STANAG 4559), imagery via NITF (STANAG 4545), dan video via
+          FMV (STANAG 4609).
+        </div>
+      </div>
+    `;
+  }
+
+  // ============================================
+  // FEED EVENT
+  // ============================================
+  function appendEvent(evt) {
+    const clearance = document.getElementById('clearance-select').value;
+    if (!canView(evt.classification, clearance)) return;
+
+    const cls = ICRCore.getClassification(evt.classification);
+    const disc = ICRCore.getDiscipline(evt.discipline);
+
+    const html = `
+      <div class="int-event" style="border-left-color:${cls.color};">
+        <div class="ie-head">
+          <div class="ie-source">
+            <i class="fas ${getDiscIcon(disc.code)}" style="color:${disc.color};"></i>
+            ${disc.code} · ${evt.siteName}
+          </div>
+          <span class="ie-class" style="background:${cls.bg};color:${cls.color};">${cls.label}</span>
+        </div>
+        <div class="ie-msg">${evt.message}</div>
+        <div class="ie-meta">
+          <span>📍 ${evt.lat.toFixed(3)}, ${evt.lon.toFixed(3)}</span>
+          <span>🎯 Conf: ${(evt.confidence * 100).toFixed(0)}%</span>
+          <span>⚡ Edge: ${evt.edgeLatencyMs?.toFixed(0) || '--'}ms</span>
+          <span>📉 Saved: ${(evt.bandwidthReduction * 100).toFixed(1)}%</span>
+          <span>🕐 ${new Date(evt.timestamp).toLocaleTimeString('id-ID')}</span>
+        </div>
+      </div>
+    `;
+
+    ['feed-list', 'feed-full'].forEach(id => {
+      const c = document.getElementById(id);
+      if (c) {
+        c.insertAdjacentHTML('afterbegin', html);
+        while (c.children.length > 30) c.removeChild(c.lastChild);
+      }
+    });
+
+    document.getElementById('feed-count').textContent = `${ICREdgeAI.getStats().transmittedTotal} events`;
+  }
+
+  function getDiscIcon(code) {
+    const map = {
+      IMINT: 'fa-camera', SIGINT: 'fa-tower-broadcast', HUMINT: 'fa-user-secret',
+      MASINT: 'fa-wave-square', OSINT: 'fa-globe', GEOINT: 'fa-map',
+      TECHINT: 'fa-microchip', CYBERINT: 'fa-shield-virus'
+    };
+    return map[code] || 'fa-circle-info';
+  }
+
+  // ============================================
+  // CLEARANCE FILTER
+  // ============================================
+  function canView(classification, clearance) {
+    const order = ['UNCLASS', 'RESTRICTED', 'CONFIDENTIAL', 'SECRET', 'TOP_SECRET'];
+    return order.indexOf(classification) <= order.indexOf(clearance);
+  }
+
+  function applyClearance() {
+    const clearance = document.getElementById('clearance-select').value;
+    // Re-filter existing events (visual)
+    document.querySelectorAll('.int-event').forEach(el => {
+      const cls = el.querySelector('.ie-class')?.textContent?.trim() || 'UNCLASSIFIED';
+      const key = cls.replace(' ', '_');
+      el.style.opacity = canView(key, clearance) ? '1' : '0.15';
+    });
+  }
+
+  // ============================================
+  // STATS UPDATE
+  // ============================================
+  function updateStats() {
+    const s = ICREdgeAI.getStats();
+    
+    document.getElementById('stat-raw').textContent = s.rawEventsTotal;
+    document.getElementById('stat-transmitted').textContent = s.transmittedTotal;
+    document.getElementById('stat-reduction').textContent = `${(s.reductionRatio * 100).toFixed(0)}%`;
+    document.getElementById('stat-sites').textContent = ICRSensorTopology.getStats().edgeSites;
+    document.getElementById('stat-alerts').textContent = s.alertsGenerated;
+    document.getElementById('stat-bandwidth').textContent = `${s.bandwidthSavedMB} MB`;
+    
+    // Bandwidth reduction avg
+    const bwAvg = s.transmittedTotal > 0
+      ? Math.min(99.9, (s.bandwidthSaved / (s.bandwidthSaved + s.transmittedTotal * 2000)) * 100).toFixed(1)
+      : '0.0';
+    const bwEl = document.getElementById('stat-bw');
+    if (bwEl) bwEl.textContent = `${bwAvg}%`;
+  }
+</script>
+
+</body>
+</html>

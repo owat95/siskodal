@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logistik TNI AL — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard" data-matra="al">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="brand">
+      <span class="brand-mark" style="color:#60a5fa;">⚓</span>
+      <div class="brand-text">
+        <strong>LOGISTIK AL</strong>
+        <span>Siskodal</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Dashboard</div>
+    <a href="#" class="nav-item active" data-tab="overview"><i class="fas fa-chart-line"></i> Overview AI</a>
+    <a href="#" class="nav-item" data-tab="alutsista"><i class="fas fa-shield-halved"></i> Alutsista</a>
+
+    <div class="nav-section">AI Analytics</div>
+    <a href="#" class="nav-item" data-tab="fuel"><i class="fas fa-gas-pump"></i> Predictive Fuel</a>
+    <a href="#" class="nav-item" data-tab="maintenance"><i class="fas fa-tools"></i> Digital Twin</a>
+    <a href="#" class="nav-item" data-tab="autonomous"><i class="fas fa-robot"></i> Autonomous Resupply</a>
+    <a href="#" class="nav-item" data-tab="supply"><i class="fas fa-network-wired"></i> Supply Chain</a>
+
+    <div class="nav-section">Gudang</div>
+    <a href="#" class="nav-item" data-tab="gudang"><i class="fas fa-warehouse"></i> Depo &amp; Stok</a>
+    <a href="#" class="nav-item" data-tab="routes"><i class="fas fa-route"></i> Rute Suplai</a>
+
+    <div class="nav-section">Keamanan</div>
+    <a href="#" class="nav-item" data-tab="cyber">
+      <i class="fas fa-shield-halved"></i> Cyber Threats
+      <span style="margin-left:auto;font-size:0.65rem;background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;">2</span>
+    </a>
+
+    <div class="nav-section">Navigasi</div>
+    <a href="/joc/" class="nav-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <a href="/joc/dashboard-ad.html" class="nav-item"><i class="fas fa-user-shield"></i> Personel AD</a>
+    <a href="/joc/map.html" class="nav-item"><i class="fas fa-globe"></i> Peta NKRI</a>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="dash-header">
+    <div class="title-block">
+      <h1>LOGISTIK TNI ANGKATAN LAUT</h1>
+      <p id="page-subtitle">AI-Powered Supply Chain &amp; Maintenance</p>
+    </div>
+    <div class="header-stats">
+
+      <!-- ROLE SWITCHER -->
+      <div class="role-switcher">
+        <label><i class="fas fa-user-lock"></i> ROLE</label>
+        <select id="role-select">
+          <option value="JENDRAL_AD">Jendral TNI AD</option>
+          <option value="OPS_LOG">Operator Logistik</option>
+          <option value="WATCHER">Watcher (Read-Only)</option>
+          <option value="JENDRAL_AL">Jendral TNI AL ⚠</option>
+          <option value="JENDRAL_AU">Jendral TNI AU ⚠</option>
+        </select>
+      </div>
+
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value" id="live-clock">--:--:--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Matra</span>
+        <span class="value" style="color:#60a5fa;">● TNI AL</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="dash-main">
+
+    <!-- TAB: OVERVIEW -->
+    <section class="tab-content active" id="tab-overview">
+      <div class="overview-grid">
+        <div class="overview-card" style="--accent:#3b82f6;">
+          <div class="label">Total Alutsista</div>
+          <div class="value" id="ov-alutsista">--</div>
+          <div class="meta">Ready + Maintenance</div>
+        </div>
+        <div class="overview-card" style="--accent:#22c55e;">
+          <div class="label">Status Ready</div>
+          <div class="value" id="ov-ready">--</div>
+          <div class="meta">Siap operasi</div>
+        </div>
+        <div class="overview-card" style="--accent:#eab308;">
+          <div class="label">Fuel Critical</div>
+          <div class="value" id="ov-fuel">--</div>
+          <div class="meta">Butuh refuel &lt; 3 hari</div>
+        </div>
+        <div class="overview-card" style="--accent:#a855f7;">
+          <div class="label">Auto Resupply</div>
+          <div class="value" id="ov-auto">--</div>
+          <div class="meta">UAV/UGV rekomendasi</div>
+        </div>
+        <div class="overview-card" style="--accent:#ef4444;">
+          <div class="label">Cyber Threats</div>
+          <div class="value" id="ov-cyber">--</div>
+          <div class="meta">Anomali aktif</div>
+        </div>
+        <div class="overview-card" style="--accent:#06b6d4;">
+          <div class="label">Supply Imbalances</div>
+          <div class="value" id="ov-supply">--</div>
+          <div class="meta">Gudang perlu redistribusi</div>
+        </div>
+      </div>
+
+      <!-- AI EXECUTIVE SUMMARY -->
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ AI Executive Summary</h3>
+          <span style="font-size:0.7rem;color:#a855f7;font-family:monospace;">◈ NEURAL ANALYSIS</span>
+        </div>
+        <div class="panel-body">
+          <div class="ai-panel">
+            <div class="ai-header">
+              <div class="ai-title"><i class="fas fa-brain"></i> PRIORITY ACTIONS</div>
+            </div>
+            <div class="ai-content" id="ai-summary"></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: ALUTSISTA -->
+    <section class="tab-content" id="tab-alutsista">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Alutsista TNI AD</h3></div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th><th>Nama</th><th>Type</th><th>Unit</th>
+                <th>Fuel</th><th>Hours</th><th>Status</th><th>Location</th>
+              </tr>
+            </thead>
+            <tbody id="alutsista-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: FUEL -->
+    <section class="tab-content" id="tab-fuel">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Predictive Fuel Depletion</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;">AI memprediksi sisa waktu pemakaian bahan bakar</span>
+        </div>
+        <div class="panel-body">
+          <div class="open-positions-grid" id="fuel-grid"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: MAINTENANCE -->
+    <section class="tab-content" id="tab-maintenance">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Digital Twin — Maintenance Scheduling</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;">Auto-scheduling alutsista repair</span>
+        </div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Alutsista</th><th>Unit</th><th>Failure Risk</th>
+                <th>Priority</th><th>Window</th><th>Duration</th><th>Facility</th>
+              </tr>
+            </thead>
+            <tbody id="maintenance-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: AUTONOMOUS -->
+    <section class="tab-content" id="tab-autonomous">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Autonomous Resupply Recommendation</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;">UAV/UGV deployment tanpa awak</span>
+        </div>
+        <div class="panel-body">
+          <div id="autonomous-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: SUPPLY -->
+    <section class="tab-content" id="tab-supply">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Supply Chain Optimization</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;">Deteksi imbalance antar gudang</span>
+        </div>
+        <div class="panel-body">
+          <div id="supply-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: GUDANG -->
+    <section class="tab-content" id="tab-gudang">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Depo &amp; Stok</h3></div>
+        <div class="panel-body">
+          <div class="open-positions-grid" id="gudang-grid"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: ROUTES -->
+    <section class="tab-content" id="tab-routes">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Rute Suplai Aktif</h3></div>
+        <div class="panel-body">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Route ID</th><th>From</th><th>To</th><th>Vehicle</th>
+                <th>Cargo</th><th>Risk</th><th>ETA</th><th>Distance</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="routes-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: CYBER -->
+    <section class="tab-content" id="tab-cyber">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Cyber Threat Hunting — Supply Chain</h3>
+          <span style="font-size:0.7rem;color:#ef4444;font-family:monospace;">⚠ ACTIVE MONITORING</span>
+        </div>
+        <div class="panel-body">
+          <div id="cyber-list"></div>
+        </div>
+      </section>
+    </section>
+
+  </main>
+
+  <!-- ACCESS DENIED OVERLAY -->
+  <div class="access-denied" id="access-denied">
+    <div class="access-denied-content">
+      <div class="icon"><i class="fas fa-shield-halved"></i></div>
+      <h2>ACCESS DENIED</h2>
+      <p>Role Anda tidak memiliki otorisasi untuk mengakses data logistik TNI AD.</p>
+      <p>Zero Trust Security — RBAC enforcement active.</p>
+      <div class="reason" id="denied-reason"></div>
+      <button onclick="DashboardLogistikAD.switchRole("JENDRAL_AL")" 
+              style="margin-top:20px;padding:10px 24px;background:#4ade80;color:#04121a;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;">
+        ← Kembali sebagai Jendral AL
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/joc/js/jspdf.umd.min.js"></script>
+<script data-cfasync="false" src="/joc/js/jspdf-autotable.min.js"></script>
+<script src="/joc/js/logistics-data.js" data-cfasync="false"></script>
+<script src="/joc/js/logistics-ai.js" data-cfasync="false"></script>
+<script src="/joc/js/export-pdf.js" data-cfasync="false"></script>
+<script src="/joc/js/dashboard-logistik-al.js" data-cfasync="false"></script>
+
+</body>
+</html>

@@ -1,0 +1,338 @@
+/* ============================================================ */
+/* INFRASTRUCTURE.CSS — Data Freshness, AI Confidence,           */
+/* Classification Banner, Offline Mode                           */
+/* ============================================================ */
+
+/* ============================================ */
+/* CLASSIFICATION BANNER (Top & Bottom)          */
+/* ============================================ */
+.classification-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.classification-top { top: 0; }
+.classification-bottom { bottom: 0; }
+
+.classification-banner .cb-label {
+  font-weight: 900;
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+  text-shadow: 0 0 8px currentColor;
+}
+
+.classification-banner .cb-sep {
+  color: #475569;
+  margin: 0 10px;
+}
+
+.classification-banner .cb-info {
+  display: flex;
+  gap: 16px;
+  font-size: 0.65rem;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.classification-banner .cb-item { display: flex; align-items: center; gap: 4px; }
+
+.classification-banner .cb-handling {
+  color: #64748b;
+  font-style: italic;
+}
+
+.classification-banner .cb-warning {
+  color: #cbd5e1;
+  font-size: 0.65rem;
+}
+
+/* Individual classification tag */
+.classification-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================ */
+/* DATA FRESHNESS INDICATOR                      */
+/* ============================================ */
+.freshness-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.freshness-indicator:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.freshness-indicator .fi-icon {
+  font-size: 0.9rem;
+  animation: pulse-fresh 2s ease-in-out infinite;
+}
+
+@keyframes pulse-fresh {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.freshness-indicator .fi-text {
+  color: #cbd5e1;
+}
+
+.freshness-indicator .fi-text strong {
+  font-weight: 900;
+}
+
+.freshness-indicator .fi-detail {
+  color: #64748b;
+  font-size: 0.65rem;
+}
+
+/* ============================================ */
+/* OFFLINE MODE BANNER                           */
+/* ============================================ */
+body.offline-mode {
+  filter: saturate(0.6);
+}
+
+body.offline-mode::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(234, 179, 8, 0.02) 8px,
+      rgba(234, 179, 8, 0.02) 16px
+    );
+}
+
+.offline-banner {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9997;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(239, 68, 68, 0.15));
+  border: 2px solid rgba(234, 179, 8, 0.6);
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: #facc15;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: offline-pulse 2s ease-in-out infinite;
+  max-width: 90%;
+}
+
+@keyframes offline-pulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(234, 179, 8, 0.15); }
+  50% { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 30px rgba(234, 179, 8, 0.35); }
+}
+
+.offline-banner .ob-icon {
+  font-size: 1.4rem;
+  animation: rotate-icon 3s linear infinite;
+}
+
+@keyframes rotate-icon {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.offline-banner .ob-text {
+  color: #cbd5e1;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.offline-banner .ob-text strong {
+  color: #facc15;
+  letter-spacing: 1px;
+}
+
+.offline-banner .ob-text em {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ============================================ */
+/* AI CONFIDENCE BADGE                           */
+/* ============================================ */
+.ai-confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: help;
+}
+
+.ai-confidence-badge .acb-icon { font-size: 0.85rem; }
+
+.ai-confidence-badge .acb-model {
+  color: #94a3b8;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-confidence-badge .acb-score {
+  font-weight: 900;
+  font-size: 0.8rem;
+}
+
+.ai-confidence-badge .acb-level {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  font-weight: 800;
+}
+
+.ai-confidence-badge .acb-validation {
+  font-size: 0.55rem;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================ */
+/* AI DISCLAIMER PANEL                           */
+/* ============================================ */
+.ai-disclaimer {
+  padding: 10px 14px;
+  background: rgba(30, 41, 59, 0.5);
+  border-left: 3px solid;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.72rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-top: 12px;
+}
+
+.ai-disclaimer.disclaimer-high   { border-color: #22c55e; }
+.ai-disclaimer.disclaimer-medium { border-color: #eab308; }
+.ai-disclaimer.disclaimer-low    { border-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+
+.ai-disclaimer .ai-label {
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-disclaimer.disclaimer-high .ai-label   { color: #4ade80; }
+.ai-disclaimer.disclaimer-medium .ai-label { color: #facc15; }
+.ai-disclaimer.disclaimer-low .ai-label    { color: #f87171; }
+
+/* ============================================ */
+/* SOURCE CREDIBILITY (Admiralty Code)           */
+/* ============================================ */
+.admiralty-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: help;
+}
+
+.admiralty-code .ac-reliability {
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.admiralty-code .ac-slash {
+  color: #475569;
+  font-weight: 400;
+}
+
+.admiralty-code .ac-accuracy {
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+/* Reliability colors */
+.admiralty-code[data-reliability="A"],
+.admiralty-code[data-reliability="B"] { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+
+.admiralty-code[data-reliability="C"],
+.admiralty-code[data-reliability="D"] { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.4); }
+
+.admiralty-code[data-reliability="E"],
+.admiralty-code[data-reliability="F"] { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+/* ============================================ */
+/* DATA QUALITY INDICATOR                        */
+/* ============================================ */
+.data-quality {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.data-quality .dq-bar {
+  display: flex;
+  gap: 2px;
+}
+
+.data-quality .dq-segment {
+  width: 8px;
+  height: 10px;
+  border-radius: 1px;
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.data-quality .dq-segment.filled { background: #22c55e; }
+.data-quality .dq-segment.warn { background: #eab308; }
+.data-quality .dq-segment.critical { background: #ef4444; }

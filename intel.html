@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intelijen — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb { display: flex; align-items: center; gap: 8px; padding: 16px 0; font-size: 0.8rem; color: #94a3b8; font-family: 'Courier New', monospace; }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .intel-header-page { text-align: center; padding: 20px 0 40px; }
+    .intel-header-page .icon-big { font-size: 4rem; margin-bottom: 16px; filter: drop-shadow(0 0 30px rgba(6, 182, 212, 0.5)); }
+    .intel-header-page h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; color: #fff; }
+    .intel-header-page .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .intel-header-page .desc { color: #94a3b8; margin-top: 16px; max-width: 780px; margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem; }
+
+    .live-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 40px; }
+    .live-stat { padding: 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 10px; border-left: 3px solid; }
+    .live-stat .value { font-size: 1.6rem; font-weight: 900; color: #fff; font-family: 'Courier New', monospace; line-height: 1; }
+    .live-stat .label { font-size: 0.65rem; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+
+    .disc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 40px; }
+    .disc-card { padding: 12px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 10px; border-left: 3px solid; }
+    .disc-card .dc-icon { font-size: 1.2rem; margin-bottom: 4px; }
+    .disc-card .dc-code { font-size: 0.65rem; font-family: 'Courier New', monospace; color: #64748b; letter-spacing: 1px; margin-bottom: 2px; }
+    .disc-card .dc-name { font-size: 0.75rem; color: #fff; font-weight: 700; }
+
+    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 40px; }
+    .cap-card { padding: 18px; background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 12px; border-left: 3px solid #06b6d4; transition: all 0.2s; }
+    .cap-card:hover { transform: translateY(-3px); border-left-color: #22d3ee; }
+    .cap-card .cc-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+    .cap-card .cc-title { font-size: 0.85rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase; }
+    .cap-card .cc-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
+
+    .cta-primary { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: linear-gradient(135deg, #00e5ff, #00ff9d); color: #04121a; font-weight: 800; font-size: 1rem; border-radius: 12px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.5px; }
+    .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 229, 255, 0.4); }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Intelijen</span>
+  </div>
+
+  <header class="intel-header-page">
+    <div class="icon-big" style="color:#06b6d4;">🛰️</div>
+    <h1>INTELIJEN</h1>
+    <p class="sub">STRATEGIC INTELLIGENCE CENTER</p>
+    <p class="desc">
+      Pusat analisis intelijen strategis dengan Admiralty Code (A-F / 1-6) untuk
+      penilaian kredibilitas sumber. Verifikasi human-in-the-loop, country profiling,
+      threat matrix, dan multi-INT fusion. Dilengkapi classification marking
+      sesuai standar NATO.
+    </p>
+  </header>
+
+  <!-- LIVE STATS -->
+  <div class="live-stats" id="live-stats"></div>
+
+  <!-- INT DISCIPLINES -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>INTELLIGENCE DISCIPLINES</h2>
+    <p>Multi-INT collection & analysis</p>
+  </div>
+
+  <div class="disc-grid" id="disc-grid"></div>
+
+  <!-- CAPABILITIES -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>KAPABILITAS INTELIJEN</h2>
+    <p>Strategic intelligence products</p>
+  </div>
+
+  <div class="cap-grid">
+    <div class="cap-card">
+      <span class="cc-icon">🎯</span>
+      <div class="cc-title">Admiralty Code</div>
+      <div class="cc-desc">Rating kredibilitas A-F + akurasi informasi 1-6. Setiap intel wajib dinilai untuk hindari disinformasi.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">✅</span>
+      <div class="cc-title">Human-in-the-Loop</div>
+      <div class="cc-desc">Verification workflow manual + AI-assisted auto-verify. Semua aksi analis tercatat.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">🌍</span>
+      <div class="cc-title">Country Profiles</div>
+      <div class="cc-desc">Profil lengkap 8 negara: capabilities, recent activity, threat level, metrics.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">📊</span>
+      <div class="cc-title">Threat Matrix</div>
+      <div class="cc-desc">Kategorisasi ancaman: STATE / PROXY / CRIMINAL / CYBER dengan probability × impact.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">📡</span>
+      <div class="cc-title">Source Registry</div>
+      <div class="cc-desc">Tracking credibility 7 sumber: accuracy rate, total submissions, verified/dismissed ratio.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">🔒</span>
+      <div class="cc-title">Classification Marking</div>
+      <div class="cc-desc">Setiap intel punya label klasifikasi NATO: UNCLASS → TOP SECRET. Banner top + bottom.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center; margin-top:40px;">
+    <a href="/joc/intel-dashboard.html" class="cta-primary">
+      <i class="fas fa-microscope"></i> Buka Intel Dashboard →
+    </a>
+    <div style="margin-top:20px;">
+      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal
+      </a>
+    </div>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · Intelijen</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script src="/joc/js/intel-data.js" data-cfasync="false"></script>
+<script src="/joc/js/intel-core.js" data-cfasync="false"></script>
+<script>
+  (function init() {
+    const stats = IntelData.getStats();
+    const coreStats = IntelCore.getStats();
+
+    // Live stats
+    const statsEl = document.getElementById('live-stats');
+    const statList = [
+      { color: '#22d3ee', value: stats.totalIntel,        label: 'Total Intel' },
+      { color: '#4ade80', value: stats.verified,          label: 'Verified' },
+      { color: '#facc15', value: stats.pending,           label: 'Pending' },
+      { color: '#ef4444', value: stats.criticalThreats,   label: 'Critical' },
+      { color: '#a855f7', value: coreStats.totalSources,  label: 'Sources' },
+      { color: '#3b82f6', value: coreStats.avgAccuracy + '%', label: 'Avg Accuracy' }
+    ];
+
+    statsEl.innerHTML = statList.map(s => `
+      <div class="live-stat" style="border-left-color:${s.color};">
+        <div class="value" style="color:${s.color};">${s.value}</div>
+        <div class="label">${s.label}</div>
+      </div>
+    `).join('');
+
+    // INT disciplines
+    const discColors = {
+      IMINT: '#3b82f6', SIGINT: '#a855f7', HUMINT: '#eab308',
+      MASINT: '#f97316', OSINT: '#22c55e', GEOINT: '#06b6d4',
+      TECHINT: '#ef4444', CYBERINT: '#ec4899'
+    };
+    const discNames = {
+      IMINT: 'Imagery', SIGINT: 'Signals', HUMINT: 'Human',
+      MASINT: 'Measurement', OSINT: 'Open Source', GEOINT: 'Geospatial',
+      TECHINT: 'Technical', CYBERINT: 'Cyber'
+    };
+
+    const discEl = document.getElementById('disc-grid');
+    discEl.innerHTML = Object.entries(discColors).map(([code, color]) => `
+      <div class="disc-card" style="border-left-color:${color};">
+        <div class="dc-code" style="color:${color};">${code}</div>
+        <div class="dc-name">${discNames[code]}</div>
+      </div>
+    `).join('');
+
+    console.log('[INTEL] Sub-portal loaded');
+  })();
+</script>
+
+</body>
+</html>

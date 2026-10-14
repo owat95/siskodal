@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Komunikasi Dashboard — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/komunikasi.css">
+</head>
+<body>
+
+<div class="dashboard" data-matra="kom">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="brand">
+      <span class="brand-mark" style="color:#3b82f6;">📡</span>
+      <div class="brand-text">
+        <strong>KOMUNIKASI</strong>
+        <span>Siskodal</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Dashboard</div>
+    <a href="#" class="nav-item active" data-tab="overview"><i class="fas fa-chart-line"></i> Overview</a>
+    <a href="#" class="nav-item" data-tab="chat"><i class="fas fa-comments"></i> Chat Secure</a>
+
+    <div class="nav-section">Device Management</div>
+    <a href="#" class="nav-item" data-tab="devices">
+      <i class="fas fa-mobile-screen"></i> Device Registry
+      <span style="margin-left:auto;font-size:0.65rem;background:#eab308;color:#000;padding:1px 6px;border-radius:4px;font-weight:800;" id="pending-badge">3</span>
+    </a>
+
+    <div class="nav-section">Network</div>
+    <a href="#" class="nav-item" data-tab="manet"><i class="fas fa-project-diagram"></i> MANET Graph</a>
+    <a href="#" class="nav-item" data-tab="radio"><i class="fas fa-wave-square"></i> Frequency Spectrum</a>
+
+    <div class="nav-section">Navigasi</div>
+    <a href="/joc/komunikasi.html" class="nav-item"><i class="fas fa-chevron-left"></i> Sub-Portal</a>
+    <a href="/joc/" class="nav-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="dash-header">
+    <div class="title-block">
+      <h1>SISTEM KOMUNIKASI TERPADU</h1>
+      <p id="page-subtitle">Secure On-Premise Communication Platform</p>
+    </div>
+    <div class="header-stats">
+      <div class="mode-indicator" id="mode-indicator">
+        <div class="mi-icon" id="mode-icon">🔒</div>
+        <div class="mi-text">
+          <div class="mi-label" id="mode-label">COMMAND CENTER</div>
+          <div class="mi-desc" id="mode-desc">Latency: <span id="mode-latency">--</span>ms</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value" id="live-clock">--:--:--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- TAB: OVERVIEW -->
+    <section class="tab-content active" id="tab-overview">
+      <div class="kom-stats">
+        <div class="kom-stat" style="border-left-color:#3b82f6;">
+          <div class="label">Total Users</div>
+          <div class="value" id="stat-users">--</div>
+          <div class="meta">Online: <span id="stat-online">--</span></div>
+        </div>
+        <div class="kom-stat" style="border-left-color:#22c55e;">
+          <div class="label">Approved Devices</div>
+          <div class="value" id="stat-approved">--</div>
+          <div class="meta">MAC whitelisted</div>
+        </div>
+        <div class="kom-stat" style="border-left-color:#eab308;">
+          <div class="label">Pending Approval</div>
+          <div class="value" id="stat-pending">--</div>
+          <div class="meta">Butuh admin review</div>
+        </div>
+        <div class="kom-stat" style="border-left-color:#ef4444;">
+          <div class="label">Revoked</div>
+          <div class="value" id="stat-revoked">--</div>
+          <div class="meta">Lost/compromised</div>
+        </div>
+        <div class="kom-stat" style="border-left-color:#a855f7;">
+          <div class="label">Channels</div>
+          <div class="value" id="stat-channels">--</div>
+          <div class="meta">Encrypted channels</div>
+        </div>
+        <div class="kom-stat" style="border-left-color:#06b6d4;">
+          <div class="label">Encryption</div>
+          <div class="value">AES-256</div>
+          <div class="meta">Olm/Megolm protocol</div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Mode Control</h3>
+          <span style="font-size:0.7rem;color:#64748b;">Auto-detect + Manual override</span>
+        </div>
+        <div class="panel-body">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+            <button class="scenario-btn" onclick="switchModeUI('COMMAND')">🔒 COMMAND</button>
+            <button class="scenario-btn" onclick="switchModeUI('MANET')">📡 MANET</button>
+            <button class="scenario-btn" onclick="switchModeUI('HF')">📻 HF FALLBACK</button>
+            <button class="scenario-btn" style="background:rgba(168,85,247,0.2); border-color:rgba(168,85,247,0.5); color:#c084fc;" onclick="autoDetectDemo()">⚡ Auto-Detect Demo</button>
+          </div>
+          <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:8px; letter-spacing:1px; text-transform:uppercase; font-weight:700;">Mode History</div>
+          <div id="mode-history"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Active Channels</h3></div>
+        <div class="panel-body">
+          <div id="channels-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: CHAT -->
+    <section class="tab-content" id="tab-chat">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Chat Secure — Dual Platform Preview</h3>
+          <span style="font-size:0.7rem;color:#22c55e;">● END-TO-END ENCRYPTED</span>
+        </div>
+        <div class="panel-body">
+          <div class="dual-phone-layout">
+            <div>
+              <div class="phone-label">🤖 ANDROID</div>
+              <div class="phone-frame android">
+                <div class="phone-screen">
+                  <div class="phone-status-bar">
+                    <span>12:15</span>
+                    <span>📶 🔋 87%</span>
+                  </div>
+                  <div class="phone-app-header">
+                    <div class="avatar">🛡️</div>
+                    <div class="info">
+                      <div class="name">Net Komando</div>
+                      <div class="status">SECURE · 15 members</div>
+                    </div>
+                  </div>
+                  <div class="phone-chat-area" id="chat-android"></div>
+                  <div class="phone-input-bar">
+                    <input type="text" id="input-android" placeholder="Ketik pesan secure..." onkeypress="if(event.key==='Enter') sendMessage('android')">
+                    <button class="send-btn" onclick="sendMessage('android')">➤</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="phone-label">🍎 iPHONE</div>
+              <div class="phone-frame iphone">
+                <div class="phone-screen">
+                  <div class="phone-status-bar">
+                    <span>12:15</span>
+                    <span>📶 🔋 92%</span>
+                  </div>
+                  <div class="phone-app-header">
+                    <div class="avatar">🛡️</div>
+                    <div class="info">
+                      <div class="name">Net Komando</div>
+                      <div class="status">SECURE · 15 members</div>
+                    </div>
+                  </div>
+                  <div class="phone-chat-area" id="chat-iphone"></div>
+                  <div class="phone-input-bar">
+                    <input type="text" id="input-iphone" placeholder="Ketik pesan secure..." onkeypress="if(event.key==='Enter') sendMessage('iphone')">
+                    <button class="send-btn" onclick="sendMessage('iphone')">➤</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: DEVICES -->
+    <section class="tab-content" id="tab-devices">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Device Registry — MAC Whitelist</h3>
+          <div style="display:flex; gap:10px;">
+            <select id="device-filter" style="padding:6px 12px; background:rgba(15,23,42,0.9); border:1px solid rgba(51,65,85,0.7); border-radius:6px; color:#e2e8f0; font-family:inherit; font-size:0.8rem;">
+              <option value="all">Semua Device</option>
+              <option value="approved">✓ Approved</option>
+              <option value="pending">⏱ Pending</option>
+              <option value="revoked">⊘ Revoked</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div id="device-registry"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: MANET -->
+    <section class="tab-content" id="tab-manet">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ MANET Network Graph — Live Mesh</h3>
+          <span style="font-size:0.7rem;color:#22c55e;">● ACTIVE</span>
+        </div>
+        <div class="panel-body">
+          <div class="manet-graph-container" id="manet-graph" style="height:500px;"></div>
+          <div style="margin-top:14px; display:flex; gap:20px; font-size:0.7rem; color:#94a3b8; flex-wrap:wrap;">
+            <span><span style="color:#22c55e;">●</span> COMMAND mode</span>
+            <span><span style="color:#eab308;">●</span> MANET mode</span>
+            <span><span style="color:#ef4444;">●</span> HF mode</span>
+            <span><span style="color:#22c55e;">━</span> Active link</span>
+            <span><span style="color:#eab308;">╌</span> Degraded</span>
+            <span><span style="color:#ef4444;">╌╌</span> Down</span>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: RADIO -->
+    <section class="tab-content" id="tab-radio">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Frequency Spectrum — Waterfall</h3>
+          <span style="font-size:0.7rem;color:#22d3ee;">◉ SCANNING</span>
+        </div>
+        <div class="panel-body">
+          <div class="waterfall-wrapper">
+            <canvas id="waterfall" width="1200" height="220"></canvas>
+            <div class="freq-labels">
+              <span>3 MHz (HF)</span>
+              <span>30 MHz (VHF)</span>
+              <span>300 MHz (UHF)</span>
+              <span>3 GHz (SHF)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Radio Channels</h3></div>
+        <div class="panel-body">
+          <div id="radio-channels"></div>
+        </div>
+      </section>
+    </section>
+
+  </main>
+
+</div>
+
+<script src="/joc/js/komunikasi-core.js" data-cfasync="false"></script>
+<script src="/joc/js/komunikasi-data.js" data-cfasync="false"></script>
+<script src="/joc/js/komunikasi-viz.js" data-cfasync="false"></script>
+<script>
+  (function init() {
+    // Clock
+    setInterval(() => {
+      const t = new Date().toISOString().substr(11, 8);
+      const el = document.getElementById('live-clock');
+      if (el) el.textContent = t;
+    }, 1000);
+
+    // Tabs
+    document.querySelectorAll('.nav-item[data-tab]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchTab(el.dataset.tab);
+      });
+    });
+
+    // Subscribe mode changes
+    KomunikasiCore.onModeChange((evt) => {
+      updateModeIndicator();
+      renderModeHistory();
+    });
+
+    // Initial render
+    updateModeIndicator();
+    renderStats();
+    renderModeHistory();
+    renderChannels();
+    renderDeviceRegistry();
+    renderRadioChannels();
+
+    // Chat — render initial messages
+    renderChatBoth('U901');
+
+    // Manet graph
+    setTimeout(() => {
+      const nodes = KomunikasiData.MANET_NODES;
+      const links = generateMeshLinks(nodes);
+      KomunikasiViz.renderManetGraph('manet-graph', nodes, links);
+    }, 100);
+
+    // Waterfall (only start when tab visible)
+    const observer = new MutationObserver(() => {
+      const radioTab = document.getElementById('tab-radio');
+      if (radioTab && radioTab.classList.contains('active')) {
+        KomunikasiViz.startWaterfall('waterfall');
+      }
+    });
+    observer.observe(document.getElementById('tab-radio'), { attributes: true, attributeFilter: ['class'] });
+
+    // Device filter
+    document.getElementById('device-filter').addEventListener('change', (e) => {
+      KomunikasiViz.renderDeviceRegistry('device-registry', { status: e.target.value });
+      bindDeviceActions();
+    });
+
+    // Bind device action buttons
+    bindDeviceActions();
+
+    console.log('[KOM] Dashboard initialized');
+  })();
+
+  // ============================================
+  // TAB SWITCH
+  // ============================================
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => {
+      t.classList.toggle('active', t.id === `tab-${tab}`);
+    });
+    document.querySelectorAll('.nav-item[data-tab]').forEach(n => {
+      n.classList.toggle('active', n.dataset.tab === tab);
+    });
+  }
+
+  // ============================================
+  // MODE INDICATOR
+  // ============================================
+  function updateModeIndicator() {
+    const mode = KomunikasiCore.getCurrentMode();
+    const indicator = document.getElementById('mode-indicator');
+    if (!indicator) return;
+
+    indicator.style.borderColor = mode.color;
+    indicator.style.background = mode.bg;
+
+    document.getElementById('mode-icon').textContent = mode.icon;
+    document.getElementById('mode-label').textContent = mode.label;
+    document.getElementById('mode-label').style.color = mode.color;
+    document.getElementById('mode-desc').innerHTML = `Latency: <span style="color:${mode.color};">${KomunikasiCore.getLatency()}ms</span>`;
+  }
+
+  function switchModeUI(mode) {
+    KomunikasiCore.switchMode(mode, 'manual-ui');
+  }
+
+  function autoDetectDemo() {
+    const seq = [
+      { mode: 'MANET', delay: 0 },
+      { mode: 'HF',    delay: 2000 },
+      { mode: 'COMMAND', delay: 4000 }
+    ];
+    seq.forEach(s => setTimeout(() => {
+      KomunikasiCore.switchMode(s.mode, 'auto-detect');
+    }, s.delay));
+  }
+
+  // ============================================
+  // STATS
+  // ============================================
+  function renderStats() {
+    const s = KomunikasiData.getStats();
+    document.getElementById('stat-users').textContent = s.totalUsers;
+    document.getElementById('stat-online').textContent = s.onlineUsers;
+    document.getElementById('stat-approved').textContent = s.approvedDevices;
+    document.getElementById('stat-pending').textContent = s.pendingDevices;
+    document.getElementById('stat-revoked').textContent = s.revokedDevices;
+    document.getElementById('stat-channels').textContent = s.channels;
+
+    const badge = document.getElementById('pending-badge');
+    if (badge) badge.textContent = s.pendingDevices;
+  }
+
+  // ============================================
+  // MODE HISTORY
+  // ============================================
+  function renderModeHistory() {
+    const container = document.getElementById('mode-history');
+    if (!container) return;
+    const history = KomunikasiCore.getModeHistory();
+    if (history.length === 0) {
+      container.innerHTML = '<div style="font-size:0.75rem;color:#64748b;">Belum ada perubahan mode</div>';
+      return;
+    }
+    container.innerHTML = history.slice().reverse().map(h => `
+      <div style="padding:6px 12px; background:rgba(15,23,42,0.5); border-left:2px solid #3b82f6; border-radius:0 6px 6px 0; margin-bottom:6px; font-size:0.75rem; font-family:'Courier New',monospace;">
+        <span style="color:#94a3b8;">${new Date(h.timestamp).toLocaleTimeString('id-ID')}</span>
+        <span style="color:#60a5fa; margin-left:12px;">${h.from} → ${h.to}</span>
+        <span style="color:#64748b; margin-left:12px;">(${h.reason})</span>
+      </div>
+    `).join('');
+  }
+
+  // ============================================
+  // CHANNELS
+  // ============================================
+  function renderChannels() {
+    const container = document.getElementById('channels-list');
+    if (!container) return;
+
+    const classColors = {
+      UNCLASS: '#22c55e', RESTRICTED: '#eab308', CONFIDENTIAL: '#f97316',
+      SECRET: '#ef4444', TOP_SECRET: '#991b1b'
+    };
+
+    container.innerHTML = `
+      <table class="data-table">
+        <thead><tr>
+          <th>ID</th><th>Type</th><th>Channel Name</th><th>Members</th>
+          <th>Classification</th><th>Status</th><th>Encryption</th>
+        </tr></thead>
+        <tbody>
+          ${KomunikasiData.CHANNELS.map(ch => {
+            const c = classColors[ch.classification] || '#64748b';
+            return `
+              <tr>
+                <td class="mono" style="font-size:0.7rem;">${ch.id}</td>
+                <td style="font-size:0.75rem;color:#60a5fa;">${ch.type}</td>
+                <td style="font-size:0.8rem;font-weight:600;">${ch.name}</td>
+                <td class="mono" style="font-size:0.75rem;">${ch.members}</td>
+                <td><span class="class-badge" style="background:${c}22; color:${c}; border:1px solid ${c}55;">${ch.classification}</span></td>
+                <td>
+                  <span style="color:${ch.status === 'active' ? '#22c55e' : '#eab308'};font-size:0.75rem;font-weight:700;">
+                    ● ${ch.status.toUpperCase()}
+                  </span>
+                </td>
+                <td>${ch.encrypted ? '🔒' : '⚠'}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // ============================================
+  // DEVICE REGISTRY
+  // ============================================
+  function renderDeviceRegistry() {
+    KomunikasiViz.renderDeviceRegistry('device-registry', { status: 'all' });
+  }
+
+  function bindDeviceActions() {
+    document.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const deviceId = btn.dataset.device;
+        const action = btn.dataset.action;
+
+        if (action === 'approve') {
+          KomunikasiData.approveDevice(deviceId);
+          console.log(`[KOM] Device ${deviceId} APPROVED`);
+        } else if (action === 'reject' || action === 'revoke') {
+          KomunikasiData.rejectDevice(deviceId, action.toUpperCase());
+          console.log(`[KOM] Device ${deviceId} ${action.toUpperCase()}`);
+        }
+
+        // Re-render
+        const filter = document.getElementById('device-filter').value;
+        KomunikasiViz.renderDeviceRegistry('device-registry', { status: filter });
+        bindDeviceActions();
+        renderStats();
+      });
+    });
+  }
+
+  // ============================================
+  // RADIO CHANNELS
+  // ============================================
+  function renderRadioChannels() {
+    const container = document.getElementById('radio-channels');
+    if (!container) return;
+    const voiceChannels = KomunikasiData.CHANNELS.filter(c => c.type === 'VOICE');
+
+    container.innerHTML = voiceChannels.map(ch => `
+      <div style="padding:12px 16px; background:rgba(15,23,42,0.6); border-left:3px solid ${ch.status === 'active' ? '#22c55e' : '#eab308'}; border-radius:0 8px 8px 0; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:0.85rem;color:#fff;font-weight:700;">${ch.name}</div>
+          <div style="font-size:0.7rem;color:#64748b;font-family:monospace;margin-top:3px;">
+            ${ch.members} users · 🔒 ${ch.encryption ? 'AES-256' : 'NONE'}
+          </div>
+        </div>
+        <div style="font-size:0.75rem;color:${ch.status === 'active' ? '#22c55e' : '#eab308'};font-weight:700;letter-spacing:1px;">
+          ● ${ch.status.toUpperCase()}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ============================================
+  // CHAT
+  // ============================================
+  function renderChatBoth(currentUser) {
+    KomunikasiViz.renderChatHistory('chat-android', 'CH-01', currentUser);
+    KomunikasiViz.renderChatHistory('chat-iphone', 'CH-01', currentUser);
+  }
+
+  function sendMessage(platform) {
+    const input = document.getElementById(`input-${platform}`);
+    const text = input.value.trim();
+    if (!text) return;
+
+    const msg = KomunikasiData.addMessage({
+      from: 'U901',
+      to: 'CH-01',
+      text: text,
+      classification: 'SECRET',
+      ttl: 3600
+    });
+
+    // Append ke kedua device (cross-sync simulation)
+    KomunikasiViz.appendChatMessage('chat-android', msg, 'U901');
+    KomunikasiViz.appendChatMessage('chat-iphone', msg, 'U901');
+
+    input.value = '';
+    console.log(`[KOM] Message sent from ${platform}: ${text}`);
+  }
+
+  // ============================================
+  // MANET GRAPH LINKS
+  // ============================================
+  function generateMeshLinks(nodes) {
+    const links = [];
+    // Full mesh untuk demo — semua node ke semua node
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        // Random link state
+        const rand = Math.random();
+        let state = 'active';
+        if (rand > 0.85) state = 'down';
+        else if (rand > 0.7) state = 'degraded';
+
+        // Sparse — hanya 50% link yang aktif
+        if (Math.random() > 0.5) {
+          links.push({
+            from: nodes[i].id,
+            to: nodes[j].id,
+            state: state
+          });
+        }
+      }
+    }
+    return links;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teritorial — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.122/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <link rel="stylesheet" href="/joc/css/teritorial.css">
+</head>
+<body>
+
+<div class="teritorial-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="teritorial-sidebar">
+
+    <div class="sb-header">
+      <h2>🛡️ TERITORIAL</h2>
+      <div class="sub">TNI ANGKATAN DARAT · 2026</div>
+    </div>
+
+    <div class="sb-stats">
+      <div class="sb-stat">
+        <div class="value" id="stat-kodam">--</div>
+        <div class="label">Kodam</div>
+      </div>
+      <div class="sb-stat">
+        <div class="value" id="stat-personel">--</div>
+        <div class="label">Personel</div>
+      </div>
+      <div class="sb-stat">
+        <div class="value" id="stat-korem">--</div>
+        <div class="label">Korem</div>
+      </div>
+    </div>
+
+    <div class="sb-controls">
+      <input type="text" class="sb-search" id="search-kodam" placeholder="🔍 Cari Kodam...">
+      <div class="region-filter" id="region-filter"></div>
+    </div>
+
+    <div class="kodam-list" id="kodam-list"></div>
+
+  </aside>
+
+  <!-- MAP -->
+  <main class="teritorial-map">
+    <div id="cesiumContainer"></div>
+
+    <!-- TOP BAR -->
+    <div class="teritorial-topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">
+          <h1>TERITORIAL TNI AD</h1>
+          <div class="sub" id="page-subtitle">27 KODAM · 38 PROVINSI · DATA 2026</div>
+        </div>
+      </div>
+      <div class="topbar-layers">
+        <label class="layer-toggle">
+          <input type="checkbox" id="layer-polygons" checked>
+          <span>Polygons</span>
+        </label>
+        <label class="layer-toggle">
+          <input type="checkbox" id="layer-hq" checked>
+          <span>HQ</span>
+        </label>
+        <label class="layer-toggle">
+          <input type="checkbox" id="layer-korem" checked>
+          <span>Korem</span>
+        </label>
+        <a href="/joc/" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;color:#60a5fa;text-decoration:none;font-size:0.7rem;font-weight:700;border-left:1px solid rgba(51,65,85,0.5);margin-left:4px;padding-left:12px;">
+          <i class="fas fa-home"></i> Portal
+        </a>
+      </div>
+    </div>
+
+    <!-- DETAIL PANEL -->
+    <div class="kodam-detail-panel" id="kodam-detail"></div>
+
+  </main>
+
+</div>
+
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.122/Build/Cesium/Cesium.js" data-cfasync="false"></script>
+<script src="/joc/js/nkri-config.js" data-cfasync="false"></script>
+<script src="/joc/js/cesium-init.js" data-cfasync="false"></script>
+<script src="/joc/js/teritorial-viz.js" data-cfasync="false"></script>
+<script src="/joc/js/teritorial-dashboard.js" data-cfasync="false"></script>
+
+</body>
+</html>

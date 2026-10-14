@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operasi C2 — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/operasi.css">
+</head>
+<body>
+
+<div class="ops-layout">
+
+  <!-- HEADER -->
+  <header class="ops-header">
+    <div class="brand">
+      <span class="brand-mark">🎯</span>
+      <div class="title-block">
+        <h1>OPERASI C2 — COMMAND &amp; CONTROL</h1>
+        <p>Mission Planning &amp; Execution Monitoring</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="label">Executing</span>
+        <span class="value" id="stat-executing">--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Units Deployed</span>
+        <span class="value" id="stat-units">--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Targets</span>
+        <span class="value" id="stat-targets">--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value" id="live-clock">--:--:--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="ops-sidebar">
+    <div class="sb-section">Operations</div>
+    <a href="#" class="sb-nav-item active"><i class="fas fa-columns"></i> Mission Board</a>
+    <a href="#" class="sb-nav-item"><i class="fas fa-globe"></i> Tactical Map</a>
+    <a href="#" class="sb-nav-item"><i class="fas fa-chart-gantt"></i> Timeline</a>
+    <a href="#" class="sb-nav-item"><i class="fas fa-file-alt"></i> After-Action</a>
+
+    <div class="sb-section">Resources</div>
+    <a href="#" class="sb-nav-item">
+      <i class="fas fa-shield-halved"></i> Units
+      <span class="badge" id="badge-units">23</span>
+    </a>
+    <a href="#" class="sb-nav-item">
+      <i class="fas fa-crosshairs"></i> Targets
+      <span class="badge" id="badge-targets">7</span>
+    </a>
+
+    <div class="sb-section">Navigate</div>
+    <a href="/joc/" class="sb-nav-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <a href="/joc/map.html" class="sb-nav-item"><i class="fas fa-globe"></i> Peta NKRI</a>
+    <a href="/joc/teritorial.html" class="sb-nav-item"><i class="fas fa-map-location-dot"></i> Teritorial</a>
+
+    <div class="stats-panel">
+      <div class="stat-row">
+        <span class="key">Planning</span>
+        <span class="val" id="stat-planning">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="key">Approved</span>
+        <span class="val" id="stat-approved">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="key">Executing</span>
+        <span class="val" style="color:#4ade80;" id="stat-executing-2">--</span>
+      </div>
+      <div class="stat-row">
+        <span class="key">Completed</span>
+        <span class="val" id="stat-completed">--</span>
+      </div>
+    </div>
+
+    <button class="btn-ops new-mission-btn" id="btn-new-mission">
+      <i class="fas fa-plus"></i> New Mission
+    </button>
+  </aside>
+
+  <!-- KANBAN -->
+  <main class="ops-kanban">
+
+    <div class="kanban-column" id="col-planning">
+      <div class="col-header">
+        <div class="col-title" style="color:#facc15;">
+          <span class="dot" style="background:#facc15;"></span>
+          PLANNING
+        </div>
+        <span class="col-count" id="badge-planning">0</span>
+      </div>
+      <div class="col-body"></div>
+    </div>
+
+    <div class="kanban-column" id="col-approved">
+      <div class="col-header">
+        <div class="col-title" style="color:#60a5fa;">
+          <span class="dot" style="background:#60a5fa;"></span>
+          APPROVED
+        </div>
+        <span class="col-count" id="badge-approved">0</span>
+      </div>
+      <div class="col-body"></div>
+    </div>
+
+    <div class="kanban-column" id="col-executing">
+      <div class="col-header">
+        <div class="col-title" style="color:#4ade80;">
+          <span class="dot" style="background:#4ade80;"></span>
+          EXECUTING
+        </div>
+        <span class="col-count" id="badge-executing">0</span>
+      </div>
+      <div class="col-body"></div>
+    </div>
+
+    <div class="kanban-column" id="col-completed">
+      <div class="col-header">
+        <div class="col-title" style="color:#94a3b8;">
+          <span class="dot" style="background:#94a3b8;"></span>
+          COMPLETED
+        </div>
+        <span class="col-count" id="badge-completed">0</span>
+      </div>
+      <div class="col-body"></div>
+    </div>
+
+    <div class="kanban-column" id="col-aborted">
+      <div class="col-header">
+        <div class="col-title" style="color:#f87171;">
+          <span class="dot" style="background:#f87171;"></span>
+          ABORTED
+        </div>
+        <span class="col-count" id="badge-aborted">0</span>
+      </div>
+      <div class="col-body"></div>
+    </div>
+
+  </main>
+
+  <!-- DETAIL PANEL -->
+  <aside class="ops-detail" id="detail-panel">
+    <div class="detail-empty">
+      <div class="icon">🎯</div>
+      <p>Pilih mission di Kanban<br>untuk melihat detail operasi</p>
+    </div>
+  </aside>
+
+</div>
+
+<!-- NEW MISSION MODAL -->
+<div class="modal-overlay" id="new-mission-modal">
+  <div class="modal-content">
+    <h3>🎯 NEW MISSION</h3>
+
+    <label>Mission Name *</label>
+    <input type="text" id="nm-name" placeholder="Operasi XYZ">
+
+    <label>Type</label>
+    <select id="nm-type"></select>
+
+    <label>Priority</label>
+    <select id="nm-priority"></select>
+
+    <label>Classification</label>
+    <select id="nm-classification">
+      <option value="UNCLASS">UNCLASSIFIED</option>
+      <option value="RESTRICTED">RESTRICTED</option>
+      <option value="CONFIDENTIAL" selected>CONFIDENTIAL</option>
+      <option value="SECRET">SECRET</option>
+      <option value="TOP_SECRET">TOP SECRET</option>
+    </select>
+
+    <label>Commander</label>
+    <input type="text" id="nm-commander" placeholder="Letkol ...">
+
+    <label>Location</label>
+    <input type="text" id="nm-location" placeholder="Laut Natuna Utara">
+
+    <label>Objective</label>
+    <textarea id="nm-objective" placeholder="Tujuan operasi..."></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-ops secondary" id="nm-cancel">Cancel</button>
+      <button class="btn-ops" id="nm-submit">Create Mission</button>
+    </div>
+  </div>
+</div>
+
+<script src="/joc/js/operasi-data.js" data-cfasync="false"></script>
+<script src="/joc/js/operasi-core.js" data-cfasync="false"></script>
+<script src="/joc/js/operasi-dashboard.js" data-cfasync="false"></script>
+
+</body>
+</html>

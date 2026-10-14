@@ -1,0 +1,637 @@
+/* ============================================================ */
+/* TERITORIAL.CSS — Kodam visualization styling                  */
+/* ============================================================ */
+
+/* Layout */
+.teritorial-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  height: 100vh;
+  background: #0a0f1e;
+}
+
+/* ============================================ */
+/* SIDEBAR — KODAM LIST                          */
+/* ============================================ */
+.teritorial-sidebar {
+  background: linear-gradient(180deg, #0f172a, #0a0f1e);
+  border-right: 1px solid rgba(51, 65, 85, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.teritorial-sidebar .sb-header {
+  padding: 20px 18px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  background: rgba(30, 41, 59, 0.4);
+}
+
+.teritorial-sidebar .sb-header h2 {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.teritorial-sidebar .sb-header .sub {
+  font-size: 0.7rem;
+  color: #64748b;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.teritorial-sidebar .sb-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.teritorial-sidebar .sb-stat {
+  text-align: center;
+}
+
+.teritorial-sidebar .sb-stat .value {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  line-height: 1;
+}
+
+.teritorial-sidebar .sb-stat .label {
+  font-size: 0.6rem;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Search + Filter */
+.teritorial-sidebar .sb-controls {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teritorial-sidebar .sb-search {
+  padding: 8px 12px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: 0.8rem;
+  outline: none;
+  width: 100%;
+}
+
+.teritorial-sidebar .sb-search:focus {
+  border-color: #3b82f6;
+}
+
+.teritorial-sidebar .region-filter {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.teritorial-sidebar .region-chip {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.15s;
+  background: transparent;
+  font-family: inherit;
+}
+
+.teritorial-sidebar .region-chip:hover {
+  transform: translateY(-1px);
+}
+
+.teritorial-sidebar .region-chip.active {
+  color: #fff;
+}
+
+/* Kodam List */
+.teritorial-sidebar .kodam-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.teritorial-sidebar .kodam-list::-webkit-scrollbar { width: 6px; }
+.teritorial-sidebar .kodam-list::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.4);
+  border-radius: 3px;
+}
+
+.kodam-item {
+  padding: 12px 18px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+}
+
+.kodam-item:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.kodam-item.active {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.kodam-item .ki-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.kodam-item .ki-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.kodam-item .ki-code {
+  font-size: 0.65rem;
+  font-family: 'Courier New', monospace;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.kodam-item .ki-badge {
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.kodam-item .ki-badge.new-2025 {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.kodam-item .ki-badge.new-2026 {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.kodam-item .ki-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 0.68rem;
+  color: #64748b;
+  font-family: 'Courier New', monospace;
+  margin-top: 4px;
+}
+
+.kodam-item .ki-meta span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.kodam-item .ki-readiness {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.kodam-item .ki-readiness-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(51, 65, 85, 0.7);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.kodam-item .ki-readiness-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+/* ============================================ */
+/* MAP AREA                                      */
+/* ============================================ */
+.teritorial-map {
+  position: relative;
+  overflow: hidden;
+}
+
+#cesiumContainer {
+  width: 100%;
+  height: 100%;
+}
+
+/* Top Bar */
+.teritorial-topbar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.teritorial-topbar > * {
+  pointer-events: auto;
+}
+
+.topbar-left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.topbar-title {
+  padding: 8px 16px;
+  background: rgba(10, 15, 30, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.topbar-title h1 {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.topbar-title .sub {
+  font-size: 0.65rem;
+  color: #64748b;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.topbar-layers {
+  display: flex;
+  gap: 4px;
+  padding: 6px 10px;
+  background: rgba(10, 15, 30, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  color: #cbd5e1;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.15s;
+}
+
+.layer-toggle:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.layer-toggle input {
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+/* ============================================ */
+/* DETAIL PANEL                                  */
+/* ============================================ */
+.kodam-detail-panel {
+  position: absolute;
+  top: 70px;
+  right: 16px;
+  bottom: 16px;
+  width: 400px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.97), rgba(10, 15, 30, 0.98));
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 14px;
+  backdrop-filter: blur(20px);
+  z-index: 20;
+  overflow-y: auto;
+  transform: translateX(120%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.kodam-detail-panel.open {
+  transform: translateX(0);
+}
+
+.kodam-detail-panel::-webkit-scrollbar { width: 6px; }
+.kodam-detail-panel::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.4);
+  border-radius: 3px;
+}
+
+.dp-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  color: #94a3b8;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.dp-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.dp-header {
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  position: relative;
+}
+
+.dp-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.dp-region-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.dp-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  padding-right: 30px;
+}
+
+.dp-code {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.dp-hq {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dp-panglima {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dp-section {
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+}
+
+.dp-section-title {
+  font-size: 0.65rem;
+  color: #64748b;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.dp-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dp-stat {
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 8px;
+  border-left: 2px solid;
+}
+
+.dp-stat .value {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  line-height: 1;
+}
+
+.dp-stat .label {
+  font-size: 0.65rem;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.dp-hierarchy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dp-hierarchy-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: rgba(30, 41, 59, 0.4);
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.dp-hierarchy-row .label {
+  color: #94a3b8;
+}
+
+.dp-hierarchy-row .value {
+  color: #fff;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.dp-korem-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dp-korem-list li {
+  padding: 8px 10px;
+  background: rgba(30, 41, 59, 0.4);
+  border-left: 2px solid;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 5px;
+  font-size: 0.72rem;
+}
+
+.dp-korem-list li .korem-code {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+}
+
+.dp-korem-list li .korem-name {
+  color: #e2e8f0;
+}
+
+.dp-korem-list li .korem-hq {
+  color: #64748b;
+  font-size: 0.65rem;
+  margin-top: 2px;
+}
+
+.dp-provinces-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.dp-province-chip {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.dp-actions {
+  display: flex;
+  gap: 8px;
+  padding: 14px 22px 20px;
+}
+
+.dp-action-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.dp-action-btn.primary {
+  background: linear-gradient(135deg, #00e5ff, #00ff9d);
+  color: #04121a;
+  border: none;
+}
+
+.dp-action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 229, 255, 0.3);
+}
+
+.dp-action-btn.secondary {
+  background: rgba(30, 41, 59, 0.6);
+  color: #94a3b8;
+  border-color: rgba(51, 65, 85, 0.6);
+}
+
+.dp-action-btn.secondary:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* Cesium credit hide */
+.cesium-widget-credits { display: none !important; }
+
+/* ============================================ */
+/* RESPONSIVE                                    */
+/* ============================================ */
+@media (max-width: 1024px) {
+  .teritorial-layout {
+    grid-template-columns: 280px 1fr;
+  }
+  .kodam-detail-panel {
+    width: 340px;
+  }
+}
+
+@media (max-width: 768px) {
+  .teritorial-layout {
+    grid-template-columns: 1fr;
+  }
+  .teritorial-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  .teritorial-sidebar.open {
+    transform: translateX(0);
+  }
+}

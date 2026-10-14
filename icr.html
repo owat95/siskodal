@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integrasi ICR — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      padding: 16px 0; font-size: 0.8rem; color: #94a3b8;
+      font-family: 'Courier New', monospace; letter-spacing: 0.5px;
+    }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb a:hover { color: #00e5ff; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .icr-header { text-align: center; padding: 20px 0 40px; }
+    .icr-header .icon-big {
+      font-size: 4rem; margin-bottom: 16px;
+      filter: drop-shadow(0 0 30px rgba(6, 182, 212, 0.5));
+    }
+    .icr-header h1 {
+      font-size: 2.5rem; font-weight: 900; letter-spacing: 3px;
+      color: #fff; text-shadow: 0 0 30px rgba(6, 182, 212, 0.4);
+    }
+    .icr-header .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .icr-header .desc {
+      color: #94a3b8; margin-top: 16px; max-width: 780px;
+      margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem;
+    }
+
+    /* Disciplines grid */
+    .disc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .disc-card {
+      padding: 16px 14px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .disc-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+    .disc-card .icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .disc-card .code {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .disc-card .name {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    /* Pipeline diagram */
+    .pipeline {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 40px;
+      padding: 24px 20px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 14px;
+      overflow-x: auto;
+    }
+    .pipe-stage {
+      padding: 14px 10px;
+      text-align: center;
+      border-radius: 10px;
+      border: 1px solid;
+      min-width: 120px;
+    }
+    .pipe-stage.sensor { border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.08); }
+    .pipe-stage.edge   { border-color: rgba(34, 197, 94, 0.5); background: rgba(34, 197, 94, 0.08); }
+    .pipe-stage.mw     { border-color: rgba(168, 85, 247, 0.5); background: rgba(168, 85, 247, 0.08); }
+    .pipe-stage.ikn    { border-color: rgba(234, 179, 8, 0.5); background: rgba(234, 179, 8, 0.08); }
+    .pipe-stage .icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .pipe-stage .label {
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
+      color: #fff; margin-bottom: 3px; text-transform: uppercase;
+    }
+    .pipe-stage .detail {
+      font-size: 0.65rem; color: #94a3b8; line-height: 1.3;
+    }
+    .pipe-arrow { color: #475569; font-size: 1.2rem; }
+
+    /* Matra profile cards */
+    .matra-profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .matra-profile {
+      padding: 24px;
+      border-radius: 14px;
+      border: 2px solid;
+      background: rgba(15, 23, 42, 0.6);
+      transition: all 0.2s;
+    }
+    .matra-profile.ad { border-color: rgba(5, 150, 105, 0.5); }
+    .matra-profile.al { border-color: rgba(30, 64, 175, 0.5); }
+    .matra-profile.au { border-color: rgba(37, 99, 235, 0.5); }
+    .matra-profile:hover { transform: translateY(-3px); }
+    .matra-profile .mp-head {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    }
+    .matra-profile .mp-icon {
+      width: 48px; height: 48px; display: flex; align-items: center;
+      justify-content: center; border-radius: 10px;
+      font-size: 1.4rem; color: #fff; font-weight: 900;
+    }
+    .matra-profile.ad .mp-icon { background: #059669; }
+    .matra-profile.al .mp-icon { background: #1e40af; }
+    .matra-profile.au .mp-icon { background: #2563eb; }
+    .matra-profile .mp-title {
+      font-size: 0.95rem; font-weight: 800; color: #fff; letter-spacing: 0.5px;
+    }
+    .matra-profile .mp-sub { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
+    .matra-profile .mp-strength {
+      list-style: none; padding: 0; margin: 0 0 16px 0;
+    }
+    .matra-profile .mp-strength li {
+      font-size: 0.8rem; color: #cbd5e1; padding: 6px 0 6px 20px;
+      position: relative; line-height: 1.4;
+    }
+    .matra-profile .mp-strength li::before {
+      content: '▸'; position: absolute; left: 6px; color: #22c55e; font-weight: 700;
+    }
+    .matra-profile .mp-tags {
+      display: flex; flex-wrap: wrap; gap: 4px;
+    }
+    .matra-profile .mp-tag {
+      font-size: 0.65rem; padding: 2px 8px; border-radius: 4px;
+      background: rgba(59, 130, 246, 0.15); color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      font-family: 'Courier New', monospace;
+    }
+    .matra-profile .mp-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 16px; padding: 8px 16px;
+      background: linear-gradient(135deg, #00e5ff, #00ff9d);
+      color: #04121a; font-weight: 800; font-size: 0.8rem;
+      border-radius: 8px; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .matra-profile .mp-cta:hover { transform: translateX(3px); }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Integrasi ICR</span>
+  </div>
+
+  <header class="icr-header">
+    <div class="icon-big" style="color:#06b6d4;">🛰️</div>
+    <h1>INTEGRASI ICR</h1>
+    <p class="sub">INTELLIGENCE, SURVEILLANCE &amp; RECONNAISSANCE</p>
+    <p class="desc">
+      Sistem multi-INT terpadu berbasis standar NATO (STANAG series).
+      Sensor di perbatasan darat &amp; laut diproses di edge AI (Jetson Orin),
+      dikirim via middleware regional, dan di-fuse di Central AI IKN.
+      Bandwidth reduction hingga 99% dengan decision quality tetap tinggi.
+    </p>
+  </header>
+
+  <!-- PIPELINE -->
+  <div class="menu-header" style="margin-bottom:16px;">
+    <h2>PIPELINE ARSITEKTUR</h2>
+    <p>Sensor → Edge AI → Middleware → IKN Central AI</p>
+  </div>
+
+  <div class="pipeline">
+    <div class="pipe-stage sensor">
+      <div class="icon">📹</div>
+      <div class="label">SENSOR</div>
+      <div class="detail">CCTV · Radar<br>FLIR · LoRa · AIS</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-stage edge">
+      <div class="icon">🧠</div>
+      <div class="label">EDGE AI</div>
+      <div class="detail">Jetson Orin<br>YOLOv8 · 30 FPS<br>Filter 99%</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-stage mw">
+      <div class="icon">🔄</div>
+      <div class="label">MIDDLEWARE</div>
+      <div class="detail">Kafka Streams<br>Normalizer<br>Matra Router</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-stage ikn">
+      <div class="icon">🎯</div>
+      <div class="label">IKN AI</div>
+      <div class="detail">Multi-INT Fusion<br>LLM Advisor<br>COP</div>
+    </div>
+  </div>
+
+  <!-- DISCIPLINES -->
+  <div class="menu-header" style="margin-bottom:16px;">
+    <h2>INTELLIGENCE DISCIPLINES</h2>
+    <p>8 disiplin INT standar NATO (AJP-2)</p>
+  </div>
+
+  <div class="disc-grid" id="disc-grid"></div>
+
+  <!-- MATRA PROFILES -->
+  <div class="menu-header" style="margin-bottom:16px;">
+    <h2>PROFILING MATRA</h2>
+    <p>Kekuatan intelijen unik per angkatan</p>
+  </div>
+
+  <div class="matra-profile-grid" id="matra-profiles"></div>
+
+  <!-- CTA -->
+  <div class="back-wrapper" style="text-align:center; margin-top:40px;">
+    <a href="/joc/icr-dashboard.html" class="mp-cta" style="font-size:0.9rem; padding:12px 28px;">
+      <i class="fas fa-satellite-dish"></i> Buka Dashboard ICR →
+    </a>
+    <div style="margin-top:20px;">
+      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal
+      </a>
+    </div>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · ICR</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script src="/joc/js/icr-core.js" data-cfasync="false"></script>
+<script src="/joc/js/icr-sensor-topology.js" data-cfasync="false"></script>
+<script>
+  (function init() {
+    // Render disciplines
+    const discGrid = document.getElementById('disc-grid');
+    ICRCore.getAllDisciplines().forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'disc-card';
+      card.style.borderColor = d.color + '80';
+      card.innerHTML = `
+        <span class="icon" style="color:${d.color};">${d.icon}</span>
+        <div class="code">${d.code}</div>
+        <div class="name">${d.name}</div>
+      `;
+      discGrid.appendChild(card);
+    });
+
+    // Render matra profiles
+    const matraGrid = document.getElementById('matra-profiles');
+    ['ad', 'al', 'au'].forEach(matra => {
+      const p = ICRCore.getProfile(matra);
+      if (!p) return;
+      const card = document.createElement('div');
+      card.className = `matra-profile ${matra}`;
+      card.innerHTML = `
+        <div class="mp-head">
+          <div class="mp-icon">${p.icon}</div>
+          <div>
+            <div class="mp-title">${p.name}</div>
+            <div class="mp-sub">ICR Profile · ${ICRSensorTopology.getSitesByMatra(matra).length} edge sites</div>
+          </div>
+        </div>
+        <ul class="mp-strength">
+          ${p.strength.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+        <div style="font-size:0.7rem; color:#64748b; margin-bottom:6px; letter-spacing:1px; text-transform:uppercase; font-weight:700;">Primary Sensors</div>
+        <div class="mp-tags">
+          ${p.primarySensors.map(s => `<span class="mp-tag">${s}</span>`).join('')}
+        </div>
+        <div style="font-size:0.7rem; color:#64748b; margin:12px 0 6px; letter-spacing:1px; text-transform:uppercase; font-weight:700;">NATO Formats</div>
+        <div class="mp-tags">
+          ${p.natoFormats.map(f => `<span class="mp-tag" style="background:rgba(168,85,247,0.15); color:#c084fc; border-color:rgba(168,85,247,0.3);">${f.replace('_',' ')}</span>`).join('')}
+        </div>
+        <a href="/joc/icr-dashboard.html?matra=${matra}" class="mp-cta">
+          <i class="fas fa-arrow-right"></i> Buka Dashboard ${p.code}
+        </a>
+      `;
+      matraGrid.appendChild(card);
+    });
+
+    console.log('[ICR] Sub-portal initialized');
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+/* ============================================================ */
+/* SIBER.CSS — Cyber Security Operations Center styling          */
+/* ============================================================ */
+
+/* Attack Map Container */
+.attack-map-container {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: radial-gradient(circle at center, #0a1628, #050a14);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.attack-map-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.attack-map-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.attack-map-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 16px;
+  font-size: 0.7rem;
+  font-family: 'Courier New', monospace;
+  background: rgba(10, 15, 30, 0.85);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.attack-map-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #94a3b8;
+}
+
+.attack-map-legend .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Threat Feed */
+.threat-event {
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border-left: 3px solid;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  animation: threatIn 0.3s ease;
+}
+
+@keyframes threatIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.threat-event:hover {
+  background: rgba(30, 41, 59, 0.9);
+  transform: translateX(3px);
+}
+
+.threat-event .te-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.threat-event .te-source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.threat-event .te-country {
+  padding: 1px 6px;
+  background: rgba(239, 68, 68, 0.15);
+  border-radius: 3px;
+  color: #f87171;
+  font-weight: 700;
+}
+
+.threat-event .te-severity {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-family: 'Courier New', monospace;
+}
+
+.threat-event .te-name {
+  color: #e2e8f0;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.threat-event .te-meta {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.threat-event .te-tactic {
+  padding: 1px 6px;
+  background: rgba(168, 85, 247, 0.15);
+  border-radius: 3px;
+  color: #c084fc;
+  font-size: 0.6rem;
+}
+
+.threat-event .te-technique {
+  padding: 1px 6px;
+  background: rgba(59, 130, 246, 0.15);
+  border-radius: 3px;
+  color: #60a5fa;
+  font-size: 0.6rem;
+}
+
+.threat-event .te-blocked {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.threat-event .te-blocked.auto {
+  color: #facc15;
+}
+
+/* Defense Panel */
+.defense-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.defense-toggle {
+  padding: 12px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.defense-toggle:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.defense-toggle .dt-label {
+  font-size: 0.8rem;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.defense-toggle .dt-status {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.4);
+  position: relative;
+  transition: all 0.2s;
+}
+
+.defense-toggle .dt-status::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #94a3b8;
+  transition: all 0.2s;
+}
+
+.defense-toggle.enabled .dt-status {
+  background: rgba(34, 197, 94, 0.3);
+}
+
+.defense-toggle.enabled .dt-status::after {
+  left: 18px;
+  background: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+}
+
+/* Incident Card */
+.incident-card {
+  padding: 14px 16px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-left: 3px solid;
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+
+.incident-card:hover {
+  transform: translateX(3px);
+}
+
+.incident-card .ic-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.incident-card .ic-id {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.incident-card .ic-title {
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.incident-card .ic-summary {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.incident-card .ic-meta {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.incident-status {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-family: 'Courier New', monospace;
+}
+
+.incident-status.resolved      { background: rgba(34,197,94,0.15); color: #4ade80; }
+.incident-status.investigating { background: rgba(234,179,8,0.15); color: #facc15; }
+.incident-status.mitigated     { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.incident-status.open          { background: rgba(239,68,68,0.15); color: #f87171; }
+
+/* Threat Level Banner */
+.threat-level-banner {
+  padding: 14px 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  border: 2px solid;
+  animation: bannerPulse 3s ease-in-out infinite;
+}
+
+@keyframes bannerPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.15); }
+  50%      { box-shadow: 0 0 30px rgba(234, 179, 8, 0.3); }
+}
+
+.threat-level-banner .tl-icon {
+  font-size: 2rem;
+}
+
+.threat-level-banner .tl-content h3 {
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.threat-level-banner .tl-content p {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Stats Grid */
+.siber-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.siber-stat {
+  padding: 14px 16px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 10px;
+  border-left: 3px solid;
+}
+
+.siber-stat .label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.siber-stat .value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  line-height: 1;
+}
+
+.siber-stat .meta {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Firewall Rules Table */
+.fw-rule {
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.5);
+  border-left: 2px solid #3b82f6;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+}
+
+.fw-rule .fw-action {
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.fw-rule .fw-action.allow { background: rgba(34,197,94,0.15); color: #4ade80; }
+.fw-rule .fw-action.deny  { background: rgba(239,68,68,0.15); color: #f87171; }
+.fw-rule .fw-action.drop  { background: rgba(234,179,8,0.15); color: #facc15; }
+/* Protocol Badge */
+.te-protocol {
+  padding: 2px 8px;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  border-radius: 4px;
+  color: #22d3ee;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* AI Assessment Badge */
+.te-ai {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}

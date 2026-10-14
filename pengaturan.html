@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengaturan — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb { display: flex; align-items: center; gap: 8px; padding: 16px 0; font-size: 0.8rem; color: #94a3b8; font-family: 'Courier New', monospace; }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .peng-header-page { text-align: center; padding: 20px 0 40px; }
+    .peng-header-page .icon-big { font-size: 4rem; margin-bottom: 16px; filter: drop-shadow(0 0 30px rgba(148, 163, 184, 0.5)); }
+    .peng-header-page h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; color: #fff; }
+    .peng-header-page .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .peng-header-page .desc { color: #94a3b8; margin-top: 16px; max-width: 780px; margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem; }
+
+    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 40px; }
+    .cap-card { padding: 20px; background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 12px; border-left: 3px solid #94a3b8; transition: all 0.2s; }
+    .cap-card:hover { transform: translateY(-3px); border-left-color: #cbd5e1; }
+    .cap-card.danger { border-left-color: #ef4444; }
+    .cap-card.danger:hover { border-left-color: #f87171; background: rgba(239,68,68,0.05); }
+    .cap-card .cc-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+    .cap-card .cc-title { font-size: 0.9rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase; }
+    .cap-card .cc-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.55; }
+    .cap-card .cc-features { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(51,65,85,0.4); }
+    .cap-card .cc-features li { font-size: 0.72rem; color: #cbd5e1; padding: 2px 0 2px 14px; list-style: none; position: relative; }
+    .cap-card .cc-features li::before { content: '▸'; position: absolute; left: 0; color: #22c55e; }
+
+    .cta-primary { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: linear-gradient(135deg, #00e5ff, #00ff9d); color: #04121a; font-weight: 800; font-size: 1rem; border-radius: 12px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.5px; }
+    .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 229, 255, 0.4); }
+
+    .warning-banner { max-width: 900px; margin: 20px auto 30px; padding: 16px 22px; background: linear-gradient(135deg, rgba(234,179,8,0.1), rgba(234,179,8,0.03)); border: 2px solid rgba(234,179,8,0.4); border-radius: 12px; display: flex; gap: 16px; align-items: start; }
+    .warning-banner .icon { font-size: 1.6rem; flex-shrink: 0; color: #facc15; }
+    .warning-banner .content h3 { font-size: 0.85rem; letter-spacing: 1px; color: #facc15; margin-bottom: 6px; font-weight: 800; text-transform: uppercase; }
+    .warning-banner .content p { font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Pengaturan</span>
+  </div>
+
+  <header class="peng-header-page">
+    <div class="icon-big" style="color:#94a3b8;">⚙️</div>
+    <h1>PENGATURAN</h1>
+    <p class="sub">SYSTEM SETTINGS &amp; ROBUSTNESS LAYER</p>
+    <p class="desc">
+      Layer konfigurasi sistem untuk ketahanan operasional — Session Management,
+      Data Retention, Backup &amp; Disaster Recovery, Emergency Purge, dan
+      Security Configuration. Modul ini adalah "safety net" untuk mencegah
+      kebocoran informasi pada komputer di ruang operasi.
+    </p>
+  </header>
+
+  <div class="warning-banner">
+    <div class="icon">🔐</div>
+    <div class="content">
+      <h3>Akses Terbatas — Administrator Only</h3>
+      <p>
+        Modul ini hanya dapat diakses oleh operator dengan clearance minimal
+        <strong>SECRET</strong>. Semua perubahan konfigurasi akan tercatat
+        di audit log sesuai UU No. 36/1999 &amp; UU ITE.
+      </p>
+    </div>
+  </div>
+
+  <!-- CAPABILITIES -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>KAPABILITAS PENGATURAN</h2>
+    <p>Robustness &amp; security features</p>
+  </div>
+
+  <div class="cap-grid">
+    <div class="cap-card">
+      <span class="cc-icon">⏱️</span>
+      <div class="cc-title">Session Management</div>
+      <div class="cc-desc">
+        Kontrol session dengan idle timeout, auto-logout, dan re-auth.
+        Mencegah kebocoran informasi saat komputer ditinggal.
+      </div>
+      <ul class="cc-features">
+        <li>Idle timeout 1-60 menit</li>
+        <li>Warning before logout</li>
+        <li>Session activity log</li>
+      </ul>
+    </div>
+
+    <div class="cap-card">
+      <span class="cc-icon">🗄️</span>
+      <div class="cc-title">Data Retention</div>
+      <div class="cc-desc">
+        Policy retention per jenis data dengan auto-purge terjadwal.
+        Mencegah database overhead dari data kedaluwarsa.
+      </div>
+      <ul class="cc-features">
+        <li>Per-type retention policy</li>
+        <li>Storage estimate &amp; preview</li>
+        <li>Manual / scheduled purge</li>
+      </ul>
+    </div>
+
+    <div class="cap-card">
+      <span class="cc-icon">☁️</span>
+      <div class="cc-title">Backup &amp; DR</div>
+      <div class="cc-desc">
+        Backup otomatis terjadwal dengan enkripsi AES-256-GCM.
+        Verifikasi integritas backup setelah selesai.
+      </div>
+      <ul class="cc-features">
+        <li>Auto-backup hourly/daily/weekly</li>
+        <li>Retention backup configurable</li>
+        <li>Backup history &amp; audit log</li>
+      </ul>
+    </div>
+
+    <div class="cap-card">
+      <span class="cc-icon">📊</span>
+      <div class="cc-title">System Info</div>
+      <div class="cc-desc">
+        Monitoring system: version, uptime, storage, active modules,
+        license status, dan konfigurasi aktif.
+      </div>
+      <ul class="cc-features">
+        <li>Real-time uptime tracking</li>
+        <li>Storage usage monitor</li>
+        <li>Config export (JSON)</li>
+      </ul>
+    </div>
+
+    <div class="cap-card" style="border-left-color:#22c55e;">
+      <span class="cc-icon">🌐</span>
+      <div class="cc-title">Remote Infrastructure</div>
+      <div class="cc-desc">
+        Monitoring real-time 40 remote sites — 27 Kodam, 8 Edge AI,
+        4 Middleware Hub, dan IKN Central AI. Ping, uptime, bandwidth,
+        dan health status per lokasi.
+      </div>
+      <ul class="cc-features">
+        <li>Live ping &amp; uptime monitor</li>
+        <li>Health status per site</li>
+        <li>Alert otomatis site down</li>
+        <li>Bandwidth &amp; storage tracking</li>
+      </ul>
+    </div>
+
+    <div class="cap-card">
+      <span class="cc-icon">🔒</span>
+      <div class="cc-title">Security Config</div>
+      <div class="cc-desc">
+        Konfigurasi klasifikasi default, RBAC, dan policy keamanan
+        sistem untuk semua modul SISKODAL.
+      </div>
+      <ul class="cc-features">
+        <li>Default classification level</li>
+        <li>Password re-auth policy</li>
+        <li>Two-person rule enforcement</li>
+      </ul>
+    </div>
+
+    <div class="cap-card danger">
+      <span class="cc-icon">🚨</span>
+      <div class="cc-title">Emergency Purge</div>
+      <div class="cc-desc">
+        Hapus semua data sensitif lokal secara instan untuk situasi
+        darurat. Wajib 2-person approval &amp; confirmation.
+      </div>
+      <ul class="cc-features">
+        <li>DoD 5220.22-M / NIST 800-88</li>
+        <li>Two-person approval workflow</li>
+        <li>Manual trigger + hotkey</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center; margin-top:40px;">
+    <a href="/joc/pengaturan-dashboard.html" class="cta-primary">
+      <i class="fas fa-cog"></i> Buka Settings Dashboard →
+    </a>
+    <div style="margin-top:20px;">
+      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal
+      </a>
+    </div>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · Pengaturan</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

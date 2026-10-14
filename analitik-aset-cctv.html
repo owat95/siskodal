@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topologi Data — CCTV/FLIR Perbatasan → IKN — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <style>
+    :root {
+      --cctv:   #ef4444;
+      --jetson: #f59e0b;
+      --fiber:  #10b981;
+      --mw:     #a855f7;
+      --ikn:    #eab308;
+      --bg:     #0a0f1e;
+      --border: rgba(148,163,184,0.15);
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:0; background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; min-height:100vh; overflow-x:hidden; }
+    .class-banner { background: linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d); color:#fecaca; text-align:center; padding:6px 16px; font-size:0.72rem; font-weight:700; letter-spacing:2px; border-bottom:1px solid #dc2626; }
+    .class-banner.bottom { border-top:1px solid #dc2626; border-bottom:none; font-weight:500; letter-spacing:0.5px; font-size:0.66rem; padding:8px 16px; }
+    .topo-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; background:linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,15,30,0.9)); border-bottom:1px solid var(--border); }
+    .topo-header .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { font-size:1.6rem; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:10px; }
+    .topo-header h1 { margin:0; font-size:1rem; letter-spacing:2px; color:#e2e8f0; }
+    .topo-header .sub { margin:2px 0 0; font-size:0.72rem; color:#64748b; }
+    .header-stats { display:flex; gap:24px; align-items:center; }
+    .stat-item { display:flex; flex-direction:column; align-items:flex-end; font-size:0.7rem; }
+    .stat-item .label { color:#64748b; font-size:0.62rem; letter-spacing:1px; }
+    .stat-item .value { color:#4ade80; font-family:'Courier New',monospace; font-weight:600; font-size:0.85rem; }
+    .stat-item .value.warn { color:#facc15; }
+    .stat-item .value.cctv { color:#ef4444; }
+    .back-btn { display:flex; align-items:center; gap:6px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#f87171; padding:8px 14px; border-radius:6px; font-size:0.72rem; font-weight:600; text-decoration:none; cursor:pointer; transition:all 0.15s; }
+    .back-btn:hover { background:rgba(239,68,68,0.2); }
+    .topo-main { display:grid; grid-template-columns:1fr 340px; gap:16px; padding:16px 24px 20px; max-width:1800px; margin:0 auto; }
+    .topo-canvas { background: radial-gradient(circle at 50% 40%, rgba(239,68,68,0.06), transparent 60%), linear-gradient(180deg, #0f172a, #0a0f1e); border:1px solid var(--border); border-radius:12px; padding:12px; position:relative; overflow:hidden; min-height:720px; }
+    .topo-canvas::before { content:''; position:absolute; inset:0; background-image: linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px); background-size:40px 40px; pointer-events:none; }
+    svg.topo-svg { width:100%; height:720px; display:block; position:relative; z-index:1; }
+    .topo-node { cursor:pointer; transition:filter 0.2s; }
+    .topo-node:hover { filter:brightness(1.2); }
+    .topo-node.dimmed { opacity:0.35; }
+    .topo-node.selected .node-box { stroke-width:3; filter:drop-shadow(0 0 12px currentColor); }
+    .topo-link { fill:none; stroke-width:2; stroke-linecap:round; opacity:0.5; }
+    .topo-link.active { opacity:0.9; stroke-width:2.5; }
+    .topo-link.wireless { stroke-dasharray:6 6; opacity:0.75; }
+    .topo-link.dimmed { opacity:0.15; }
+    .packet { filter:drop-shadow(0 0 6px currentColor); }
+    .sensor-zone { fill:rgba(239,68,68,0.04); stroke:rgba(239,68,68,0.2); stroke-dasharray:4 6; stroke-width:1; }
+    .sensor-zone-label { fill:#ef4444; font-size:9px; font-family:'Courier New', monospace; letter-spacing:1.5px; opacity:0.7; }
+    .topo-legend { position:absolute; bottom:16px; left:16px; background:rgba(15,23,42,0.85); border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:0.7rem; display:flex; gap:16px; flex-wrap:wrap; z-index:2; }
+    .legend-item { display:flex; align-items:center; gap:6px; }
+    .legend-dot { width:10px; height:10px; border-radius:50%; }
+    .topo-sidebar { display:flex; flex-direction:column; gap:12px; }
+    .info-panel { background:linear-gradient(180deg, rgba(30,41,59,0.6), rgba(15,23,42,0.85)); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+    .info-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#f87171; text-transform:uppercase; }
+    .info-row { display:flex; gap:10px; margin-bottom:7px; font-size:0.72rem; line-height:1.4; }
+    .info-row .key { color:#64748b; min-width:90px; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px; padding-top:1px; }
+    .info-row .val { flex:1; color:#cbd5e1; font-family:'Courier New',monospace; font-size:0.7rem; }
+    .info-row .val.highlight { color:#4ade80; }
+    .info-row .val.warn { color:#facc15; }
+    .info-row .val.cctv { color:#f87171; }
+    .log-panel { flex:1; background:rgba(10,15,30,0.9); border:1px solid var(--border); border-radius:10px; padding:12px 14px; overflow:hidden; display:flex; flex-direction:column; max-height:340px; }
+    .log-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#f87171; text-transform:uppercase; }
+    #log-stream { flex:1; overflow-y:auto; font-family:'Courier New',monospace; font-size:0.68rem; line-height:1.6; }
+    #log-stream .log-line { padding:2px 0; color:#94a3b8; animation:logFadeIn 0.3s; }
+    #log-stream .log-line .ts { color:#475569; }
+    #log-stream .log-line .tag { display:inline-block; min-width:66px; font-weight:700; }
+    #log-stream .log-line .tag.cctv { color:#ef4444; }
+    #log-stream .log-line .tag.jetson { color:#f59e0b; }
+    #log-stream .log-line .tag.fiber { color:#10b981; }
+    #log-stream .log-line .tag.mw { color:#a855f7; }
+    #log-stream .log-line .tag.ikn { color:#eab308; }
+    #log-stream .log-line .tag.alert { color:#f87171; }
+    #log-stream .log-line .tag.ok { color:#4ade80; }
+    @keyframes logFadeIn { from { opacity:0; transform:translateX(-6px);} to { opacity:1; transform:translateX(0);} }
+    .flow-stats { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:10px; }
+    .flow-stat { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.15); border-radius:6px; padding:8px; text-align:center; }
+    .flow-stat .num { font-size:1.05rem; font-weight:700; color:#4ade80; font-family:'Courier New',monospace; }
+    .flow-stat .lbl { font-size:0.6rem; color:#64748b; letter-spacing:0.5px; text-transform:uppercase; }
+    .flow-stat.warn .num { color:#facc15; }
+    .flow-stat.cctv .num { color:#f87171; }
+    @media (max-width: 1200px) { .topo-main { grid-template-columns:1fr; } .topo-sidebar { flex-direction:row; flex-wrap:wrap; } .info-panel, .log-panel { flex:1; min-width:280px; } }
+  </style>
+</head>
+<body>
+
+<div class="class-banner">
+  RAHASIA · 📹 TOPOLOGI DATA ASET · Clearance: SECRET · 2026-10-06
+</div>
+
+<header class="topo-header">
+  <div class="brand">
+    <div class="brand-mark">📹</div>
+    <div>
+      <h1>CCTV/FLIR PERBATASAN → IKN CENTRAL</h1>
+      <p class="sub">Multispectral perimeter · fixed infra · lowest latency · always-on</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="label">Status</span>
+      <span class="value">● LIVE</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Latency E2E</span>
+      <span class="value">&lt;80 ms</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Uptime</span>
+      <span class="value cctv">99.97%</span>
+    </div>
+    <a href="/joc/analitik-dashboard.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Kembali ke Analytics
+    </a>
+  </div>
+</header>
+
+<div class="topo-main">
+
+  <div class="topo-canvas">
+    <svg class="topo-svg" viewBox="0 0 1300 720" preserveAspectRatio="xMidYMid meet">
+
+      <defs>
+        <marker id="arrow-cctv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+        </marker>
+        <marker id="arrow-jetson" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+        </marker>
+        <marker id="arrow-fiber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+        </marker>
+        <marker id="arrow-mw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+        </marker>
+        <marker id="arrow-ikn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#eab308"/>
+        </marker>
+        <marker id="arrow-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+        </marker>
+      </defs>
+
+      <!-- SENSOR ZONE (border) -->
+      <rect class="sensor-zone" x="60" y="480" width="700" height="200" rx="12"/>
+      <text class="sensor-zone-label" x="76" y="500">◈ PERIMETER ZONE · 24/7 MONITORING · MULTISPECTRAL (RGB + IR)</text>
+
+      <!-- ============ LINKS ============ -->
+      <!-- CCTV Pole 1 → Local Jetson -->
+      <path id="path-cctv1" class="topo-link active" stroke="#ef4444"
+            d="M 220 590 C 300 570, 380 560, 450 550"
+            marker-end="url(#arrow-cctv)"/>
+      <!-- CCTV Pole 2 → Local Jetson -->
+      <path id="path-cctv2" class="topo-link active" stroke="#ef4444"
+            d="M 220 640 C 300 630, 380 590, 450 570"
+            marker-end="url(#arrow-cctv)"/>
+      <!-- CCTV Pole 3 → Local Jetson -->
+      <path id="path-cctv3" class="topo-link active" stroke="#ef4444"
+            d="M 380 660 C 420 640, 450 610, 470 590"
+            marker-end="url(#arrow-cctv)"/>
+
+      <!-- Jetson → Fiber Bridge (solid, very short) -->
+      <path id="path-jetson-fiber" class="topo-link active" stroke="#f59e0b"
+            d="M 560 555 L 620 555"
+            marker-end="url(#arrow-jetson)"/>
+
+      <!-- Fiber Bridge → MW -->
+      <path id="path-fiber-mw" class="topo-link active" stroke="#10b981"
+            d="M 720 510 C 800 450, 880 380, 960 320"
+            marker-end="url(#arrow-fiber)"/>
+
+      <!-- MW → IKN -->
+      <path id="path-mw-ikn" class="topo-link active" stroke="#eab308"
+            d="M 960 240 L 960 140"
+            marker-end="url(#arrow-ikn)"/>
+
+      <!-- Dimmed edges -->
+      <path class="topo-link dimmed" stroke="#22c55e" stroke-dasharray="4 4"
+            d="M 500 420 L 700 420" marker-end="url(#arrow-dim)"/>
+      <path class="topo-link dimmed" stroke="#0ea5e9" stroke-dasharray="4 4"
+            d="M 1120 460 L 1000 350" marker-end="url(#arrow-dim)"/>
+      <path class="topo-link dimmed" stroke="#3b82f6" stroke-dasharray="4 4"
+            d="M 300 420 L 700 380" marker-end="url(#arrow-dim)"/>
+
+      <!-- ============ ANIMATED PACKETS ============ -->
+      <circle class="packet" r="5" fill="#ef4444">
+        <animateMotion dur="0.9s" repeatCount="indefinite"><mpath href="#path-cctv1"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.9s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#f87171">
+        <animateMotion dur="1s" begin="0.3s" repeatCount="indefinite"><mpath href="#path-cctv2"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" begin="0.3s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#dc2626">
+        <animateMotion dur="0.8s" begin="0.5s" repeatCount="indefinite"><mpath href="#path-cctv3"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.8s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="3" fill="#f59e0b">
+        <animateMotion dur="0.3s" begin="1s" repeatCount="indefinite"><mpath href="#path-jetson-fiber"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.3s" begin="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#10b981">
+        <animateMotion dur="1s" begin="1.4s" repeatCount="indefinite"><mpath href="#path-fiber-mw"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" begin="1.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#eab308">
+        <animateMotion dur="1s" begin="2.2s" repeatCount="indefinite"><mpath href="#path-mw-ikn"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" begin="2.2s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ============ NODES ============ -->
+
+      <!-- CCTV POLE 1 -->
+      <g class="topo-node" transform="translate(220, 590)" data-node="cctv1">
+        <rect class="node-box" x="-90" y="-45" width="180" height="90" rx="10"
+              fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+        <circle cx="-68" cy="-22" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="700" letter-spacing="1">
+          📹 CCTV + FLIR POLE
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Tower 15m · dual-sensor
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
+          RGB 4K + Thermal IR
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Sector: Kaltim-01
+        </text>
+      </g>
+
+      <!-- CCTV POLE 2 -->
+      <g class="topo-node" transform="translate(220, 650)" data-node="cctv2">
+        <rect class="node-box" x="-90" y="-32" width="180" height="64" rx="8"
+              fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+        <circle cx="-68" cy="-12" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-12" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="700" letter-spacing="1">
+          📹 CCTV POLE B
+        </text>
+        <text x="0" y="8" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Sector: Kaltim-02
+        </text>
+        <text x="0" y="24" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          RGB + IR · pan-tilt-zoom
+        </text>
+      </g>
+
+      <!-- CCTV POLE 3 (Papua) -->
+      <g class="topo-node" transform="translate(380, 660)" data-node="cctv3">
+        <rect class="node-box" x="-90" y="-32" width="180" height="64" rx="8"
+              fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+        <circle cx="-68" cy="-12" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-12" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="700" letter-spacing="1">
+          📹 CCTV POLE C
+        </text>
+        <text x="0" y="8" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Sector: Papua-01
+        </text>
+        <text x="0" y="24" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          RGB + IR · 60 GHz radar
+        </text>
+      </g>
+
+      <!-- LOCAL JETSON (hidden bunker) -->
+      <g class="topo-node" transform="translate(540, 555)" data-node="jetson">
+        <rect class="node-box" x="-90" y="-45" width="180" height="90" rx="10"
+              fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+        <circle cx="-68" cy="-22" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700" letter-spacing="1">
+          🧠 LOCAL JETSON
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Orin Nano 8GB · 40 TOPS
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
+          InfraVisNet-L · multispectral
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Bunker · underground · -20°C
+        </text>
+      </g>
+
+      <!-- FIBER BRIDGE -->
+      <g class="topo-node" transform="translate(680, 555)" data-node="fiber">
+        <rect class="node-box" x="-70" y="-40" width="140" height="80" rx="10"
+              fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+        <circle cx="-48" cy="-18" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-18" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700" letter-spacing="1">
+          🔗 FIBER BRIDGE
+        </text>
+        <text x="0" y="2" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          10G single-mode
+        </text>
+        <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Backup: 60 GHz PTP
+        </text>
+      </g>
+
+      <!-- MW HUB -->
+      <g class="topo-node" transform="translate(960, 280)" data-node="mw-hub">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#a855f7" font-size="13" font-weight="700" letter-spacing="1">
+          🔄 MIDDLEWARE HUB
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Kafka · Redis Streams · Normalizer
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Border event aggregation
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Hub: mw-balikpapan · 10.80.3.0/24
+        </text>
+      </g>
+
+      <!-- IKN CENTRAL -->
+      <g class="topo-node" transform="translate(960, 90)" data-node="ikn-central">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#eab308" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#eab308" font-size="13" font-weight="700" letter-spacing="1">
+          🛰️ IKN CENTRAL
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Multi-INT Fusion · Strategic Advisor · COP
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          IKN Kalimantan Timur · 10.90.1.0/24
+        </text>
+      </g>
+
+      <!-- AD Edge (dimmed) -->
+      <g class="topo-node dimmed" transform="translate(400, 420)" data-node="ad-edge">
+        <rect class="node-box" x="-90" y="-35" width="180" height="70" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-8" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="700" letter-spacing="1">
+          AD EDGE NODE
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Ground units · separate pipeline
+        </text>
+        <text x="0" y="26" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          Not in this data path
+        </text>
+      </g>
+
+      <!-- AU Edge (dimmed) -->
+      <g class="topo-node dimmed" transform="translate(1120, 460)" data-node="au-edge">
+        <rect class="node-box" x="-90" y="-35" width="180" height="70" rx="8"
+              fill="#0f172a" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-8" text-anchor="middle" fill="#0ea5e9" font-size="11" font-weight="700" letter-spacing="1">
+          AU EDGE NODE
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Air surveillance · separate pipeline
+        </text>
+        <text x="0" y="26" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          Not in this data path
+        </text>
+      </g>
+
+      <!-- AL Edge (dimmed) -->
+      <g class="topo-node dimmed" transform="translate(300, 420)" data-node="al-edge">
+        <rect class="node-box" x="-80" y="-30" width="160" height="60" rx="8"
+              fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-6" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="700" letter-spacing="1">
+          AL EDGE
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          Not in this path
+        </text>
+      </g>
+
+      <!-- Link labels -->
+      <g font-size="9" font-family="monospace" fill="#64748b">
+        <text x="290" y="540" fill="#ef4444">RTSP / H.265</text>
+        <text x="565" y="530" fill="#f59e0b">Local LAN &lt;2ms</text>
+        <text x="680" y="530" fill="#10b981">Fiber &lt;5ms</text>
+        <text x="810" y="380" fill="#10b981">Backbone</text>
+        <text x="972" y="195" fill="#eab308">BGP · ASN 65309</text>
+      </g>
+
+    </svg>
+
+    <div class="topo-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#ef4444"></span> CCTV/FLIR</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span> Local Jetson</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span> Fiber</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a855f7"></span> Middleware</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#eab308"></span> IKN uplink</div>
+      <div class="legend-item" style="opacity:0.5"><span class="legend-dot" style="background:#64748b"></span> Isolated</div>
+    </div>
+  </div>
+
+  <aside class="topo-sidebar">
+
+    <div class="info-panel">
+      <h3>◈ Flow Statistics</h3>
+      <div class="flow-stats">
+        <div class="flow-stat cctv">
+          <div class="num">&lt;2ms</div>
+          <div class="lbl">Local LAN</div>
+        </div>
+        <div class="flow-stat">
+          <div class="num">&lt;5ms</div>
+          <div class="lbl">Fiber</div>
+        </div>
+        <div class="flow-stat warn">
+          <div class="num">&lt;80ms</div>
+          <div class="lbl">E2E</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel" id="node-details">
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val cctv">CCTV + FLIR Pole</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">Perimeter Sensor Tower</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">Perbatasan Kaltim / Papua</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">RGB 4K + Thermal IR + 60GHz radar</span></div>
+      <div class="info-row"><span class="key">AI Model</span><span class="val">InfraVisNet-L (YOLOv11n)</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val">RTSP / H.265 → Local Jetson</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val">Local Jetson (bunker)</span></div>
+    </div>
+
+    <div class="info-panel" style="border-color: rgba(16,185,129,0.3);">
+      <h3 style="color: #10b981;">✔ Lowest Latency</h3>
+      <div style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.5;">
+        Karena fixed infrastructure (fiber optik), CCTV/FLIR ini punya
+        <strong style="color: #10b981;">latency terendah</strong> dari semua aset —
+        <strong>&lt;80ms end-to-end</strong> dari pole sampai IKN.
+        <br><br>
+        Cocok untuk <strong>perimeter alert real-time</strong> dan
+        <strong>tracking otomatis</strong> di area sensitif.
+      </div>
+    </div>
+
+    <div class="log-panel">
+      <h3>◈ Live Stream Log</h3>
+      <div id="log-stream"></div>
+    </div>
+
+  </aside>
+</div>
+
+<div class="class-banner bottom">
+  RAHASIA · ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
+</div>
+
+<script src="/joc/js/classification.js?v=2.0" data-cfasync="false"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  const NODES = {
+    'cctv1': {
+      title: 'CCTV + FLIR Pole',
+      class: 'Perimeter Sensor Tower',
+      location: 'Kaltim-01 (border Kalimantan Timur)',
+      sensors: 'RGB 4K + Thermal IR + 60 GHz radar',
+      uplink: 'RTSP / H.265 → Local Jetson',
+      tactical: 'InfraVisNet-L (YOLOv11n) · multispectral',
+      next: 'Local Jetson (underground bunker)',
+      highlight: true
+    },
+    'cctv2': {
+      title: 'CCTV Pole B',
+      class: 'Perimeter Sensor Tower',
+      location: 'Kaltim-02 (border Kalimantan Timur)',
+      sensors: 'RGB + IR · pan-tilt-zoom',
+      uplink: 'RTSP / H.265 → Local Jetson',
+      tactical: 'PTZ capability · 300m range',
+      next: 'Local Jetson',
+      highlight: true
+    },
+    'cctv3': {
+      title: 'CCTV Pole C',
+      class: 'Perimeter Sensor Tower',
+      location: 'Papua-01 (border Papua)',
+      sensors: 'RGB + IR + 60 GHz radar',
+      uplink: 'RTSP / H.265 → Local Jetson',
+      tactical: 'Radar-augmented detection',
+      next: 'Local Jetson',
+      highlight: true
+    },
+    'jetson': {
+      title: 'Local Jetson (Bunker)',
+      class: 'Edge AI — Underground',
+      location: 'Underground bunker · climate controlled -20°C',
+      sensors: 'Ingest RTSP dari 4-8 pole CCTV',
+      uplink: 'CoT metadata only → Fiber Bridge',
+      tactical: 'Jetson Orin Nano 8GB · 40 TOPS · 7-15W',
+      next: 'Fiber Bridge → MW Hub',
+      highlight: true
+    },
+    'fiber': {
+      title: 'Fiber Bridge',
+      class: 'Backbone Aggregation',
+      location: 'Regional fiber node',
+      sensors: '10G single-mode fiber',
+      uplink: '~5 Mbps aggregate (metadata only)',
+      tactical: 'Backup: 60 GHz point-to-point wireless',
+      next: 'Middleware Hub Balikpapan',
+      highlight: true
+    },
+    'mw-hub': {
+      title: 'Middleware Hub',
+      class: 'Regional Aggregator',
+      location: 'Balikpapan · 10.80.3.0/24',
+      sensors: 'Kafka · Redis Streams · Normalizer',
+      uplink: '~1 Mbps aggregate',
+      tactical: 'Cross-matra routing',
+      next: 'IKN Central',
+      highlight: true
+    },
+    'ikn-central': {
+      title: 'IKN Central',
+      class: 'Strategic Command',
+      location: 'IKN Kalimantan Timur · 10.90.1.0/24',
+      sensors: 'Multi-INT Fusion · Strategic Advisor',
+      uplink: '~5 Mbps aggregate',
+      tactical: 'NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4',
+      next: 'COP Nasional',
+      highlight: true
+    },
+    'ad-edge': {
+      title: 'AD Edge Node',
+      class: 'Matra: Angkatan Darat',
+      location: 'Kodam Regional',
+      sensors: 'Ground sensors',
+      uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      next: 'Tidak dalam jalur data ini',
+      highlight: false
+    },
+    'au-edge': {
+      title: 'AU Edge Node',
+      class: 'Matra: Angkatan Udara',
+      location: 'Lanud Regional',
+      sensors: 'Air surveillance',
+      uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      next: 'Tidak dalam jalur data ini',
+      highlight: false
+    },
+    'al-edge': {
+      title: 'AL Edge Node',
+      class: 'Matra: Angkatan Laut',
+      location: 'Lantamal Regional',
+      sensors: 'Naval sensors',
+      uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      next: 'Tidak dalam jalur data ini',
+      highlight: false
+    }
+  };
+
+  const detailsPanel = document.getElementById('node-details');
+  function renderNodeDetails(nodeId) {
+    const n = NODES[nodeId];
+    if (!n) return;
+    detailsPanel.innerHTML = `
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val ${n.highlight ? 'cctv' : ''}">${n.title}</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">${n.class}</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">${n.location}</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">${n.sensors}</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val ${n.highlight ? 'warn' : ''}">${n.uplink}</span></div>
+      <div class="info-row"><span class="key">Details</span><span class="val">${n.tactical}</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val ${n.highlight ? 'highlight' : 'warn'}">${n.next}</span></div>
+    `;
+  }
+
+  document.querySelectorAll('.topo-node').forEach(node => {
+    node.addEventListener('click', () => {
+      const id = node.getAttribute('data-node');
+      if (!NODES[id]) return;
+      document.querySelectorAll('.topo-node').forEach(n => n.classList.remove('selected'));
+      node.classList.add('selected');
+      renderNodeDetails(id);
+    });
+  });
+
+  const logStream = document.getElementById('log-stream');
+
+  const LOG_TEMPLATES = [
+    { tag: 'cctv',   text: 'POLE Kaltim-01: multispectral scan — 0 motion, 0 heat anomaly' },
+    { tag: 'cctv',   text: 'POLE Kaltim-02: PTZ sweep sector 4-6 — clear' },
+    { tag: 'cctv',   text: 'POLE Papua-01: 60 GHz radar scan · 12 targets (wildlife)' },
+    { tag: 'alert',  text: 'POLE Kaltim-01: PERSON DETECTED — sector C3, conf 94%' },
+    { tag: 'jetson', text: 'JETSON: InfraVisNet-L inference (42ms) — confirm HUMAN, not wildlife' },
+    { tag: 'jetson', text: 'JETSON: alert CoT payload 1.2 KB → fiber uplink' },
+    { tag: 'fiber',  text: 'FIBER: 10G single-mode · latency 3.8ms · packet loss 0.00%' },
+    { tag: 'fiber',  text: 'FIBER: forward to mw-balikpapan · 10.80.3.1' },
+    { tag: 'mw',     text: 'MW-HUB: routing alert → IKN via BGP ASN 65309 → 65000' },
+    { tag: 'mw',     text: 'MW-HUB: cross-matra — notify AD perimeter response unit' },
+    { tag: 'ikn',    text: 'IKN: alert logged — Kaltim-01 sector C3 · personnel intrusion' },
+    { tag: 'ikn',    text: 'IKN: MiniMax M3 pattern analysis — 3rd incident this week (trend +40%)' },
+    { tag: 'ok',     text: 'PIPELINE: E2E latency 76ms · uptime 99.97% · all poles operational' }
+  ];
+
+  const TAG_CLASSES = { cctv:'cctv', jetson:'jetson', fiber:'fiber', mw:'mw', ikn:'ikn', alert:'alert', ok:'ok' };
+
+  function makeLogLine(tpl) {
+    const now = new Date();
+    const ts = String(now.getHours()).padStart(2,'0') + ':' +
+               String(now.getMinutes()).padStart(2,'0') + ':' +
+               String(now.getSeconds()).padStart(2,'0');
+    return `<div class="log-line"><span class="ts">${ts}</span><span class="tag ${TAG_CLASSES[tpl.tag] || ''}">[${tpl.tag.toUpperCase()}]</span>${tpl.text}</div>`;
+  }
+
+  let logIdx = 0;
+  function pushLog() {
+    const tpl = LOG_TEMPLATES[logIdx % LOG_TEMPLATES.length];
+    logIdx++;
+    logStream.insertAdjacentHTML('beforeend', makeLogLine(tpl));
+    while (logStream.children.length > 40) logStream.removeChild(logStream.firstChild);
+    logStream.scrollTop = logStream.scrollHeight;
+  }
+  for (let i = 0; i < 6; i++) pushLog();
+  setInterval(pushLog, 1700);
+
+  console.log('[TOPO] CCTV/FLIR Perbatasan → IKN ready');
+})();
+</script>
+
+</body>
+</html>

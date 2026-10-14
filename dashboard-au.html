@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TNI AU — SISKODAL Dashboard</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard" data-matra="au">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="brand">
+      <span class="brand-mark" style="color:#3b82f6;">◈</span>
+      <div class="brand-text">
+        <strong>TNI AU</strong>
+        <span>Siskodal</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Dashboard</div>
+    <a href="#" class="nav-item active"><i class="fas fa-chart-line"></i> Overview</a>
+    <a href="#" class="nav-item"><i class="fas fa-users"></i> Personel</a>
+    <a href="#" class="nav-item"><i class="fas fa-plane"></i> Aset Udara</a>
+    <a href="#" class="nav-item"><i class="fas fa-satellite-dish"></i> Radar &amp; PSU</a>
+
+    <div class="nav-section">Operasional</div>
+    <a href="#" class="nav-item"><i class="fas fa-crosshairs"></i> Operasi</a>
+    <a href="#" class="nav-item"><i class="fas fa-cube"></i> Logistik</a>
+
+    <div class="nav-section">Analitik</div>
+    <a href="#" class="nav-item"><i class="fas fa-chart-bar"></i> KPI</a>
+    <a href="#" class="nav-item"><i class="fas fa-money-bill"></i> Gaji</a>
+
+    <div class="nav-section">Navigasi</div>
+    <a href="/joc/" class="nav-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <a href="/joc/map.html" class="nav-item"><i class="fas fa-globe"></i> Peta NKRI</a>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="dash-header">
+    <div class="title-block">
+      <h1>TNI ANGKATAN UDARA</h1>
+      <p>Personnel &amp; KPI Operations Center</p>
+    </div>
+    <div class="title-block">
+      <h1>...</h1>
+      <p id="page-subtitle">Personnel & KPI Operations Center</p>
+    </div>
+    <button class="btn-export" onclick="ExportPDF.exportPersonnel('au')" title="Export laporan personel ke PDF">
+      <i class="fas fa-file-pdf"></i> Export PDF
+    </button>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value" id="live-clock">--:--:--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Status</span>
+        <span class="value" style="color:#4ade80;">● OPERATIONAL</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- OVERVIEW -->
+    <div class="overview-grid">
+      <div class="overview-card" style="--accent:#3b82f6;">
+        <div class="label">Total Personel</div>
+        <div class="value" id="stat-total">--</div>
+        <div class="meta">Aktif &amp; on-mission</div>
+      </div>
+      <div class="overview-card" style="--accent:#22c55e;">
+        <div class="label">Rata-rata KPI</div>
+        <div class="value" id="stat-kpi">--</div>
+        <div class="meta">Composite score (0-100)</div>
+      </div>
+      <div class="overview-card" style="--accent:#eab308;">
+        <div class="label">Ready Promosi</div>
+        <div class="value" id="stat-ready">--</div>
+        <div class="meta">Memenuhi syarat kenaikan pangkat</div>
+      </div>
+      <div class="overview-card" style="--accent:#a855f7;">
+        <div class="label">Total Gaji/Bulan</div>
+        <div class="value" id="stat-salary">--</div>
+        <div class="meta">Base + tunjangan + bonus</div>
+      </div>
+    </div>
+
+    <!-- PERSONNEL TABLE -->
+    <section class="panel">
+      <div class="panel-header">
+        <h3>◤ Database Personel</h3>
+        <span style="font-size:0.8rem;color:#64748b;font-family:'Courier New',monospace;"
+              id="personnel-count">0 / 0</span>
+      </div>
+      <div class="panel-body">
+
+        <!-- FILTERS -->
+        <div class="filter-bar">
+          <input type="text" id="filter-search" placeholder="🔍 Cari nama atau NRP...">
+          <select id="filter-rank"><option value="">Semua Pangkat</option></select>
+          <select id="filter-unit"><option value="">Semua Unit</option></select>
+          <select id="filter-specialty"><option value="">Semua Specialty</option></select>
+          <button id="filter-reset" style="padding:8px 16px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#f87171;border-radius:8px;cursor:pointer;font-size:0.85rem;">
+            Reset
+          </button>
+        </div>
+
+        <!-- TABLE -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>NRP</th>
+              <th>Nama</th>
+              <th>Pangkat</th>
+              <th>Unit</th>
+              <th>Specialty</th>
+              <th>KPI</th>
+              <th>Area</th>
+            </tr>
+          </thead>
+          <tbody id="personnel-tbody"></tbody>
+        </table>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- DETAIL PANEL (slide-in dari kanan) -->
+  <aside id="detail-panel" class="detail-panel"></aside>
+
+</div>
+
+<!-- Scripts -->
+<!-- jsPDF Libraries -->
+<script data-cfasync="false" src="/joc/js/jspdf.umd.min.js"></script>
+<script data-cfasync="false" src="/joc/js/jspdf-autotable.min.js"></script>
+
+<script src="/joc/js/kpi-engine.js" data-cfasync="false"></script>
+<script src="/joc/js/personnel-data.js" data-cfasync="false"></script>
+<script src="/joc/js/succession-ai.js" data-cfasync="false"></script>
+<script src="/joc/js/export-pdf.js" data-cfasync="false"></script>
+<script src="/joc/js/dashboard-au.js" data-cfasync="false"></script>
+
+</body>
+</html>

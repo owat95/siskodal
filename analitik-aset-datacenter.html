@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topologi Data — Datacenter IKN — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <style>
+    :root {
+      --dc:      #14b8a6;
+      --vlm:     #f59e0b;
+      --access:  #8b5cf6;
+      --env:     #10b981;
+      --soc:     #ef4444;
+      --ikn:     #eab308;
+      --bg:      #0a0f1e;
+      --border:  rgba(148,163,184,0.15);
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:0; background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; min-height:100vh; overflow-x:hidden; }
+    .class-banner { background: linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d); color:#fecaca; text-align:center; padding:6px 16px; font-size:0.72rem; font-weight:700; letter-spacing:2px; border-bottom:1px solid #dc2626; }
+    .class-banner.bottom { border-top:1px solid #dc2626; border-bottom:none; font-weight:500; letter-spacing:0.5px; font-size:0.66rem; padding:8px 16px; }
+    .topo-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; background:linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,15,30,0.9)); border-bottom:1px solid var(--border); }
+    .topo-header .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { font-size:1.6rem; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:rgba(20,184,166,0.1); border:1px solid rgba(20,184,166,0.3); border-radius:10px; }
+    .topo-header h1 { margin:0; font-size:1rem; letter-spacing:2px; color:#e2e8f0; }
+    .topo-header .sub { margin:2px 0 0; font-size:0.72rem; color:#64748b; }
+    .header-stats { display:flex; gap:24px; align-items:center; }
+    .stat-item { display:flex; flex-direction:column; align-items:flex-end; font-size:0.7rem; }
+    .stat-item .label { color:#64748b; font-size:0.62rem; letter-spacing:1px; }
+    .stat-item .value { color:#4ade80; font-family:'Courier New',monospace; font-weight:600; font-size:0.85rem; }
+    .stat-item .value.warn { color:#facc15; }
+    .stat-item .value.dc { color:#2dd4bf; }
+    .back-btn { display:flex; align-items:center; gap:6px; background:rgba(20,184,166,0.1); border:1px solid rgba(20,184,166,0.3); color:#2dd4bf; padding:8px 14px; border-radius:6px; font-size:0.72rem; font-weight:600; text-decoration:none; cursor:pointer; transition:all 0.15s; }
+    .back-btn:hover { background:rgba(20,184,166,0.2); }
+    .topo-main { display:grid; grid-template-columns:1fr 340px; gap:16px; padding:16px 24px 20px; max-width:1800px; margin:0 auto; }
+    .topo-canvas { background: radial-gradient(circle at 50% 40%, rgba(20,184,166,0.06), transparent 60%), linear-gradient(180deg, #0f172a, #0a0f1e); border:1px solid var(--border); border-radius:12px; padding:12px; position:relative; overflow:hidden; min-height:820px; }
+    .topo-canvas::before { content:''; position:absolute; inset:0; background-image: linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px); background-size:40px 40px; pointer-events:none; }
+    svg.topo-svg { width:100%; height:820px; display:block; position:relative; z-index:1; }
+    .topo-node { cursor:pointer; transition:filter 0.2s; }
+    .topo-node:hover { filter:brightness(1.2); }
+    .topo-node.dimmed { opacity:0.35; }
+    .topo-node.selected .node-box { stroke-width:3; filter:drop-shadow(0 0 12px currentColor); }
+    .topo-link { fill:none; stroke-width:2; stroke-linecap:round; opacity:0.5; }
+    .topo-link.active { opacity:0.9; stroke-width:2.5; }
+    .topo-link.secure { stroke-dasharray:3 3; opacity:0.9; stroke-width:2; }
+    .topo-link.dimmed { opacity:0.15; }
+    .packet { filter:drop-shadow(0 0 6px currentColor); }
+    .air-gap-zone { fill:rgba(239,68,68,0.03); stroke:rgba(239,68,68,0.35); stroke-dasharray:8 4; stroke-width:1.5; }
+    .air-gap-label { fill:#f87171; font-size:10px; font-family:'Courier New', monospace; letter-spacing:1.5px; opacity:0.9; font-weight:700; }
+    .dc-zone { fill:rgba(20,184,166,0.04); stroke:rgba(20,184,166,0.2); stroke-dasharray:4 6; stroke-width:1; }
+    .dc-zone-label { fill:#2dd4bf; font-size:9px; font-family:'Courier New', monospace; letter-spacing:1.5px; opacity:0.7; }
+    .topo-legend { position:absolute; bottom:16px; left:16px; background:rgba(15,23,42,0.85); border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:0.7rem; display:flex; gap:16px; flex-wrap:wrap; z-index:2; }
+    .legend-item { display:flex; align-items:center; gap:6px; }
+    .legend-dot { width:10px; height:10px; border-radius:50%; }
+    .topo-sidebar { display:flex; flex-direction:column; gap:12px; }
+    .info-panel { background:linear-gradient(180deg, rgba(30,41,59,0.6), rgba(15,23,42,0.85)); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+    .info-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#2dd4bf; text-transform:uppercase; }
+    .info-row { display:flex; gap:10px; margin-bottom:7px; font-size:0.72rem; line-height:1.4; }
+    .info-row .key { color:#64748b; min-width:90px; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px; padding-top:1px; }
+    .info-row .val { flex:1; color:#cbd5e1; font-family:'Courier New',monospace; font-size:0.7rem; }
+    .info-row .val.highlight { color:#4ade80; }
+    .info-row .val.warn { color:#facc15; }
+    .info-row .val.dc { color:#2dd4bf; }
+    .log-panel { flex:1; background:rgba(10,15,30,0.9); border:1px solid var(--border); border-radius:10px; padding:12px 14px; overflow:hidden; display:flex; flex-direction:column; max-height:340px; }
+    .log-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#2dd4bf; text-transform:uppercase; }
+    #log-stream { flex:1; overflow-y:auto; font-family:'Courier New',monospace; font-size:0.68rem; line-height:1.6; }
+    #log-stream .log-line { padding:2px 0; color:#94a3b8; animation:logFadeIn 0.3s; }
+    #log-stream .log-line .ts { color:#475569; }
+    #log-stream .log-line .tag { display:inline-block; min-width:66px; font-weight:700; }
+    #log-stream .log-line .tag.cctv { color:#14b8a6; }
+    #log-stream .log-line .tag.vlm { color:#f59e0b; }
+    #log-stream .log-line .tag.access { color:#8b5cf6; }
+    #log-stream .log-line .tag.env { color:#10b981; }
+    #log-stream .log-line .tag.soc { color:#f87171; }
+    #log-stream .log-line .tag.ikn { color:#eab308; }
+    #log-stream .log-line .tag.ok { color:#4ade80; }
+    @keyframes logFadeIn { from { opacity:0; transform:translateX(-6px);} to { opacity:1; transform:translateX(0);} }
+    .flow-stats { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:10px; }
+    .flow-stat { background:rgba(20,184,166,0.06); border:1px solid rgba(20,184,166,0.15); border-radius:6px; padding:8px; text-align:center; }
+    .flow-stat .num { font-size:1.05rem; font-weight:700; color:#4ade80; font-family:'Courier New',monospace; }
+    .flow-stat .lbl { font-size:0.6rem; color:#64748b; letter-spacing:0.5px; text-transform:uppercase; }
+    .flow-stat.warn .num { color:#facc15; }
+    .flow-stat.dc .num { color:#2dd4bf; }
+    @media (max-width: 1200px) { .topo-main { grid-template-columns:1fr; } .topo-sidebar { flex-direction:row; flex-wrap:wrap; } .info-panel, .log-panel { flex:1; min-width:280px; } }
+  </style>
+</head>
+<body>
+
+<div class="class-banner">
+  RAHASIA · 🏢 TOPOLOGI DATA ASET · Clearance: SECRET · 2026-10-06
+</div>
+
+<header class="topo-header">
+  <div class="brand">
+    <div class="brand-mark">🏢</div>
+    <div>
+      <h1>DATACENTER IKN → SOC</h1>
+      <p class="sub">Self-contained · air-gapped · physical security LLM · internal loop only</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="label">Status</span>
+      <span class="value">● LIVE</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Latency</span>
+      <span class="value">&lt;15 ms</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Uptime SLA</span>
+      <span class="value dc">99.999%</span>
+    </div>
+    <a href="/joc/analitik-dashboard.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Kembali ke Analytics
+    </a>
+  </div>
+</header>
+
+<div class="topo-main">
+
+  <div class="topo-canvas">
+    <svg class="topo-svg" viewBox="0 0 1300 820" preserveAspectRatio="xMidYMid meet">
+
+      <defs>
+        <marker id="arrow-cctv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#14b8a6"/>
+        </marker>
+        <marker id="arrow-access" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+        </marker>
+        <marker id="arrow-env" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+        </marker>
+        <marker id="arrow-vlm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+        </marker>
+        <marker id="arrow-soc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+        </marker>
+        <marker id="arrow-ikn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#eab308"/>
+        </marker>
+        <marker id="arrow-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+        </marker>
+      </defs>
+
+      <!-- AIR-GAPPED ZONE -->
+      <rect class="air-gap-zone" x="30" y="160" width="1150" height="620" rx="16"/>
+      <text class="air-gap-label" x="50" y="184">◈ AIR-GAPPED ZONE · NO EXTERNAL NETWORK · NO WIRELESS</text>
+
+      <!-- DC FLOOR ZONE (contains sensors) -->
+      <rect class="dc-zone" x="50" y="630" width="1110" height="130" rx="12"/>
+      <text class="dc-zone-label" x="66" y="652">◈ DC FLOOR · RACK AISLES A–D · RAISED FLOOR · N+1 UPS</text>
+
+      <!-- ============ LINKS ============ -->
+      <!-- Sensors → VLM (fan-in) -->
+      <path id="path-env-vlm" class="topo-link secure" stroke="#10b981"
+            d="M 145 630 Q 200 590, 300 580 L 505 570"
+            marker-end="url(#arrow-env)"/>
+      <path id="path-access-vlm" class="topo-link secure" stroke="#8b5cf6"
+            d="M 380 630 Q 440 600, 510 585 L 535 575"
+            marker-end="url(#arrow-access)"/>
+      <path id="path-cctv1-vlm" class="topo-link active" stroke="#14b8a6"
+            d="M 630 630 L 630 605"
+            marker-end="url(#arrow-cctv)"/>
+      <path id="path-cctv2-vlm" class="topo-link active" stroke="#14b8a6"
+            d="M 870 630 Q 820 610, 760 590"
+            marker-end="url(#arrow-cctv)"/>
+      <path id="path-cctv3-vlm" class="topo-link active" stroke="#14b8a6"
+            d="M 1100 630 Q 920 610, 780 590"
+            marker-end="url(#arrow-cctv)"/>
+
+      <!-- VLM → SOC -->
+      <path id="path-vlm-soc" class="topo-link active" stroke="#f59e0b"
+            d="M 650 495 L 650 425"
+            marker-end="url(#arrow-vlm)"/>
+
+      <!-- SOC → IKN Security Core -->
+      <path id="path-soc-ikn" class="topo-link active" stroke="#ef4444"
+            d="M 650 335 L 650 275"
+            marker-end="url(#arrow-soc)"/>
+
+      <!-- IKN Security Core → IKN Central -->
+      <path id="path-ikncentral" class="topo-link active" stroke="#eab308"
+            d="M 650 185 L 650 115"
+            marker-end="url(#arrow-ikn)"/>
+
+      <!-- Dimmed: to external matra edges -->
+      <path class="topo-link dimmed" stroke="#22c55e" stroke-dasharray="4 4"
+            d="M 785 250 L 1150 230" marker-end="url(#arrow-dim)"/>
+      <path class="topo-link dimmed" stroke="#0ea5e9" stroke-dasharray="4 4"
+            d="M 785 260 L 1150 320" marker-end="url(#arrow-dim)"/>
+      <path class="topo-link dimmed" stroke="#3b82f6" stroke-dasharray="4 4"
+            d="M 785 270 L 1150 410" marker-end="url(#arrow-dim)"/>
+
+      <!-- ============ ANIMATED PACKETS ============ -->
+      <circle class="packet" r="4" fill="#10b981">
+        <animateMotion dur="1s" repeatCount="indefinite"><mpath href="#path-env-vlm"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#8b5cf6">
+        <animateMotion dur="1s" begin="0.3s" repeatCount="indefinite"><mpath href="#path-access-vlm"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" begin="0.3s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#14b8a6">
+        <animateMotion dur="0.5s" begin="0.5s" repeatCount="indefinite"><mpath href="#path-cctv1-vlm"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.5s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#2dd4bf">
+        <animateMotion dur="0.9s" begin="0.6s" repeatCount="indefinite"><mpath href="#path-cctv2-vlm"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.9s" begin="0.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#14b8a6">
+        <animateMotion dur="1.1s" begin="0.8s" repeatCount="indefinite"><mpath href="#path-cctv3-vlm"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.1s" begin="0.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#f59e0b">
+        <animateMotion dur="0.6s" begin="1.4s" repeatCount="indefinite"><mpath href="#path-vlm-soc"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.6s" begin="1.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#ef4444">
+        <animateMotion dur="0.6s" begin="1.8s" repeatCount="indefinite"><mpath href="#path-soc-ikn"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.6s" begin="1.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#eab308">
+        <animateMotion dur="0.7s" begin="2.2s" repeatCount="indefinite"><mpath href="#path-ikncentral"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.7s" begin="2.2s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ============ NODES ============ -->
+      <!-- IKN CENTRAL -->
+      <g class="topo-node" transform="translate(650, 70)" data-node="ikn-central">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#eab308" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#eab308" font-size="13" font-weight="700" letter-spacing="1">
+          🛰️ IKN CENTRAL
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Multi-INT Fusion · Strategic Advisor · COP
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          IKN Kalimantan Timur · 10.90.1.0/24
+        </text>
+      </g>
+
+      <!-- IKN SECURITY CORE -->
+      <g class="topo-node" transform="translate(650, 230)" data-node="ikn-core">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#14b8a6" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#2dd4bf" font-size="12" font-weight="700" letter-spacing="1">
+          🏢 IKN SECURITY CORE
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Aggregation · Correlation · Alerting
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          SIEM integration · append-only audit log
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Self-contained · no external egress
+        </text>
+      </g>
+
+      <!-- SOC -->
+      <g class="topo-node" transform="translate(650, 380)" data-node="soc">
+        <rect class="node-box" x="-120" y="-45" width="240" height="90" rx="10"
+              fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+        <circle cx="-98" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="700" letter-spacing="1">
+          🚨 SECURITY OPS CENTER
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          24/7 operator · on-site · SOP 5-min SLA
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Alert triage · escalation
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          On-premise IKN DC
+        </text>
+      </g>
+
+      <!-- VLM JETSON -->
+      <g class="topo-node" transform="translate(650, 540)" data-node="vlm">
+        <rect class="node-box" x="-140" y="-50" width="280" height="100" rx="10"
+              fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+        <circle cx="-118" cy="-26" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-26" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700" letter-spacing="1">
+          🧠 LOCAL VLM JETSON
+        </text>
+        <text x="0" y="-6" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Jetson Orin AGX 64GB · 275 TOPS · 60W
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#94a3b8" font-size="9">
+          VLM: Qwen2-VL / MiniCPM-V
+        </text>
+        <text x="0" y="30" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          In-DC rack RK-99 · tailgating · PPE check · rack access
+        </text>
+      </g>
+
+      <!-- SENSORS ROW (in DC floor zone) -->
+      <!-- ENV SENSORS -->
+      <g class="topo-node" transform="translate(145, 700)" data-node="env">
+        <rect class="node-box" x="-85" y="-45" width="170" height="90" rx="10"
+              fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+        <circle cx="-63" cy="-22" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700" letter-spacing="1">
+          🌡️ ENV SENSORS
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Temp · RH · Smoke
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Water leak · Power
+        </text>
+        <text x="0" y="32" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          BMS · Modbus
+        </text>
+      </g>
+
+      <!-- ACCESS CONTROL -->
+      <g class="topo-node" transform="translate(380, 700)" data-node="access">
+        <rect class="node-box" x="-105" y="-45" width="210" height="90" rx="10"
+              fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+        <circle cx="-83" cy="-22" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#8b5cf6" font-size="11" font-weight="700" letter-spacing="1">
+          🔐 ACCESS CONTROL
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Badge + Biometric + PIN
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Mantrap door · 2-person rule
+        </text>
+        <text x="0" y="32" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Audit log · append-only
+        </text>
+      </g>
+
+      <!-- CCTV A -->
+      <g class="topo-node" transform="translate(630, 700)" data-node="cctv-aisle-a">
+        <rect class="node-box" x="-85" y="-35" width="170" height="70" rx="8"
+              fill="#0f172a" stroke="#14b8a6" stroke-width="2"/>
+        <circle cx="-63" cy="-13" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-13" text-anchor="middle" fill="#2dd4bf" font-size="10" font-weight="700" letter-spacing="1">
+          📹 CCTV AISLE A
+        </text>
+        <text x="0" y="5" text-anchor="middle" fill="#94a3b8" font-size="9">
+          R01–R24 · cold aisle
+        </text>
+        <text x="0" y="22" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          4K · 30fps · IR
+        </text>
+      </g>
+
+      <!-- CCTV B -->
+      <g class="topo-node" transform="translate(870, 700)" data-node="cctv-aisle-b">
+        <rect class="node-box" x="-85" y="-35" width="170" height="70" rx="8"
+              fill="#0f172a" stroke="#14b8a6" stroke-width="2"/>
+        <circle cx="-63" cy="-13" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-13" text-anchor="middle" fill="#2dd4bf" font-size="10" font-weight="700" letter-spacing="1">
+          📹 CCTV AISLE B
+        </text>
+        <text x="0" y="5" text-anchor="middle" fill="#94a3b8" font-size="9">
+          R25–R48 · hot aisle
+        </text>
+        <text x="0" y="22" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          Overhead + door cam
+        </text>
+      </g>
+
+      <!-- CCTV C -->
+      <g class="topo-node" transform="translate(1100, 700)" data-node="cctv-aisle-c">
+        <rect class="node-box" x="-85" y="-35" width="170" height="70" rx="8"
+              fill="#0f172a" stroke="#14b8a6" stroke-width="2"/>
+        <circle cx="-63" cy="-13" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-13" text-anchor="middle" fill="#2dd4bf" font-size="10" font-weight="700" letter-spacing="1">
+          📹 CCTV AISLE C
+        </text>
+        <text x="0" y="5" text-anchor="middle" fill="#94a3b8" font-size="9">
+          R49–R72 · GPU cluster
+        </text>
+        <text x="0" y="22" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          Thermal + visible
+        </text>
+      </g>
+
+      <!-- External matra (dimmed, outside air-gap) -->
+      <g class="topo-node dimmed" transform="translate(1235, 230)" data-node="ad-ext">
+        <rect class="node-box" x="-60" y="-25" width="120" height="50" rx="6"
+              fill="#0f172a" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-4" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="700" letter-spacing="1">
+          AD EDGE
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          OUTSIDE AIR-GAP
+        </text>
+      </g>
+      <g class="topo-node dimmed" transform="translate(1235, 320)" data-node="au-ext">
+        <rect class="node-box" x="-60" y="-25" width="120" height="50" rx="6"
+              fill="#0f172a" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-4" text-anchor="middle" fill="#0ea5e9" font-size="10" font-weight="700" letter-spacing="1">
+          AU EDGE
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          OUTSIDE AIR-GAP
+        </text>
+      </g>
+      <g class="topo-node dimmed" transform="translate(1235, 410)" data-node="al-ext">
+        <rect class="node-box" x="-60" y="-25" width="120" height="50" rx="6"
+              fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-4" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="700" letter-spacing="1">
+          AL EDGE
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          OUTSIDE AIR-GAP
+        </text>
+      </g>
+
+      <!-- Link labels -->
+      <g font-size="9" font-family="monospace" fill="#64748b">
+        <text x="200" y="645" fill="#10b981">BMS</text>
+        <text x="400" y="645" fill="#8b5cf6">2-factor audit</text>
+        <text x="640" y="645" fill="#2dd4bf">RTSP</text>
+        <text x="670" y="475" fill="#f59e0b">CoT event</text>
+        <text x="670" y="315" fill="#ef4444">Internal only</text>
+        <text x="670" y="160" fill="#eab308">Airtight · 15ms E2E</text>
+      </g>
+
+    </svg>
+
+    <div class="topo-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#14b8a6"></span> CCTV/DC</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span> Access</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span> Env sensors</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span> VLM Jetson</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ef4444"></span> SOC</div>
+      <div class="legend-item" style="opacity:0.5"><span class="legend-dot" style="background:#64748b"></span> External</div>
+    </div>
+  </div>
+
+  <aside class="topo-sidebar">
+
+    <div class="info-panel">
+      <h3>◈ Flow Statistics</h3>
+      <div class="flow-stats">
+        <div class="flow-stat dc">
+          <div class="num">&lt;2ms</div>
+          <div class="lbl">Local LAN</div>
+        </div>
+        <div class="flow-stat">
+          <div class="num">15ms</div>
+          <div class="lbl">E2E</div>
+        </div>
+        <div class="flow-stat warn">
+          <div class="num">0</div>
+          <div class="lbl">External Egress</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel" id="node-details">
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val dc">CCTV — Rack Aisle A</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">Internal DC Camera</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">Rack aisle A · R01–R24 (cold aisle)</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">4K @ 30fps · IR-capable · PTZ</span></div>
+      <div class="info-row"><span class="key">AI Model</span><span class="val">VLM: Qwen2-VL / MiniCPM-V</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val">RTSP / H.265 · LAN &lt;2ms</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val">Local VLM Jetson (in-DC)</span></div>
+    </div>
+
+    <div class="info-panel" style="border-color: rgba(239,68,68,0.3);">
+      <h3 style="color: #f87171;">🔒 Air-Gapped</h3>
+      <div style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.5;">
+        Datacenter IKN beroperasi <strong style="color:#f87171;">fully air-gapped</strong> —
+        tidak ada koneksi keluar ke internet atau jaringan eksternal.
+        <br><br>
+        Semua CCTV, access control, dan environmental sensors hanya terhubung ke
+        <strong>VLM Jetson lokal</strong>, yang aggregate ke IKN Security Core.
+      </div>
+    </div>
+
+    <div class="log-panel">
+      <h3>◈ Live Stream Log</h3>
+      <div id="log-stream"></div>
+    </div>
+
+  </aside>
+</div>
+
+<div class="class-banner bottom">
+  RAHASIA · ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
+</div>
+
+<script src="/joc/js/classification.js?v=2.0" data-cfasync="false"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  const NODES = {
+    'cctv-aisle-a': {
+      title: 'CCTV — Rack Aisle A', class: 'Internal DC Camera',
+      location: 'Rack aisle A · R01–R24 (cold aisle)',
+      sensors: '4K @ 30fps · IR-capable · PTZ',
+      uplink: 'RTSP / H.265 · LAN <2ms',
+      tactical: 'VLM: Qwen2-VL · 24/7 recording · 90-day retention',
+      next: 'Local VLM Jetson (in-DC)', highlight: true
+    },
+    'cctv-aisle-b': {
+      title: 'CCTV — Rack Aisle B', class: 'Internal DC Camera',
+      location: 'Rack aisle B · R25–R48 (hot aisle)',
+      sensors: '4K @ 30fps · overhead + door cam',
+      uplink: 'RTSP / H.265 · LAN <2ms',
+      tactical: 'Tailgating detection · badge correlation',
+      next: 'Local VLM Jetson', highlight: true
+    },
+    'cctv-aisle-c': {
+      title: 'CCTV — Rack Aisle C', class: 'Internal DC Camera',
+      location: 'Rack aisle C · R49–R72 (GPU cluster)',
+      sensors: '4K + thermal · GPU rack monitoring',
+      uplink: 'RTSP / H.265 · LAN <2ms',
+      tactical: 'Thermal anomaly · rack intrusion detection',
+      next: 'Local VLM Jetson', highlight: true
+    },
+    'access': {
+      title: 'Access Control System', class: 'Physical Access Control',
+      location: 'All entry points + mantrap door',
+      sensors: 'Badge reader + biometric + PIN',
+      uplink: '2-factor · encrypted · LAN',
+      tactical: 'Mantrap door · 2-person rule for GPU zone',
+      next: 'Local VLM Jetson', highlight: true
+    },
+    'env': {
+      title: 'Environmental Sensors', class: 'BMS Integration',
+      location: 'DC floor + rack rows',
+      sensors: 'Temp · RH · smoke · water leak · power',
+      uplink: 'Serial-over-IP / Modbus · LAN',
+      tactical: 'Auto-trigger fire suppression + cooling failover',
+      next: 'Local VLM Jetson', highlight: true
+    },
+    'vlm': {
+      title: 'Local VLM Jetson', class: 'Edge AI — Vision-Language Model',
+      location: 'In-DC secure rack (RK-99)',
+      sensors: 'Ingest RTSP dari 12+ kamera + sensor',
+      uplink: 'CoT event → SOC · 15ms E2E',
+      tactical: 'Qwen2-VL / MiniCPM-V · 275 TOPS · 60W',
+      next: 'Security Operations Center', highlight: true
+    },
+    'soc': {
+      title: 'Security Operations Center', class: 'On-Site SOC',
+      location: 'IKN DC · adjacent room',
+      sensors: 'Alert triage dashboard',
+      uplink: 'Escalation to IKN Security Core',
+      tactical: '24/7 operator · 5-min response SLA',
+      next: 'IKN Security Core', highlight: true
+    },
+    'ikn-core': {
+      title: 'IKN Security Core', class: 'Aggregation & Correlation',
+      location: 'IKN DC · core rack',
+      sensors: 'SIEM · correlation engine',
+      uplink: 'Append-only audit log · WORM',
+      tactical: 'Air-gapped · no external egress',
+      next: 'IKN Central (strategic)', highlight: true
+    },
+    'ikn-central': {
+      title: 'IKN Central', class: 'Strategic Command',
+      location: 'IKN Kalimantan Timur · 10.90.1.0/24',
+      sensors: 'Multi-INT Fusion · Strategic Advisor',
+      uplink: '~5 Mbps aggregate',
+      tactical: 'NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4',
+      next: 'COP Nasional', highlight: true
+    },
+    'ad-ext': {
+      title: 'AD Edge (External)', class: 'Matra: Angkatan Darat',
+      location: 'Outside air-gap', sensors: '—', uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE NETWORK',
+      next: 'Tidak terhubung ke datacenter ini', highlight: false
+    },
+    'au-ext': {
+      title: 'AU Edge (External)', class: 'Matra: Angkatan Udara',
+      location: 'Outside air-gap', sensors: '—', uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE NETWORK',
+      next: 'Tidak terhubung ke datacenter ini', highlight: false
+    },
+    'al-ext': {
+      title: 'AL Edge (External)', class: 'Matra: Angkatan Laut',
+      location: 'Outside air-gap', sensors: '—', uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE NETWORK',
+      next: 'Tidak terhubung ke datacenter ini', highlight: false
+    }
+  };
+
+  const detailsPanel = document.getElementById('node-details');
+  function renderNodeDetails(nodeId) {
+    const n = NODES[nodeId];
+    if (!n) return;
+    detailsPanel.innerHTML = `
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val ${n.highlight ? 'dc' : ''}">${n.title}</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">${n.class}</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">${n.location}</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">${n.sensors}</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val ${n.highlight ? 'warn' : ''}">${n.uplink}</span></div>
+      <div class="info-row"><span class="key">Details</span><span class="val">${n.tactical}</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val ${n.highlight ? 'highlight' : 'warn'}">${n.next}</span></div>
+    `;
+  }
+
+  document.querySelectorAll('.topo-node').forEach(node => {
+    node.addEventListener('click', () => {
+      const id = node.getAttribute('data-node');
+      if (!NODES[id]) return;
+      document.querySelectorAll('.topo-node').forEach(n => n.classList.remove('selected'));
+      node.classList.add('selected');
+      renderNodeDetails(id);
+    });
+  });
+
+  const logStream = document.getElementById('log-stream');
+
+  const LOG_TEMPLATES = [
+    { tag: 'cctv',   text: 'CCTV-A: aisle scan — 2 personnel present, badge OK' },
+    { tag: 'cctv',   text: 'CCTV-B: motion detected — technician closing rack door' },
+    { tag: 'cctv',   text: 'CCTV-C: thermal scan — R60 rack temp 28°C (normal)' },
+    { tag: 'access', text: 'ACCESS: badge scan OK — ID 7841, clearance TOP, GPU zone' },
+    { tag: 'env',    text: 'ENV: aisle B temp 22.4°C · RH 46% · within spec' },
+    { tag: 'env',    text: 'ENV: water leak sensor aisle C — clear' },
+    { tag: 'vlm',    text: 'VLM: Qwen2-VL inference (68ms) — identify 2 persons, PPE complete' },
+    { tag: 'vlm',    text: 'VLM: tailgating check — 1 badge, 1 person · PASS' },
+    { tag: 'vlm',    text: 'VLM: emit CoT event → SOC · type: patrol_ok' },
+    { tag: 'soc',    text: 'SOC: alert triaged · severity LOW · logged, no action' },
+    { tag: 'soc',    text: 'SOC: shift report — 0 critical, 3 informational events' },
+    { tag: 'ikn',    text: 'IKN-CORE: append-only log write — hash chain OK' },
+    { tag: 'ikn',    text: 'IKN-CORE: air-gap integrity check — 0 external egress' },
+    { tag: 'ok',     text: 'PIPELINE: E2E 14ms · all sensors green · uptime 99.999%' }
+  ];
+
+  const TAG_CLASSES = { cctv:'cctv', vlm:'vlm', access:'access', env:'env', soc:'soc', ikn:'ikn', ok:'ok' };
+
+  function makeLogLine(tpl) {
+    const now = new Date();
+    const ts = String(now.getHours()).padStart(2,'0') + ':' +
+               String(now.getMinutes()).padStart(2,'0') + ':' +
+               String(now.getSeconds()).padStart(2,'0');
+    return `<div class="log-line"><span class="ts">${ts}</span><span class="tag ${TAG_CLASSES[tpl.tag] || ''}">[${tpl.tag.toUpperCase()}]</span>${tpl.text}</div>`;
+  }
+
+  let logIdx = 0;
+  function pushLog() {
+    const tpl = LOG_TEMPLATES[logIdx % LOG_TEMPLATES.length];
+    logIdx++;
+    logStream.insertAdjacentHTML('beforeend', makeLogLine(tpl));
+    while (logStream.children.length > 40) logStream.removeChild(logStream.firstChild);
+    logStream.scrollTop = logStream.scrollHeight;
+  }
+  for (let i = 0; i < 6; i++) pushLog();
+  setInterval(pushLog, 1800);
+
+  console.log('[TOPO] Datacenter IKN (air-gapped) → SOC → IKN Security Core ready');
+})();
+</script>
+
+</body>
+</html>

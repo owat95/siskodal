@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengaturan — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <link rel="stylesheet" href="/joc/css/pengaturan.css">
+</head>
+<body>
+
+<div class="peng-layout">
+
+  <!-- HEADER -->
+  <header class="peng-header">
+    <div class="brand">
+      <span class="brand-mark">⚙️</span>
+      <div class="title-block">
+        <h1>PENGATURAN</h1>
+        <p>System Settings &amp; Robustness</p>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="label">Uptime</span>
+        <span class="value" id="hdr-uptime">--:--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Session</span>
+        <span class="value" id="hdr-session">--:--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value live-clock">--:--:--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="peng-sidebar">
+    <div class="sb-section">Configuration</div>
+    <a href="#" class="sb-item active" data-tab="session"><i class="fas fa-clock"></i> Session &amp; Idle</a>
+    <a href="#" class="sb-item" data-tab="retention"><i class="fas fa-database"></i> Data Retention</a>
+    <a href="#" class="sb-item" data-tab="backup"><i class="fas fa-cloud-arrow-up"></i> Backup &amp; DR</a>
+    <a href="#" class="sb-item" data-tab="system"><i class="fas fa-info-circle"></i> System Info</a>
+    <a href="#" class="sb-item" data-tab="remote">
+      <i class="fas fa-network-wired"></i> Remote Sites
+      <span class="badge" id="remote-badge" style="margin-left:auto;font-size:0.6rem;background:#22c55e;color:#000;padding:1px 6px;border-radius:3px;font-weight:800;">40</span>
+    </a>
+    <div class="sb-section">Security</div>
+    <a href="#" class="sb-item danger" data-tab="purge"><i class="fas fa-triangle-exclamation"></i> Emergency Purge</a>
+
+    <div class="sb-section">Navigate</div>
+    <a href="/joc/pengaturan.html" class="sb-item"><i class="fas fa-chevron-left"></i> Sub-Portal</a>
+    <a href="/joc/" class="sb-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="peng-main">
+
+    <!-- TAB: SESSION -->
+    <section class="tab-content active" id="tab-session">
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-clock"></i> Session Status</div>
+        </div>
+        <div class="pp-body">
+          <div class="session-timer" id="session-timer">
+            <div class="st-icon">⏱️</div>
+            <div class="st-body">
+              <div class="st-label">Idle Timeout In</div>
+              <div class="st-time" id="session-remaining">--:--</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="st-label">Session ID</div>
+              <div style="font-family:'Courier New',monospace;font-size:0.75rem;color:#94a3b8;margin-top:4px;" id="session-id">--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-sliders-h"></i> Session Policy</div>
+        </div>
+        <div class="pp-body">
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Auto Logout</div>
+              <div class="sr-desc">Otomatis logout jika tidak ada aktivitas</div>
+            </div>
+            <div class="sr-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfg-autologout" checked>
+                <span class="ts-track"></span>
+                <span class="ts-label">ENABLED</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Idle Timeout</div>
+              <div class="sr-desc">Waktu idle sebelum auto logout (1-60 menit)</div>
+            </div>
+            <div class="sr-control">
+              <input type="number" id="cfg-idletimeout" min="1" max="60" value="15">
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Warning Before Logout</div>
+              <div class="sr-desc">Waktu peringatan sebelum logout (menit)</div>
+            </div>
+            <div class="sr-control">
+              <input type="number" id="cfg-warnbefore" min="1" max="10" value="2">
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Require Re-auth on Return</div>
+              <div class="sr-desc">Wajib login ulang saat kembali setelah idle</div>
+            </div>
+            <div class="sr-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfg-reauth" checked>
+                <span class="ts-track"></span>
+                <span class="ts-label">ENABLED</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-list"></i> Session Log (Last 20)</div>
+        </div>
+        <div class="pp-body">
+          <div id="session-log"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: RETENTION -->
+    <section class="tab-content" id="tab-retention">
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-database"></i> Storage Estimate</div>
+          <span style="font-size:0.7rem;color:#94a3b8;font-family:'Courier New',monospace;" id="storage-total">--</span>
+        </div>
+        <div class="pp-body">
+          <div class="storage-bar" id="storage-bar"></div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(51,65,85,0.4);display:flex;justify-content:space-between;font-size:0.72rem;color:#94a3b8;font-family:'Courier New',monospace;">
+            <span>Average daily: <strong style="color:#e2e8f0;" id="storage-daily">--</strong></span>
+            <span>Total: <strong style="color:#e2e8f0;" id="storage-total-2">--</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-hourglass-half"></i> Retention Policy</div>
+        </div>
+        <div class="pp-body">
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Audit Log Retention</div>
+              <div class="sr-desc">Berapa lama audit log disimpan</div>
+            </div>
+            <div class="sr-control">
+              <select id="cfg-auditdays">
+                <option value="7">7 hari</option>
+                <option value="30">30 hari</option>
+                <option value="90" selected>90 hari</option>
+                <option value="180">180 hari</option>
+                <option value="365">365 hari</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Cyber Events Retention</div>
+              <div class="sr-desc">Retention untuk event keamanan siber</div>
+            </div>
+            <div class="sr-control">
+              <select id="cfg-cyberdays">
+                <option value="7">7 hari</option>
+                <option value="30" selected>30 hari</option>
+                <option value="90">90 hari</option>
+                <option value="180">180 hari</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Intel Data Retention</div>
+              <div class="sr-desc">Retention untuk intel produk</div>
+            </div>
+            <div class="sr-control">
+              <select id="cfg-inteldays">
+                <option value="30">30 hari</option>
+                <option value="90">90 hari</option>
+                <option value="180">180 hari</option>
+                <option value="365" selected>365 hari</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Auto-Purge</div>
+              <div class="sr-desc">Hapus otomatis data kedaluwarsa</div>
+            </div>
+            <div class="sr-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfg-autopurge" checked>
+                <span class="ts-track"></span>
+                <span class="ts-label">ENABLED</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-broom"></i> Manual Purge</div>
+        </div>
+        <div class="pp-body">
+          <div style="padding:14px;background:rgba(234,179,8,0.08);border-left:3px solid #eab308;border-radius:0 6px 6px 0;margin-bottom:16px;">
+            <div style="font-size:0.78rem;color:#facc15;font-weight:700;margin-bottom:6px;">⚠ PURGE PREVIEW</div>
+            <div style="font-size:0.75rem;color:#cbd5e1;line-height:1.5;" id="purge-preview-text">
+              Loading...
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-settings" onclick="PengaturanDashboard.previewRetentionPurge()">
+              <i class="fas fa-eye"></i> Preview
+            </button>
+            <button class="btn-settings danger" onclick="PengaturanDashboard.executeRetentionPurge()">
+              <i class="fas fa-broom"></i> Execute Purge
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: BACKUP -->
+    <section class="tab-content" id="tab-backup">
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-cloud-arrow-up"></i> Backup Status</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-settings primary" onclick="PengaturanDashboard.triggerManualBackup()">
+              <i class="fas fa-play"></i> Backup Now
+            </button>
+          </div>
+        </div>
+        <div class="pp-body">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px;">
+            <div class="sys-info-item ok">
+              <div class="si-label">Last Backup</div>
+              <div class="si-value" id="bkp-last">--</div>
+            </div>
+            <div class="sys-info-item info">
+              <div class="si-label">Success</div>
+              <div class="si-value" id="bkp-success">--</div>
+            </div>
+            <div class="sys-info-item warn">
+              <div class="si-label">Failed</div>
+              <div class="si-value" id="bkp-failed">--</div>
+            </div>
+            <div class="sys-info-item">
+              <div class="si-label">Total Size</div>
+              <div class="si-value" id="bkp-size">--</div>
+            </div>
+          </div>
+
+          <div id="backup-progress-area"></div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-history"></i> Backup History</div>
+        </div>
+        <div class="pp-body" style="padding:0;">
+          <table class="backup-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Duration</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="backup-history-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-sliders-h"></i> Backup Policy</div>
+        </div>
+        <div class="pp-body">
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Auto-Backup</div>
+              <div class="sr-desc">Backup otomatis sesuai jadwal</div>
+            </div>
+            <div class="sr-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfg-autobackup" checked>
+                <span class="ts-track"></span>
+                <span class="ts-label">ENABLED</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Schedule</div>
+              <div class="sr-desc">Frekuensi backup otomatis</div>
+            </div>
+            <div class="sr-control">
+              <select id="cfg-backupschedule">
+                <option value="hourly">Setiap Jam</option>
+                <option value="daily" selected>Setiap Hari</option>
+                <option value="weekly">Setiap Minggu</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Retention Backups</div>
+              <div class="sr-desc">Jumlah backup terbaru yang disimpan</div>
+            </div>
+            <div class="sr-control">
+              <input type="number" id="cfg-backupretention" min="5" max="90" value="30">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: SYSTEM -->
+    <section class="tab-content" id="tab-system">
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-info-circle"></i> System Information</div>
+        </div>
+        <div class="pp-body">
+          <div class="sys-info-grid" id="sys-info-grid"></div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-shield-halved"></i> Security Configuration</div>
+        </div>
+        <div class="pp-body">
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Default Classification</div>
+              <div class="sr-desc">Tingkat klasifikasi default untuk data baru</div>
+            </div>
+            <div class="sr-control">
+              <select id="cfg-classification">
+                <option value="UNCLASS">UNCLASSIFIED</option>
+                <option value="RESTRICTED" selected>RESTRICTED</option>
+                <option value="CONFIDENTIAL">CONFIDENTIAL</option>
+                <option value="SECRET">SECRET</option>
+                <option value="TOP_SECRET">TOP SECRET</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-file-export"></i> Export Configuration</div>
+        </div>
+        <div class="pp-body">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-settings" onclick="PengaturanDashboard.exportConfig()">
+              <i class="fas fa-download"></i> Export Config (JSON)
+            </button>
+            <button class="btn-settings" onclick="PengaturanDashboard.resetConfig()">
+              <i class="fas fa-undo"></i> Reset to Defaults
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: REMOTE SITES -->
+    <section class="tab-content" id="tab-remote">
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-network-wired"></i> Remote Infrastructure Monitor</div>
+          <button class="btn-settings" onclick="PengaturanDashboard.refreshRemote()">
+            <i class="fas fa-sync"></i> Refresh
+          </button>
+        </div>
+        <div class="pp-body">
+          <div class="remote-stats" id="remote-stats"></div>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-list"></i> Site Status</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="remote-filter-type" class="filter-select">
+              <option value="ALL">Semua Tipe</option>
+              <option value="KODAM">Kodam</option>
+              <option value="EDGE_AI">Edge AI</option>
+              <option value="MIDDLEWARE">Middleware</option>
+              <option value="CENTRAL">Central</option>
+            </select>
+            <select id="remote-filter-status" class="filter-select">
+              <option value="ALL">Semua Status</option>
+              <option value="ONLINE">Online</option>
+              <option value="DEGRADED">Degraded</option>
+              <option value="OFFLINE">Offline</option>
+            </select>
+          </div>
+        </div>
+        <div class="pp-body" style="padding:0;">
+          <table class="remote-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Site</th>
+                <th>Type</th>
+                <th>IP</th>
+                <th>Ping</th>
+                <th>Uptime</th>
+                <th>CPU</th>
+                <th>RAM</th>
+                <th>Disk</th>
+                <th>BW</th>
+              </tr>
+            </thead>
+            <tbody id="remote-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: PURGE -->
+    <section class="tab-content" id="tab-purge">
+      <div class="danger-zone">
+        <div class="dz-header">
+          <div class="dz-icon">🚨</div>
+          <div>
+            <div class="dz-title">EMERGENCY PURGE</div>
+            <div class="dz-desc">Hapus semua data sensitif lokal secara instan — untuk situasi darurat</div>
+          </div>
+        </div>
+
+        <div class="dz-warning">
+          ⚠ <strong>PERINGATAN:</strong> Aksi ini akan menghapus semua data lokal:
+          audit log, cyber events, intel data, cache, dan temporary files.
+          Data TIDAK DAPAT dikembalikan. Wajib 2-person approval sesuai SOP.
+        </div>
+
+        <div id="purge-status-area"></div>
+
+        <div class="dz-actions" style="margin-top:16px;">
+          <button class="btn-settings danger solid" id="btn-initiate-purge" onclick="PengaturanDashboard.initiatePurge()">
+            <i class="fas fa-triangle-exclamation"></i> Initiate Purge
+          </button>
+        </div>
+      </div>
+
+      <div class="peng-panel">
+        <div class="pp-header">
+          <div class="pp-title"><i class="fas fa-sliders-h"></i> Purge Policy</div>
+        </div>
+        <div class="pp-body">
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Two-Person Rule</div>
+              <div class="sr-desc">Wajib 2 approval untuk execute purge</div>
+            </div>
+            <div class="sr-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfg-twoperson" checked>
+                <span class="ts-track"></span>
+                <span class="ts-label">ENABLED</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Wipe Method</div>
+              <div class="sr-desc">Standard secure erase</div>
+            </div>
+            <div class="sr-control">
+              <select id="cfg-wipemethod">
+                <option value="DOD-5220.22-M" selected>DoD 5220.22-M</option>
+                <option value="GUTMANN">Gutmann (35 pass)</option>
+                <option value="NIST-800-88">NIST 800-88</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="sr-info">
+              <div class="sr-label">Require Re-auth</div>
+              <div class="sr-desc">Wajib input password saat purge</div>
+            </div>
+            <div class="sr-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="cfg-requireauth" checked>
+                <span class="ts-track"></span>
+                <span class="ts-label">ENABLED</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+<!-- PURGE MODAL -->
+<div class="purge-modal" id="purge-modal">
+  <div class="purge-modal-content">
+    <h2>🚨 CONFIRM EMERGENCY PURGE</h2>
+    <p>Anda akan menghapus <strong>SEMUA DATA SENSITIF LOKAL</strong>. Tindakan ini tidak dapat dibatalkan.</p>
+    <p style="color:#f87171;font-weight:700;">Ketik <span style="font-family:'Courier New',monospace;background:rgba(239,68,68,0.2);padding:2px 8px;border-radius:4px;">PURGE</span> untuk konfirmasi:</p>
+    <input type="text" id="purge-confirm-input" placeholder="Ketik PURGE" autocomplete="off">
+    <div class="purge-modal-actions">
+      <button class="btn-settings" onclick="PengaturanDashboard.closePurgeModal()">Batal</button>
+      <button class="btn-settings danger solid" id="btn-purge-confirm" disabled onclick="PengaturanDashboard.confirmPurge()">
+        <i class="fas fa-fire"></i> Execute Purge
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="/joc/js/remote-infra-data.js?v=2.0" data-cfasync="false"></script>
+<script src="/joc/js/pengaturan-core.js?v=2.0" data-cfasync="false"></script>
+<script src="/joc/js/pengaturan-dashboard.js?v=2.0" data-cfasync="false"></script>
+
+</body>
+</html>

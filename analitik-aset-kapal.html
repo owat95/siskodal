@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topologi Data — Kapal Laut → IKN — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <style>
+    :root {
+      --navy:    #3b82f6;
+      --army:    #22c55e;
+      --air:     #0ea5e9;
+      --mwhub:   #a855f7;
+      --ikn:     #eab308;
+      --ship:    #06b6d4;
+      --sat:     #f97316;
+      --gnd:     #ec4899;
+      --bg:      #0a0f1e;
+      --panel:   #111827;
+      --border:  rgba(148,163,184,0.15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .class-banner {
+      background: linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d);
+      color: #fecaca; text-align: center;
+      padding: 6px 16px; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 2px; border-bottom: 1px solid #dc2626;
+    }
+    .class-banner.bottom {
+      border-top: 1px solid #dc2626; border-bottom: none;
+      font-weight: 500; letter-spacing: 0.5px;
+      font-size: 0.66rem; padding: 8px 16px;
+    }
+
+    .topo-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,15,30,0.9));
+      border-bottom: 1px solid var(--border);
+    }
+    .topo-header .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      font-size: 1.6rem; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 10px;
+    }
+    .topo-header h1 { margin: 0; font-size: 1rem; letter-spacing: 2px; color: #e2e8f0; }
+    .topo-header .sub { margin: 2px 0 0; font-size: 0.72rem; color: #64748b; }
+    .header-stats { display: flex; gap: 24px; align-items: center; }
+    .stat-item { display: flex; flex-direction: column; align-items: flex-end; font-size: 0.7rem; }
+    .stat-item .label { color: #64748b; font-size: 0.62rem; letter-spacing: 1px; }
+    .stat-item .value {
+      color: #4ade80; font-family: 'Courier New', monospace;
+      font-weight: 600; font-size: 0.85rem;
+    }
+    .stat-item .value.warn { color: #facc15; }
+
+    .back-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.3);
+      color: #60a5fa; padding: 8px 14px; border-radius: 6px;
+      font-size: 0.72rem; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .back-btn:hover { background: rgba(59,130,246,0.2); }
+
+    .topo-main {
+      display: grid; grid-template-columns: 1fr 340px;
+      gap: 16px; padding: 16px 24px 20px;
+      max-width: 1800px; margin: 0 auto;
+    }
+
+    .topo-canvas {
+      background:
+        radial-gradient(circle at 50% 40%, rgba(59,130,246,0.06), transparent 60%),
+        linear-gradient(180deg, #0f172a, #0a0f1e);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px;
+      position: relative; overflow: hidden;
+      min-height: 720px;
+    }
+    .topo-canvas::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    svg.topo-svg {
+      width: 100%; height: 720px;
+      display: block; position: relative; z-index: 1;
+    }
+
+    .topo-node { cursor: pointer; transition: filter 0.2s; }
+    .topo-node:hover { filter: brightness(1.2); }
+    .topo-node.dimmed { opacity: 0.35; }
+    .topo-node.selected .node-box {
+      stroke-width: 3;
+      filter: drop-shadow(0 0 12px currentColor);
+    }
+
+    .topo-link { fill: none; stroke-width: 2; stroke-linecap: round; opacity: 0.5; }
+    .topo-link.active { opacity: 0.9; stroke-width: 2.5; }
+    .topo-link.wireless {
+      stroke-dasharray: 6 6;
+      opacity: 0.75;
+    }
+    .topo-link.dimmed { opacity: 0.15; }
+
+    .packet { filter: drop-shadow(0 0 6px currentColor); }
+
+    .topo-legend {
+      position: absolute; bottom: 16px; left: 16px;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 14px; font-size: 0.7rem;
+      display: flex; gap: 16px; flex-wrap: wrap; z-index: 2;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend-dash {
+      width: 18px; height: 0;
+      border-top: 2px dashed #f97316;
+    }
+
+    .topo-sidebar { display: flex; flex-direction: column; gap: 12px; }
+
+    .info-panel {
+      background: linear-gradient(180deg, rgba(30,41,59,0.6), rgba(15,23,42,0.85));
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .info-panel h3 {
+      margin: 0 0 10px; font-size: 0.75rem;
+      letter-spacing: 1.5px; color: #60a5fa; text-transform: uppercase;
+    }
+    .info-row { display: flex; gap: 10px; margin-bottom: 7px; font-size: 0.72rem; line-height: 1.4; }
+    .info-row .key {
+      color: #64748b; min-width: 90px; font-size: 0.65rem;
+      text-transform: uppercase; letter-spacing: 0.5px; padding-top: 1px;
+    }
+    .info-row .val {
+      flex: 1; color: #cbd5e1;
+      font-family: 'Courier New', monospace; font-size: 0.7rem;
+    }
+    .info-row .val.highlight { color: #4ade80; }
+    .info-row .val.warn { color: #facc15; }
+
+    .log-panel {
+      flex: 1; background: rgba(10,15,30,0.9);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; overflow: hidden;
+      display: flex; flex-direction: column;
+      max-height: 340px;
+    }
+    .log-panel h3 {
+      margin: 0 0 10px; font-size: 0.75rem;
+      letter-spacing: 1.5px; color: #60a5fa; text-transform: uppercase;
+    }
+    #log-stream {
+      flex: 1; overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem; line-height: 1.6;
+    }
+    #log-stream .log-line {
+      padding: 2px 0; color: #94a3b8;
+      animation: logFadeIn 0.3s;
+    }
+    #log-stream .log-line .ts { color: #475569; }
+    #log-stream .log-line .tag {
+      display: inline-block; min-width: 66px; font-weight: 700;
+    }
+    #log-stream .log-line .tag.ship { color: var(--ship); }
+    #log-stream .log-line .tag.sat  { color: var(--sat); }
+    #log-stream .log-line .tag.gnd  { color: var(--gnd); }
+    #log-stream .log-line .tag.al   { color: #60a5fa; }
+    #log-stream .log-line .tag.mw   { color: var(--mwhub); }
+    #log-stream .log-line .tag.ikn  { color: var(--ikn); }
+    #log-stream .log-line .tag.ok   { color: #4ade80; }
+
+    @keyframes logFadeIn {
+      from { opacity: 0; transform: translateX(-6px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .flow-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; margin-top: 10px;
+    }
+    .flow-stat {
+      background: rgba(59,130,246,0.06);
+      border: 1px solid rgba(59,130,246,0.15);
+      border-radius: 6px; padding: 8px; text-align: center;
+    }
+    .flow-stat .num {
+      font-size: 1.1rem; font-weight: 700;
+      color: #4ade80; font-family: 'Courier New', monospace;
+    }
+    .flow-stat .lbl {
+      font-size: 0.6rem; color: #64748b;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .flow-stat.warn .num { color: #facc15; }
+    .flow-stat.sat .num { color: #f97316; }
+
+    @media (max-width: 1200px) {
+      .topo-main { grid-template-columns: 1fr; }
+      .topo-sidebar { flex-direction: row; flex-wrap: wrap; }
+      .info-panel, .log-panel { flex: 1; min-width: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="class-banner">
+  RAHASIA · 📡 TOPOLOGI DATA ASET · Clearance: SECRET · 2026-10-06
+</div>
+
+<header class="topo-header">
+  <div class="brand">
+    <div class="brand-mark">🚢</div>
+    <div>
+      <h1>KAPAL LAUT &amp; SEKOCI → IKN CENTRAL</h1>
+      <p class="sub">VSAT uplink · Navy-specific edge processing · metadata-only forwarding</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="label">Status</span>
+      <span class="value">● LIVE</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Latency E2E</span>
+      <span class="value warn">~750 ms</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Link Type</span>
+      <span class="value" style="color:#f97316;">VSAT Ku-band</span>
+    </div>
+    <a href="/joc/analitik-dashboard.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Kembali ke Analytics
+    </a>
+  </div>
+</header>
+
+<div class="topo-main">
+
+  <div class="topo-canvas">
+    <svg class="topo-svg" viewBox="0 0 1300 720" preserveAspectRatio="xMidYMid meet">
+
+      <defs>
+        <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6"/>
+        </marker>
+        <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f97316"/>
+        </marker>
+        <marker id="arrow-pink" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#ec4899"/>
+        </marker>
+        <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+        </marker>
+        <marker id="arrow-yellow" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#eab308"/>
+        </marker>
+        <marker id="arrow-dim" viewBox="0 0 10 10" refX="8" refY="5"
+                markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+        </marker>
+      </defs>
+
+      <!-- ==================== LINKS ==================== -->
+
+      <!-- 1. KRI → SATCOM (dashed, wireless uplink) -->
+      <path id="path-ship-sat" class="topo-link wireless" stroke="#f97316"
+            d="M 220 590 C 220 550, 220 530, 220 500"
+            marker-end="url(#arrow-orange)"/>
+
+      <!-- 2. SATCOM → Ground Station (dashed, wireless downlink) -->
+      <path id="path-sat-gnd" class="topo-link wireless" stroke="#f97316"
+            d="M 265 470 C 340 470, 380 470, 420 470"
+            marker-end="url(#arrow-orange)"/>
+
+      <!-- 3. Ground Station → AL Edge (solid, local fiber) -->
+      <path id="path-gnd-al" class="topo-link active" stroke="#ec4899"
+            d="M 520 440 L 520 380"
+            marker-end="url(#arrow-pink)"/>
+
+      <!-- 4. AL Edge → Middleware (solid, backbone fiber) -->
+      <path id="path-al-mw" class="topo-link active" stroke="#a855f7"
+            d="M 550 340 C 620 320, 680 300, 750 280"
+            marker-end="url(#arrow-purple)"/>
+
+      <!-- 5. Middleware → IKN (solid, backbone) -->
+      <path id="path-mw-ikn" class="topo-link active" stroke="#eab308"
+            d="M 800 240 L 800 140"
+            marker-end="url(#arrow-yellow)"/>
+
+      <!-- Dimmed: AD Edge & AU Edge (separate pipelines) -->
+      <path class="topo-link dimmed" stroke="#22c55e" stroke-dasharray="4 4"
+            d="M 800 420 L 800 340" marker-end="url(#arrow-dim)"/>
+      <path class="topo-link dimmed" stroke="#0ea5e9" stroke-dasharray="4 4"
+            d="M 1050 420 L 850 320" marker-end="url(#arrow-dim)"/>
+
+      <!-- ==================== ANIMATED PACKETS ==================== -->
+
+      <!-- Ship → SATCOM (uplink) -->
+      <circle class="packet" r="6" fill="#06b6d4">
+        <animateMotion dur="1.5s" repeatCount="indefinite">
+          <mpath href="#path-ship-sat"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#22d3ee">
+        <animateMotion dur="1.5s" begin="0.5s" repeatCount="indefinite">
+          <mpath href="#path-ship-sat"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.5s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- SATCOM → Ground (downlink) -->
+      <circle class="packet" r="5" fill="#f97316">
+        <animateMotion dur="1.2s" begin="1s" repeatCount="indefinite">
+          <mpath href="#path-sat-gnd"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.2s" begin="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#fb923c">
+        <animateMotion dur="1.2s" begin="1.6s" repeatCount="indefinite">
+          <mpath href="#path-sat-gnd"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.2s" begin="1.6s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Ground → AL Edge (local fiber) -->
+      <circle class="packet" r="4" fill="#ec4899">
+        <animateMotion dur="0.6s" begin="2s" repeatCount="indefinite">
+          <mpath href="#path-gnd-al"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.6s" begin="2s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- AL Edge → Middleware (backbone) -->
+      <circle class="packet" r="5" fill="#a855f7">
+        <animateMotion dur="1.2s" begin="2.4s" repeatCount="indefinite">
+          <mpath href="#path-al-mw"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.2s" begin="2.4s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Middleware → IKN (backbone) -->
+      <circle class="packet" r="5" fill="#eab308">
+        <animateMotion dur="1s" begin="3s" repeatCount="indefinite">
+          <mpath href="#path-mw-ikn"/>
+        </animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" begin="3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ==================== NODES ==================== -->
+
+      <!-- KRI SHIP -->
+      <g class="topo-node" transform="translate(220, 640)" data-node="ship">
+        <rect class="node-box" x="-120" y="-42" width="240" height="84" rx="10"
+              fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
+        <circle cx="-98" cy="-18" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-18" text-anchor="middle" fill="#06b6d4" font-size="13" font-weight="700" letter-spacing="1">
+          🚢 KRI-XXX (KAPAL PERANG)
+        </text>
+        <text x="0" y="2" text-anchor="middle" fill="#94a3b8" font-size="10">
+          Radar ASTERIX · AIS · FLIR · EO
+        </text>
+        <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          VSAT Ku-band · Link 16 (tactical)
+        </text>
+      </g>
+
+      <!-- SATCOM (SATELLITE) -->
+      <g class="topo-node" transform="translate(220, 470)" data-node="satcom">
+        <rect class="node-box" x="-70" y="-38" width="140" height="76" rx="10"
+              fill="#1a1005" stroke="#f97316" stroke-width="2"/>
+        <circle cx="-48" cy="-14" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-14" text-anchor="middle" fill="#f97316" font-size="12" font-weight="700" letter-spacing="1">
+          🛰️ SATCOM
+        </text>
+        <text x="0" y="6" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          GEO · Ku-band
+        </text>
+        <text x="0" y="22" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">
+          Telkom-4 / SATRIA-2
+        </text>
+      </g>
+
+      <!-- GROUND STATION -->
+      <g class="topo-node" transform="translate(520, 470)" data-node="ground">
+        <rect class="node-box" x="-90" y="-42" width="180" height="84" rx="10"
+              fill="#0f172a" stroke="#ec4899" stroke-width="2"/>
+        <circle cx="-68" cy="-18" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-18" text-anchor="middle" fill="#ec4899" font-size="12" font-weight="700" letter-spacing="1">
+          📡 GROUND STATION
+        </text>
+        <text x="0" y="2" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          VSAT Modem · Antenna 4.5m
+        </text>
+        <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Lantamal VIII Manado
+        </text>
+      </g>
+
+      <!-- AL EDGE NODE -->
+      <g class="topo-node" transform="translate(520, 340)" data-node="al-edge">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#3b82f6" font-size="13" font-weight="700" letter-spacing="1">
+          🎖️ AL EDGE NODE
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Jetson Orin AGX 64GB · 275 TOPS · 60W
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          YOLOv8-maritime · Fusi AIS + Radar
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Matra: AL · 10.64.10.0/24
+        </text>
+      </g>
+
+      <!-- MIDDLEWARE HUB -->
+      <g class="topo-node" transform="translate(800, 280)" data-node="mw-hub">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#a855f7" font-size="13" font-weight="700" letter-spacing="1">
+          🔄 MIDDLEWARE HUB
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Kafka · Redis Streams · Normalizer · Matra Router
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Agregasi regional · Cross-matra routing
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Hub: mw-makassar · 10.80.2.0/24
+        </text>
+      </g>
+
+      <!-- IKN CENTRAL -->
+      <g class="topo-node" transform="translate(800, 90)" data-node="ikn-central">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#eab308" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#eab308" font-size="13" font-weight="700" letter-spacing="1">
+          🛰️ IKN CENTRAL
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Multi-INT Fusion · Strategic Advisor · COP
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          IKN Kalimantan Timur · 10.90.1.0/24
+        </text>
+      </g>
+
+      <!-- AD EDGE (dimmed) -->
+      <g class="topo-node dimmed" transform="translate(800, 460)" data-node="ad-edge">
+        <rect class="node-box" x="-90" y="-35" width="180" height="70" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-8" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="700" letter-spacing="1">
+          AD EDGE NODE
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Jetson Orin Nano 8GB · Ground sensors
+        </text>
+        <text x="0" y="26" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          Not in this data path
+        </text>
+      </g>
+
+      <!-- AU EDGE (dimmed) -->
+      <g class="topo-node dimmed" transform="translate(1080, 460)" data-node="au-edge">
+        <rect class="node-box" x="-90" y="-35" width="180" height="70" rx="8"
+              fill="#0f172a" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-8" text-anchor="middle" fill="#0ea5e9" font-size="11" font-weight="700" letter-spacing="1">
+          AU EDGE NODE
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Jetson Orin Nano 8GB · Air surveillance
+        </text>
+        <text x="0" y="26" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          Not in this data path
+        </text>
+      </g>
+
+      <!-- Link labels -->
+      <g font-size="9" font-family="monospace" fill="#64748b">
+        <text x="232" y="545" fill="#f97316">VSAT uplink · ~600ms</text>
+        <text x="290" y="455" fill="#f97316">Downlink</text>
+        <text x="530" y="415" fill="#ec4899">Local fiber &lt;5ms</text>
+        <text x="640" y="300" fill="#a855f7">Backbone fiber</text>
+        <text x="812" y="195" fill="#eab308">BGP · ASN 65302 → 65000</text>
+      </g>
+
+    </svg>
+
+    <div class="topo-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span> Ship → SATCOM</div>
+      <div class="legend-item"><span class="legend-dash"></span> Wireless uplink</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ec4899"></span> Ground station</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a855f7"></span> Middleware</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#eab308"></span> IKN uplink</div>
+      <div class="legend-item" style="opacity:0.5"><span class="legend-dot" style="background:#64748b"></span> Isolated</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="topo-sidebar">
+
+    <div class="info-panel">
+      <h3>◈ Flow Statistics</h3>
+      <div class="flow-stats">
+        <div class="flow-stat sat">
+          <div class="num">~600ms</div>
+          <div class="lbl">VSAT Hop</div>
+        </div>
+        <div class="flow-stat">
+          <div class="num">200×</div>
+          <div class="lbl">Reduction</div>
+        </div>
+        <div class="flow-stat warn">
+          <div class="num">~750ms</div>
+          <div class="lbl">E2E Latency</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel" id="node-details">
+      <h3>◈ Node Detail</h3>
+      <div class="info-row">
+        <span class="key">Node</span>
+        <span class="val highlight">KRI-XXX</span>
+      </div>
+      <div class="info-row">
+        <span class="key">Class</span>
+        <span class="val">Kapal Perang / KRI</span>
+      </div>
+      <div class="info-row">
+        <span class="key">Location</span>
+        <span class="val">Selat Natuna Utara</span>
+      </div>
+      <div class="info-row">
+        <span class="key">Sensors</span>
+        <span class="val">Radar ASTERIX · AIS · FLIR · EO</span>
+      </div>
+      <div class="info-row">
+        <span class="key">Uplink</span>
+        <span class="val warn">VSAT Ku-band · ~600ms</span>
+      </div>
+      <div class="info-row">
+        <span class="key">Tactical</span>
+        <span class="val">Link 16 (LOS, ~300km)</span>
+      </div>
+      <div class="info-row">
+        <span class="key">Next hop</span>
+        <span class="val">SATCOM GEO → Ground Station</span>
+      </div>
+    </div>
+
+    <div class="info-panel" style="border-color: rgba(250,204,21,0.3);">
+      <h3 style="color: #facc15;">⚠ Pipeline Isolation</h3>
+      <div style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.5;">
+        Data dari kapal laut <strong style="color: #60a5fa;">hanya masuk ke AL Edge</strong>
+        via VSAT. AD Edge dan AU Edge punya pipeline sendiri — Jetson Orin terpisah, tanpa cross-talk.
+        <br><br>
+        Cross-matra fusion <strong>hanya di Middleware Hub</strong>.
+      </div>
+    </div>
+
+    <div class="log-panel">
+      <h3>◈ Live Stream Log</h3>
+      <div id="log-stream"></div>
+    </div>
+
+  </aside>
+</div>
+
+<div class="class-banner bottom">
+  RAHASIA · ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
+</div>
+
+<script src="/joc/js/classification.js" data-cfasync="false"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  const NODES = {
+    'ship': {
+      title: 'KRI-XXX (Kapal Perang)',
+      class: 'Kapal Perang / KRI',
+      location: 'Selat Natuna Utara',
+      sensors: 'Radar ASTERIX · AIS · FLIR · EO',
+      uplink: 'VSAT Ku-band · ~600ms',
+      tactical: 'Link 16 (LOS, ~300km)',
+      next: 'SATCOM GEO → Ground Station Manado',
+      highlight: true
+    },
+    'satcom': {
+      title: 'SATCOM (Satelit GEO)',
+      class: 'Komunikasi Satelit',
+      location: 'Orbit GEO 35,786 km',
+      sensors: 'Ku-band transponder · C-band backup',
+      uplink: 'Uplink dari KRI · ~250ms one-way',
+      tactical: 'Telkom-4 / SATRIA-2 constellation',
+      next: 'Ground Station Manado',
+      highlight: true
+    },
+    'ground': {
+      title: 'Ground Station Manado',
+      class: 'VSAT Earth Station',
+      location: 'Lantamal VIII Manado',
+      sensors: 'Antenna 4.5m · VSAT modem · LNB',
+      uplink: 'Downlink Ku-band · SNR 12.4 dB',
+      tactical: 'BER 1e-7 · clear sky margin 4 dB',
+      next: 'AL Edge Node (local fiber)',
+      highlight: true
+    },
+    'al-edge': {
+      title: 'AL Edge Node',
+      class: 'Matra: Angkatan Laut',
+      location: 'Lantamal VIII Manado · 10.64.10.0/24',
+      sensors: 'Ingest: RTSP, STANAG 4609, ASTERIX, CoT',
+      uplink: '~200 Kbps aggregate',
+      tactical: 'Jetson Orin AGX 64GB · 275 TOPS · 60W',
+      next: 'Middleware Hub Makassar',
+      highlight: true
+    },
+    'mw-hub': {
+      title: 'Middleware Hub',
+      class: 'Regional Aggregator',
+      location: 'Makassar · 10.80.2.0/24',
+      sensors: 'Kafka · Redis Streams · Normalizer · Router',
+      uplink: '~1 Mbps aggregate',
+      tactical: 'Cross-matra routing (AD/AL/AU)',
+      next: 'IKN Central',
+      highlight: true
+    },
+    'ikn-central': {
+      title: 'IKN Central',
+      class: 'Strategic Command',
+      location: 'IKN Kalimantan Timur · 10.90.1.0/24',
+      sensors: 'Multi-INT Fusion · Strategic Advisor · COP',
+      uplink: '~5 Mbps aggregate',
+      tactical: 'NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4',
+      next: 'COP Nasional',
+      highlight: true
+    },
+    'ad-edge': {
+      title: 'AD Edge Node',
+      class: 'Matra: Angkatan Darat',
+      location: 'Kodam Regional',
+      sensors: 'Terrestrial sensors, ground units',
+      uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      next: 'Tidak dalam jalur data ini',
+      highlight: false
+    },
+    'au-edge': {
+      title: 'AU Edge Node',
+      class: 'Matra: Angkatan Udara',
+      location: 'Lanud Regional',
+      sensors: 'Air surveillance, radar PSU',
+      uplink: '—',
+      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      next: 'Tidak dalam jalur data ini',
+      highlight: false
+    }
+  };
+
+  const detailsPanel = document.getElementById('node-details');
+
+  function renderNodeDetails(nodeId) {
+    const n = NODES[nodeId];
+    if (!n) return;
+    detailsPanel.innerHTML = `
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val ${n.highlight ? 'highlight' : ''}">${n.title}</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">${n.class}</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">${n.location}</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">${n.sensors}</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val ${n.highlight ? 'warn' : ''}">${n.uplink}</span></div>
+      <div class="info-row"><span class="key">Details</span><span class="val">${n.tactical}</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val ${n.highlight ? 'highlight' : 'warn'}">${n.next}</span></div>
+    `;
+  }
+
+  document.querySelectorAll('.topo-node').forEach(node => {
+    node.addEventListener('click', () => {
+      const id = node.getAttribute('data-node');
+      document.querySelectorAll('.topo-node').forEach(n => n.classList.remove('selected'));
+      node.classList.add('selected');
+      renderNodeDetails(id);
+    });
+  });
+
+  const logStream = document.getElementById('log-stream');
+
+  const LOG_TEMPLATES = [
+    { tag: 'ship', text: 'KRI-XXX: FLIR frame → YOLOv8-maritime inference complete (108ms)' },
+    { tag: 'ship', text: 'KRI-XXX: 4 tracks identified · CoT payload 4.2 KB ready' },
+    { tag: 'ship', text: 'KRI-XXX: uplink VSAT Ku-band · SNR 12.4 dB · BER 1e-7' },
+    { tag: 'sat',  text: 'SATCOM: relay via Telkom-4 · 11.5 GHz downlink · 1.8 Mbps' },
+    { tag: 'sat',  text: 'SATCOM: one-way latency 252 ms · jitter 8 ms' },
+    { tag: 'gnd',  text: 'GROUND: VSAT modem lock · Eb/No 8.2 dB · clear sky margin 4 dB' },
+    { tag: 'gnd',  text: 'GROUND: CoT decoded → forward to AL Edge via local fiber' },
+    { tag: 'al',   text: 'AL-EDGE: aggregated 4 tracks · fused with radar ASTERIX' },
+    { tag: 'al',   text: 'AL-EDGE: normalized STANAG 4609 · uplink 198 Kbps → mw-makassar' },
+    { tag: 'mw',   text: 'MW-HUB: routing CoT → IKN via BGP ASN 65302 → 65000' },
+    { tag: 'mw',   text: 'MW-HUB: cross-matra correlation — 0 AD/AU conflicts' },
+    { tag: 'ikn',  text: 'IKN: strategic update — Natuna sector ELEVATED, 3 ships tracked' },
+    { tag: 'ikn',  text: 'IKN: MiniMax M3 fusion complete — confidence 87% HIGH' },
+    { tag: 'ok',   text: 'PIPELINE: E2E latency ~750ms (600ms VSAT + 150ms backbone) · loss 0.02%' }
+  ];
+
+  const TAG_CLASSES = { ship: 'ship', sat: 'sat', gnd: 'gnd', al: 'al', mw: 'mw', ikn: 'ikn', ok: 'ok' };
+
+  function makeLogLine(tpl) {
+    const now = new Date();
+    const ts = String(now.getHours()).padStart(2,'0') + ':' +
+               String(now.getMinutes()).padStart(2,'0') + ':' +
+               String(now.getSeconds()).padStart(2,'0');
+    return `<div class="log-line">
+      <span class="ts">${ts}</span>
+      <span class="tag ${TAG_CLASSES[tpl.tag] || ''}">[${tpl.tag.toUpperCase()}]</span>
+      ${tpl.text}
+    </div>`;
+  }
+
+  let logIdx = 0;
+  function pushLog() {
+    const tpl = LOG_TEMPLATES[logIdx % LOG_TEMPLATES.length];
+    logIdx++;
+    logStream.insertAdjacentHTML('beforeend', makeLogLine(tpl));
+    while (logStream.children.length > 40) {
+      logStream.removeChild(logStream.firstChild);
+    }
+    logStream.scrollTop = logStream.scrollHeight;
+  }
+
+  for (let i = 0; i < 6; i++) pushLog();
+  setInterval(pushLog, 1800);
+
+  if (window.Classification && typeof Classification.init === 'function') {
+    try {
+      Classification.init({
+        level: 'CONFIDENTIAL',
+        user: { name: 'Analis SOC', clearance: 'SECRET' }
+      });
+    } catch (e) {
+      console.warn('[TOPO] Classification init skipped:', e.message);
+    }
+  }
+
+  console.log('[TOPO] Kapal Laut → SATCOM → Ground → AL Edge → IKN ready');
+})();
+</script>
+
+</body>
+</html>

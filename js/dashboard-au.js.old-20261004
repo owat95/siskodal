@@ -1,0 +1,295 @@
+/* ============================================================
+ * DASHBOARD-AU.JS — Logic untuk dashboard TNI AU
+ * ============================================================ */
+
+const DashboardAU = (() => {
+  'use strict';
+
+  let personnel = [];
+  let filtered = [];
+  let selectedId = null;
+
+  // ============================================
+  // INIT
+  // ============================================
+  function init() {
+    if (!window.PersonnelAU || !window.KPIEngine) {
+      console.error('[AU] Missing dependencies');
+      return;
+    }
+
+    personnel = PersonnelAU.getAll();
+    filtered = [...personnel];
+
+    renderOverview();
+    renderPersonnelTable();
+    wireControls();
+    wireDetailPanel();
+    startClock();
+
+    console.log(`[AU] Dashboard initialized — ${personnel.length} personnel`);
+  }
+
+  // ============================================
+  // OVERVIEW CARDS
+  // ============================================
+  function renderOverview() {
+    const total = personnel.length;
+
+    // Rata-rata KPI composite
+    const avgKpi = personnel.reduce((sum, p) =>
+      sum + KPIEngine.computeComposite(p.kpi), 0) / total;
+
+    // Readiness promosi
+    const readyCount = personnel.filter(p => {
+      const a = KPIEngine.assessPromotion(p, 'au');
+      return a && a.status === 'READY';
+    }).length;
+
+    // Total gaji bulanan
+    const totalSalary = personnel.reduce((sum, p) => {
+      const s = KPIEngine.computeSalary(p, 'au');
+      return sum + (s ? s.total : 0);
+    }, 0);
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-kpi').textContent = avgKpi.toFixed(1);
+    document.getElementById('stat-ready').textContent = readyCount;
+    document.getElementById('stat-salary').textContent =
+      'Rp ' + (totalSalary / 1000000).toFixed(1) + 'M';
+  }
+
+  // ============================================
+  // PERSONNEL TABLE
+  // ============================================
+  function renderPersonnelTable() {
+    const tbody = document.getElementById('personnel-tbody');
+    tbody.innerHTML = '';
+
+    filtered.forEach(p => {
+      const composite = KPIEngine.computeComposite(p.kpi);
+      const kpiClass = composite >= 90 ? 'excellent'
+                     : composite >= 75 ? 'good'
+                     : composite >= 60 ? 'fair'
+                     : 'poor';
+
+      const tr = document.createElement('tr');
+      tr.dataset.id = p.id;
+      if (p.id === selectedId) tr.classList.add('active');
+
+      tr.innerHTML = `
+        <td class="mono">${p.nrp}</td>
+        <td><strong>${p.name}</strong></td>
+        <td>${KPIEngine.getRankName('au', p.rank)}</td>
+        <td>${p.unit}</td>
+        <td><span style="color:#60a5fa;font-family:'Courier New',monospace;font-size:0.75rem;">${p.specialty}</span></td>
+        <td>
+          <span class="kpi-badge ${kpiClass}">${composite.toFixed(0)}</span>
+        </td>
+        <td class="mono">${p.area}</td>
+      `;
+
+      tr.addEventListener('click', () => selectPersonnel(p.id));
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('personnel-count').textContent =
+      `${filtered.length} / ${personnel.length}`;
+  }
+
+  // ============================================
+  // DETAIL PANEL
+  // ============================================
+  function selectPersonnel(id) {
+    selectedId = id;
+    const p = personnel.find(x => x.id === id);
+    if (!p) return;
+
+    // Update active row
+    document.querySelectorAll('#personnel-tbody tr').forEach(tr => {
+      tr.classList.toggle('active', tr.dataset.id === id);
+    });
+
+    // Render detail
+    const detail = document.getElementById('detail-panel');
+    const promotion = KPIEngine.assessPromotion(p, 'au');
+    const salary = KPIEngine.computeSalary(p, 'au');
+    const composite = KPIEngine.computeComposite(p.kpi);
+
+    detail.innerHTML = `
+      <button class="close-btn" onclick="DashboardAU.closeDetail()">✕</button>
+      <div class="detail-header">
+        <h2>${p.name}</h2>
+        <div class="rank-name">${KPIEngine.getRankName('au', p.rank)}</div>
+        <div class="meta">NRP: ${p.nrp} · ${p.unit}</div>
+      </div>
+
+      <h4 style="font-size:0.75rem;letter-spacing:1px;color:#94a3b8;margin-bottom:8px;">
+        KPI BREAKDOWN
+      </h4>
+      ${renderKPIRow('Skill', p.kpi.skill)}
+      ${renderKPIRow('Fitness', p.kpi.fitness)}
+      ${renderKPIRow('Leadership', p.kpi.leadership)}
+      ${renderKPIRow('Discipline', p.kpi.discipline)}
+      ${renderKPIRow('Operations', p.kpi.ops)}
+      <div class="kpi-row" style="border-top:1px solid rgba(51,65,85,0.5);margin-top:8px;padding-top:12px;">
+        <span class="kpi-label"><strong>COMPOSITE</strong></span>
+        <span class="kpi-value" style="font-size:1.2rem;color:${getCompositeColor(composite)};">
+          ${composite.toFixed(1)}
+        </span>
+      </div>
+
+      <div class="promotion-block ${getPromotionClass(promotion.status)}">
+        <h4>◤ PROMOTION READINESS</h4>
+        <div class="readiness-meter">${promotion.readiness}%</div>
+        <div class="next-rank">
+          ${promotion.nextRank ? `Next: ${promotion.nextRank.name}` : 'Pangkat tertinggi'}
+        </div>
+        <div style="font-size:0.75rem;color:#94a3b8;margin-top:8px;line-height:1.5;">
+          ${promotion.recommendation}
+        </div>
+        <div style="font-size:0.7rem;color:#64748b;margin-top:8px;font-family:'Courier New',monospace;">
+          Years in rank: ${promotion.yearsInRank} / ${promotion.minYearsRequired} required<br>
+          Time: ${promotion.timeOK ? '✓' : '✗'} ·
+          KPI: ${promotion.kpiOK ? '✓' : '✗'} ·
+          Discipline: ${promotion.noViolations ? '✓' : '✗'}
+        </div>
+      </div>
+
+      <div class="salary-block">
+        <h4>◤ SALARY BAND (Per Bulan)</h4>
+        <div class="total">${KPIEngine.formatIDR(salary.total)}</div>
+        <div class="breakdown">
+          Base: ${KPIEngine.formatIDR(salary.base)}<br>
+          Tunjangan KPI: ${KPIEngine.formatIDR(salary.allowance)}<br>
+          Bonus Prestasi: ${KPIEngine.formatIDR(salary.bonus)}
+        </div>
+      </div>
+
+      <div style="margin-top:16px;font-size:0.75rem;color:#64748b;">
+        <div>Area: <span style="color:#cbd5e1;">${p.area}</span></div>
+        <div>Specialty: <span style="color:#60a5fa;">${p.specialty}</span></div>
+        <div>Awards: <span style="color:#facc15;">${p.awards} ★</span></div>
+        <div>Violations: <span style="color:${p.violations > 0 ? '#f87171' : '#4ade80'};">
+          ${p.violations}${p.violations > 0 ? ' ⚠' : ' ✓'}</span></div>
+      </div>
+    `;
+
+    detail.classList.add('open');
+  }
+
+  function renderKPIRow(label, value) {
+    const color = value >= 85 ? '#4ade80' : value >= 70 ? '#60a5fa' : value >= 55 ? '#facc15' : '#f87171';
+    return `
+      <div class="kpi-row">
+        <span class="kpi-label">${label}</span>
+        <span class="kpi-value" style="color:${color};">${value}</span>
+      </div>
+      <div class="progress"><div class="progress-fill" style="width:${value}%;"></div></div>
+    `;
+  }
+
+  function getCompositeColor(c) {
+    return c >= 90 ? '#4ade80' : c >= 75 ? '#60a5fa' : c >= 60 ? '#facc15' : '#f87171';
+  }
+
+  function getPromotionClass(status) {
+    if (status === 'READY') return '';
+    if (status === 'PENDING') return 'pending';
+    return 'not-ready';
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-panel').classList.remove('open');
+    selectedId = null;
+    document.querySelectorAll('#personnel-tbody tr').forEach(tr => tr.classList.remove('active'));
+  }
+
+  // ============================================
+  // FILTERS
+  // ============================================
+  function applyFilters() {
+    const search = document.getElementById('filter-search').value.toLowerCase().trim();
+    const rankFilter = document.getElementById('filter-rank').value;
+    const unitFilter = document.getElementById('filter-unit').value;
+    const specFilter = document.getElementById('filter-specialty').value;
+
+    filtered = personnel.filter(p => {
+      if (search && !p.name.toLowerCase().includes(search) &&
+          !p.nrp.includes(search)) return false;
+      if (rankFilter && p.rank !== rankFilter) return false;
+      if (unitFilter && p.unit !== unitFilter) return false;
+      if (specFilter && p.specialty !== specFilter) return false;
+      return true;
+    });
+
+    renderPersonnelTable();
+  }
+
+  // ============================================
+  // CONTROLS
+  // ============================================
+  function wireControls() {
+    // Populate filter dropdowns
+    const rankSel = document.getElementById('filter-rank');
+    PersonnelAU.RANKS.forEach(r => {
+      const o = document.createElement('option');
+      o.value = r;
+      o.textContent = KPIEngine.getRankName('au', r);
+      rankSel.appendChild(o);
+    });
+
+    const unitSel = document.getElementById('filter-unit');
+    PersonnelAU.UNITS.forEach(u => {
+      const o = document.createElement('option');
+      o.value = u;
+      o.textContent = u;
+      unitSel.appendChild(o);
+    });
+
+    const specSel = document.getElementById('filter-specialty');
+    PersonnelAU.SPECIALTIES.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s;
+      o.textContent = s;
+      specSel.appendChild(o);
+    });
+
+    // Wire events
+    document.getElementById('filter-search').addEventListener('input', applyFilters);
+    document.getElementById('filter-rank').addEventListener('change', applyFilters);
+    document.getElementById('filter-unit').addEventListener('change', applyFilters);
+    document.getElementById('filter-specialty').addEventListener('change', applyFilters);
+    document.getElementById('filter-reset').addEventListener('click', () => {
+      document.getElementById('filter-search').value = '';
+      document.getElementById('filter-rank').value = '';
+      document.getElementById('filter-unit').value = '';
+      document.getElementById('filter-specialty').value = '';
+      applyFilters();
+    });
+  }
+
+  function wireDetailPanel() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDetail();
+    });
+  }
+
+  // ============================================
+  // LIVE CLOCK
+  // ============================================
+  function startClock() {
+    setInterval(() => {
+      const t = new Date().toISOString().substr(11, 8);
+      const el = document.getElementById('live-clock');
+      if (el) el.textContent = t;
+    }, 1000);
+  }
+
+  // ============================================
+  // BOOT
+  // ============================================
+  window.addEventListener('DOMContentLoaded', init);
+
+  return { closeDetail };
+})();

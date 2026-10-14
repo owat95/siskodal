@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOC Dashboard — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/siber.css">
+</head>
+<body>
+
+<div class="dashboard" data-matra="siber">
+
+  <!-- SIDEBAR -->
+  <aside class="dash-sidebar">
+    <div class="brand">
+      <span class="brand-mark" style="color:#ef4444;">🛡️</span>
+      <div class="brand-text">
+        <strong>SOC</strong>
+        <span>Siskodal</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Monitoring</div>
+    <a href="#" class="nav-item active" data-tab="overview"><i class="fas fa-chart-line"></i> Overview</a>
+    <a href="#" class="nav-item" data-tab="map"><i class="fas fa-globe"></i> Live Attack Map</a>
+    <a href="#" class="nav-item" data-tab="feed">
+      <i class="fas fa-stream"></i> Threat Feed
+      <span style="margin-left:auto;font-size:0.65rem;background:#ef4444;color:#fff;padding:1px 6px;border-radius:4px;font-weight:800;" id="live-badge">●</span>
+    </a>
+
+    <div class="nav-section">Response</div>
+    <a href="#" class="nav-item" data-tab="incidents"><i class="fas fa-triangle-exclamation"></i> Incidents</a>
+    <a href="#" class="nav-item" data-tab="firewall"><i class="fas fa-fire"></i> Firewall &amp; IPS</a>
+
+    <div class="nav-section">Navigasi</div>
+    <a href="/joc/siber.html" class="nav-item"><i class="fas fa-chevron-left"></i> Sub-Portal</a>
+    <a href="/joc/" class="nav-item"><i class="fas fa-home"></i> Portal SISKODAL</a>
+  </aside>
+
+  <!-- HEADER -->
+  <header class="dash-header">
+    <div class="title-block">
+      <h1>CYBER SECURITY OPERATIONS CENTER</h1>
+      <p id="page-subtitle">Real-time Threat Monitoring &amp; Response</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="label">Threat Level</span>
+        <span class="value" id="threat-level" style="color:#facc15;">● ELEVATED</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value" id="live-clock">--:--:--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Defense</span>
+        <span class="value" style="color:#4ade80;">● ACTIVE</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+
+    <!-- TAB: OVERVIEW -->
+    <section class="tab-content active" id="tab-overview">
+      <div class="threat-level-banner" style="border-color:#eab308; background:rgba(234,179,8,0.08);">
+        <div class="tl-icon">⚠️</div>
+        <div class="tl-content" style="flex:1;">
+          <h3 style="color:#facc15;">THREAT LEVEL: ELEVATED</h3>
+          <p>342 attacker unik terdeteksi dalam 24 jam · Auto-block aktif · 3 insiden sedang di-investigasi</p>
+        </div>
+      </div>
+
+      <div class="siber-stats">
+        <div class="siber-stat" style="border-left-color:#ef4444;">
+          <div class="label">Events Today</div>
+          <div class="value" id="stat-events">--</div>
+          <div class="meta">Threat events</div>
+        </div>
+        <div class="siber-stat" style="border-left-color:#22c55e;">
+          <div class="label">Blocked</div>
+          <div class="value" id="stat-blocked">--</div>
+          <div class="meta">Auto-IP block</div>
+        </div>
+        <div class="siber-stat" style="border-left-color:#a855f7;">
+          <div class="label">Unique Attackers</div>
+          <div class="value" id="stat-attackers">--</div>
+          <div class="meta">24 jam terakhir</div>
+        </div>
+        <div class="siber-stat" style="border-left-color:#eab308;">
+          <div class="label">Active Incidents</div>
+          <div class="value" id="stat-incidents">--</div>
+          <div class="meta">In investigation</div>
+        </div>
+        <div class="siber-stat" style="border-left-color:#dc2626;">
+          <div class="label">Critical Events</div>
+          <div class="value" id="stat-critical">--</div>
+          <div class="meta">Severity: CRITICAL</div>
+        </div>
+        <div class="siber-stat" style="border-left-color:#06b6d4;">
+          <div class="label">Firewall Rules</div>
+          <div class="value" id="stat-rules">--</div>
+          <div class="meta">Active / Total</div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Defense Controls</h3>
+          <span style="font-size:0.7rem;color:#22c55e;">● ACTIVE</span>
+        </div>
+        <div class="panel-body">
+          <div class="defense-panel" id="defense-panel"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Recent Threat Events</h3>
+          <span style="font-size:0.7rem;color:#ef4444;">● LIVE</span>
+        </div>
+        <div class="panel-body">
+          <div id="overview-feed"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: LIVE ATTACK MAP -->
+    <section class="tab-content" id="tab-map">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Live Attack Map — Global Threat Visualization</h3>
+          <span style="font-size:0.7rem;color:#ef4444;font-family:'Courier New',monospace;">● LIVE ATTACKS</span>
+        </div>
+        <div class="panel-body">
+          <div class="attack-map-container">
+            <canvas id="attack-canvas"></canvas>
+            <div class="attack-map-legend">
+              <span><span class="dot" style="background:#22c55e; box-shadow:0 0 8px #22c55e;"></span> Target (NKRI)</span>
+              <span><span class="dot" style="background:#ef4444; box-shadow:0 0 8px #ef4444;"></span> Attacker (Foreign)</span>
+              <span><span class="dot" style="background:#facc15; box-shadow:0 0 8px #facc15;"></span> Blocked (IPS)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: THREAT FEED -->
+    <section class="tab-content" id="tab-feed">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Threat Feed — Real-time Events</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;" id="feed-count">0 events</span>
+        </div>
+        <div class="panel-body">
+          <div id="threat-feed"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: INCIDENTS -->
+    <section class="tab-content" id="tab-incidents">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Incident Response Queue</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;" id="incident-count">--</span>
+        </div>
+        <div class="panel-body">
+          <div id="incidents-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB: FIREWALL -->
+    <section class="tab-content" id="tab-firewall">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Firewall Rules — NGFW Configuration</h3>
+          <span style="font-size:0.7rem;color:#94a3b8;" id="rules-count">--</span>
+        </div>
+        <div class="panel-body">
+          <div id="firewall-rules"></div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top:20px;">
+        <div class="panel-header">
+          <h3>◤ Auto-Blocked IPs</h3>
+          <span style="font-size:0.7rem;color:#22c55e;" id="blocked-count">--</span>
+        </div>
+        <div class="panel-body">
+          <div id="blocked-ips"></div>
+        </div>
+      </section>
+    </section>
+
+  </main>
+
+</div>
+
+<script src="/joc/js/siber-core.js" data-cfasync="false"></script>
+<script src="/joc/js/siber-data.js" data-cfasync="false"></script>
+<script>
+  // ============================================
+  // STATE
+  // ============================================
+  window.attackEvents = [];
+  let threatFeed = [];
+  let simulationInterval = null;
+  let mapCtx = null;
+  let mapRunning = false;
+  let worldMapImage = null;
+  let worldMapReady = false;
+
+  // ============================================
+  // INIT
+  // ============================================
+  (function init() {
+    setInterval(() => {
+      const t = new Date().toISOString().substr(11, 8);
+      const el = document.getElementById('live-clock');
+      if (el) el.textContent = t;
+    }, 1000);
+
+    document.querySelectorAll('.nav-item[data-tab]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchTab(el.dataset.tab);
+      });
+    });
+
+    renderStats();
+    renderDefenseControls();
+    renderIncidents();
+    renderFirewallRules();
+    renderBlockedIPs();
+
+    // Seed initial events (addThreatEvent sudah handle push ke attackEvents)
+    SiberData.SEED_EVENTS.forEach(evt => addThreatEvent(evt, false));
+    console.log('[SIBER] Seeded attack events:', window.attackEvents.length);
+    // Load world map background
+    loadWorldMap();
+    // Start simulation
+    startSimulation();
+
+    // Attack map — only start when tab visible
+    setTimeout(() => {
+      startAttackMap();
+    }, 500);
+
+    console.log('[SIBER] Dashboard initialized');
+  })();
+
+  // ============================================
+  // TAB SWITCH
+  // ============================================
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => {
+      t.classList.toggle('active', t.id === `tab-${tab}`);
+    });
+    document.querySelectorAll('.nav-item[data-tab]').forEach(n => {
+      n.classList.toggle('active', n.dataset.tab === tab);
+    });
+
+    const titles = {
+      overview: 'Real-time Threat Monitoring & Response',
+      map: 'Global Attack Visualization',
+      feed: 'Threat Event Stream',
+      incidents: 'Incident Response Queue',
+      firewall: 'Firewall & IPS Configuration'
+    };
+    const subtitle = document.getElementById('page-subtitle');
+    if (subtitle) subtitle.textContent = titles[tab] || '';
+    // Force resize attack map kalau tab map aktif
+    if (tab === 'map') {
+      setTimeout(() => {
+        const canvas = document.getElementById('attack-canvas');
+        if (canvas) {
+          resizeCanvas(canvas);
+          console.log('[SIBER] Map resized on tab switch:', canvas.width, 'x', canvas.height);
+        }
+      }, 100);
+    }
+  }
+
+  // ============================================
+  // STATS
+  // ============================================
+  function renderStats() {
+    const s = SiberData.getStats();
+    const defState = SiberCore.getDefenseState();
+
+    document.getElementById('stat-events').textContent = s.eventsToday;
+    document.getElementById('stat-blocked').textContent = s.blockedToday;
+    document.getElementById('stat-attackers').textContent = s.uniqueAttackers;
+    document.getElementById('stat-incidents').textContent = s.activeIncidents;
+    document.getElementById('stat-critical').textContent = s.criticalEvents;
+    document.getElementById('stat-rules').textContent = `${defState.rulesActive}/${defState.rulesTotal}`;
+  }
+
+  // ============================================
+  // DEFENSE CONTROLS
+  // ============================================
+  function renderDefenseControls() {
+    const container = document.getElementById('defense-panel');
+    if (!container) return;
+
+    const state = SiberCore.getDefenseState();
+    const controls = [
+      { key: 'firewallEnabled', label: 'Next-Gen Firewall', icon: '🔥' },
+      { key: 'idsEnabled',      label: 'Intrusion Detection (IDS)', icon: '👁️' },
+      { key: 'ipsEnabled',      label: 'Intrusion Prevention (IPS)', icon: '🛡️' },
+      { key: 'autoBlockEnabled',label: 'Auto IP Block', icon: '⚡' }
+    ];
+
+    container.innerHTML = controls.map(c => `
+      <div class="defense-toggle ${state[c.key] ? 'enabled' : ''}" data-key="${c.key}">
+        <div class="dt-label">
+          <span>${c.icon}</span>
+          <span>${c.label}</span>
+        </div>
+        <div class="dt-status"></div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.defense-toggle').forEach(el => {
+      el.addEventListener('click', () => {
+        SiberCore.toggleDefense(el.dataset.key);
+        renderDefenseControls();
+      });
+    });
+  }
+
+  // ============================================
+  // THREAT FEED
+  // ============================================
+  function addThreatEvent(evt, animate = true) {
+    threatFeed.unshift(evt);
+    if (threatFeed.length > 100) threatFeed.pop();
+
+    const sev = SiberCore.getSeverity(evt.severity);
+    const tactic = SiberCore.getTactic(evt.tactic);
+
+    const score = SiberCore.computeThreatScore(evt);
+    let blocked = evt.blocked;
+
+    if (!blocked && SiberCore.shouldAutoBlock(evt)) {
+      SiberCore.blockIP(evt.attackerIP, `AUTO_BLOCK: ${evt.name}`);
+      evt.blocked = true;
+      evt.autoBlocked = true;
+      blocked = true;
+      renderBlockedIPs();
+    }
+
+    // AI assessment (fallback compute kalau belum ada)
+    let ai = evt.ai;
+    if (!ai && window.SiberCore && typeof window.SiberCore.assessAI === 'function') {
+      try { ai = window.SiberCore.assessAI(evt); } catch(e) {}
+    }
+    if (!ai) ai = { level: 'MEDIUM', score: 50, reason: 'N/A' };
+    const aiColors = {
+      HIGH:   { color: '#ef4444', bg: 'rgba(239,68,68,0.15)' },
+      MEDIUM: { color: '#eab308', bg: 'rgba(234,179,8,0.15)' },
+      LOW:    { color: '#22c55e', bg: 'rgba(34,197,94,0.15)' }
+    };
+    const aiC = aiColors[ai.level] || aiColors.LOW;
+
+    const html = `
+      <div class="threat-event" style="border-left-color:${sev.color};">
+        <div class="te-head">
+          <div class="te-source">
+            <span class="te-country">${evt.attackerCountry}</span>
+            <span>${evt.attackerIP}</span>
+            <span style="color:#64748b;">→</span>
+            <span style="color:#60a5fa;">${evt.targetName || 'Unknown'}</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <span class="te-protocol">${evt.protocol || 'TCP'}${evt.port ? ':' + evt.port : ''}</span>
+            <span class="te-severity" style="background:${sev.bg}; color:${sev.color};">${sev.label}</span>
+          </div>
+        </div>
+        <div class="te-name">${evt.name}</div>
+        <div style="font-size:0.7rem; color:#94a3b8; margin:4px 0;">${evt.description}</div>
+        <div class="te-meta">
+          <span class="te-tactic">${tactic ? tactic.icon + ' ' + tactic.name : evt.tactic}</span>
+          <span class="te-technique">${evt.technique}</span>
+          <span class="te-ai" style="background:${aiC.bg}; color:${aiC.color};">🤖 AI: ${ai.level} (${ai.score})</span>
+          <span>Conf: ${evt.confidence ? (evt.confidence * 100).toFixed(0) : '--'}%</span>
+          ${blocked ? `<span class="te-blocked ${evt.autoBlocked ? 'auto' : ''}">${evt.autoBlocked ? '⚡ AUTO-BLOCKED' : '✓ BLOCKED'}</span>` : ''}
+          <span>🕐 ${new Date(evt.timestamp).toLocaleTimeString('id-ID')}</span>
+        </div>
+      </div>
+    `;
+
+    ['overview-feed', 'threat-feed'].forEach(id => {
+      const c = document.getElementById(id);
+      if (c) {
+        if (animate) c.insertAdjacentHTML('afterbegin', html);
+        else c.insertAdjacentHTML('beforeend', html);
+        while (c.children.length > 30) c.removeChild(c.lastChild);
+      }
+    });
+
+    const fc = document.getElementById('feed-count');
+    if (fc) fc.textContent = `${threatFeed.length} events`;
+
+    // Add to attack map
+    if (evt.attackerLocation && evt.targetLocation) {
+      window.attackEvents.push(evt);
+      if (window.attackEvents.length > 20) window.attackEvents.shift();
+    }
+  }
+
+  // ============================================
+  // SIMULATION
+  // ============================================
+  function startSimulation() {
+    simulationInterval = setInterval(() => {
+      const evt = SiberData.generateEvent();
+      addThreatEvent(evt);
+      renderStats();
+    }, 3000);
+  }
+
+
+  function startAttackMap() {
+    const canvas = document.getElementById('attack-canvas');
+    if (!canvas) { console.warn('[SIBER] No canvas'); return; }
+    mapCtx = canvas.getContext('2d');
+    mapRunning = true;
+
+    setTimeout(() => {
+      resizeCanvas(canvas);
+      console.log('[SIBER] Map start — canvas', canvas.width, 'x', canvas.height);
+      drawLoop(canvas);
+    }, 300);
+
+    window.addEventListener('resize', () => resizeCanvas(canvas));
+  }
+
+  function resizeCanvas(canvas) {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const W = Math.floor(rect.width) || 1200;
+    const H = Math.floor(rect.height) || 500;
+    if (canvas.width !== W || canvas.height !== H) {
+      canvas.width = W;
+      canvas.height = H;
+      console.log('[SIBER] Canvas resized to', W, 'x', H);
+    }
+  }
+
+  // Full world viewport (Mercator-ish equirectangular)
+  const VIEWPORT = { minLon: -180, maxLon: 180, minLat: -55, maxLat: 75 };
+
+  function loadWorldMap() {
+    worldMapImage = new Image();
+    worldMapImage.crossOrigin = 'anonymous';
+    worldMapImage.onload = () => {
+      worldMapReady = true;
+      console.log('[SIBER] World map loaded');
+    };
+    worldMapImage.onerror = () => {
+      console.warn('[SIBER] World map failed, using grid only');
+      worldMapReady = false;
+    };
+    worldMapImage.src = '/joc/img/world-map-night.png';
+  }
+
+  function project(lon, lat, W, H) {
+    const x = ((lon - VIEWPORT.minLon) / (VIEWPORT.maxLon - VIEWPORT.minLon)) * W;
+    const y = ((VIEWPORT.maxLat - lat) / (VIEWPORT.maxLat - VIEWPORT.minLat)) * H;
+    return { x, y };
+  }
+
+  function drawLoop(canvas) {
+    if (!mapRunning) return;
+    const W = canvas.width;
+    const H = canvas.height;
+    if (W < 50 || H < 50) {
+      requestAnimationFrame(() => drawLoop(canvas));
+      return;
+    }
+
+    // Clear solid
+    mapCtx.fillStyle = '#050a14';
+    mapCtx.fillRect(0, 0, W, H);
+
+    // Draw world map (kalau loaded)
+    if (worldMapReady && worldMapImage) {
+      mapCtx.globalAlpha = 0.85;
+      mapCtx.drawImage(worldMapImage, 0, 0, W, H);
+      mapCtx.globalAlpha = 1;
+
+      mapCtx.fillStyle = 'rgba(10, 22, 40, 0.35)';
+      mapCtx.fillRect(0, 0, W, H);
+    } else {
+      // Fallback: grid lines
+      mapCtx.strokeStyle = 'rgba(6, 182, 212, 0.08)';
+      mapCtx.lineWidth = 1;
+      for (let lon = -180; lon <= 180; lon += 20) {
+        const x = project(lon, 0, W, H).x;
+        mapCtx.beginPath();
+        mapCtx.moveTo(x, 0);
+        mapCtx.lineTo(x, H);
+        mapCtx.stroke();
+      }
+      for (let lat = -50; lat <= 70; lat += 20) {
+        const y = project(0, lat, W, H).y;
+        mapCtx.beginPath();
+        mapCtx.moveTo(0, y);
+        mapCtx.lineTo(W, y);
+        mapCtx.stroke();
+      }
+    }
+
+    // NKRI outline
+    const idNE = project(141, 6, W, H);
+    const idSW = project(95, -11, W, H);
+    mapCtx.strokeStyle = 'rgba(34, 197, 94, 0.6)';
+    mapCtx.lineWidth = 2;
+    mapCtx.strokeRect(idSW.x, idNE.y, idNE.x - idSW.x, idSW.y - idNE.y);
+    mapCtx.fillStyle = 'rgba(34, 197, 94, 0.08)';
+    mapCtx.fillRect(idSW.x, idNE.y, idNE.x - idSW.x, idSW.y - idNE.y);
+
+    // NKRI label
+    mapCtx.font = 'bold 11px "Courier New"';
+    mapCtx.fillStyle = 'rgba(34, 197, 94, 0.8)';
+    mapCtx.fillText('NKRI', idSW.x + 4, idNE.y + 14);
+
+    // Target markers with smart clustering
+    const placedMarkers = [];
+
+    function findFreePosition(baseX, baseY, minDist = 40) {
+      // Try cluster positions: spiral pattern
+      const offsets = [
+        { dx: 0,    dy: 0    },
+        { dx: 60,   dy: -25  }, { dx: 60,   dy: 25  },
+        { dx: -60,  dy: -25  }, { dx: -60,  dy: 25  },
+        { dx: 0,    dy: -40  }, { dx: 0,    dy: 40  },
+        { dx: 80,   dy: 0    }, { dx: -80,  dy: 0   },
+        { dx: 60,   dy: -50  }, { dx: 60,   dy: 50  },
+        { dx: -60,  dy: -50  }, { dx: -60,  dy: 50  },
+        { dx: 100,  dy: -20  }, { dx: 100,  dy: 20  },
+        { dx: -100, dy: -20  }, { dx: -100, dy: 20  }
+      ];
+
+      for (const off of offsets) {
+        const x = baseX + off.dx;
+        const y = baseY + off.dy;
+        const clash = placedMarkers.find(m => Math.hypot(m.x - x, m.y - y) < minDist);
+        if (!clash) return { x, y, dx: off.dx, dy: off.dy };
+      }
+      return { x: baseX, y: baseY, dx: 0, dy: 0 };
+    }
+
+    SiberData.TARGET_ASSETS.forEach((t, idx) => {
+      const base = project(t.lon, t.lat, W, H);
+      const pos = findFreePosition(base.x, base.y, 55);
+      placedMarkers.push({ x: pos.x, y: pos.y, name: t.name });
+
+      const pulse = (Math.sin(Date.now() / 400 + idx) + 1) / 2;
+
+      // Leader line from base to displaced position (kalau digeser)
+      if (pos.dx !== 0 || pos.dy !== 0) {
+        mapCtx.strokeStyle = 'rgba(34, 197, 94, 0.35)';
+        mapCtx.lineWidth = 1;
+        mapCtx.setLineDash([3, 3]);
+        mapCtx.beginPath();
+        mapCtx.moveTo(base.x, base.y);
+        mapCtx.lineTo(pos.x, pos.y);
+        mapCtx.stroke();
+        mapCtx.setLineDash([]);
+
+        // Base small dot
+        mapCtx.beginPath();
+        mapCtx.arc(base.x, base.y, 2, 0, Math.PI * 2);
+        mapCtx.fillStyle = 'rgba(34, 197, 94, 0.5)';
+        mapCtx.fill();
+      }
+
+      // Outer pulse
+      mapCtx.beginPath();
+      mapCtx.arc(pos.x, pos.y, 4 + pulse * 4, 0, Math.PI * 2);
+      mapCtx.strokeStyle = `rgba(34, 197, 94, ${0.5 - pulse * 0.4})`;
+      mapCtx.lineWidth = 1.2;
+      mapCtx.stroke();
+
+      // Core dot
+      mapCtx.beginPath();
+      mapCtx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+      mapCtx.fillStyle = t.critical ? '#22c55e' : '#10b981';
+      mapCtx.shadowColor = '#22c55e';
+      mapCtx.shadowBlur = 10;
+      mapCtx.fill();
+      mapCtx.shadowBlur = 0;
+
+      // Label dengan arah dinamis
+      mapCtx.font = 'bold 10px "Courier New"';
+      const labelW = mapCtx.measureText(t.name).width;
+      const labelX = pos.dx >= 0 ? pos.x + 10 : pos.x - labelW - 10;
+      const labelY = pos.y + 3;
+
+      // Label background
+      mapCtx.fillStyle = 'rgba(10, 15, 30, 0.85)';
+      mapCtx.fillRect(labelX - 3, labelY - 11, labelW + 6, 14);
+
+      // Label text
+      mapCtx.fillStyle = '#e2e8f0';
+      mapCtx.fillText(t.name, labelX, labelY);
+    });
+
+    // Active attack events
+    window.attackEvents.forEach(evt => {
+      const age = Date.now() - evt.timestamp;
+      const maxAge = 10000;
+      if (age > maxAge) return;
+      const progress = age / maxAge;
+      const alpha = 1 - progress;
+
+      const from = project(evt.attackerLocation.lon, evt.attackerLocation.lat, W, H);
+      const to = project(evt.targetLocation.lon, evt.targetLocation.lat, W, H);
+
+      const sevColors = {
+        CRITICAL: '239, 68, 68', HIGH: '249, 115, 22',
+        MEDIUM: '234, 179, 8', LOW: '34, 197, 94'
+      };
+      const rgb = sevColors[evt.severity] || '148, 163, 184';
+
+      const midX = (from.x + to.x) / 2;
+      const midY = (from.y + to.y) / 2 - Math.abs(to.x - from.x) * 0.25;
+
+      // Full arc (faded)
+      mapCtx.beginPath();
+      mapCtx.moveTo(from.x, from.y);
+      mapCtx.quadraticCurveTo(midX, midY, to.x, to.y);
+      mapCtx.strokeStyle = `rgba(${rgb}, ${alpha * 0.5})`;
+      mapCtx.lineWidth = 1.5;
+      mapCtx.stroke();
+
+      // Animated packet
+      const t = progress;
+      const px = (1-t)*(1-t)*from.x + 2*(1-t)*t*midX + t*t*to.x;
+      const py = (1-t)*(1-t)*from.y + 2*(1-t)*t*midY + t*t*to.y;
+
+      mapCtx.beginPath();
+      mapCtx.arc(px, py, 4, 0, Math.PI * 2);
+      mapCtx.fillStyle = `rgba(${rgb}, 1)`;
+      mapCtx.shadowColor = `rgb(${rgb})`;
+      mapCtx.shadowBlur = 15;
+      mapCtx.fill();
+      mapCtx.shadowBlur = 0;
+
+      // Attacker marker (pulse)
+      mapCtx.beginPath();
+      mapCtx.arc(from.x, from.y, 3 + (1 - alpha) * 10, 0, Math.PI * 2);
+      mapCtx.strokeStyle = `rgba(${rgb}, ${alpha * 0.7})`;
+      mapCtx.lineWidth = 2;
+      mapCtx.stroke();
+
+      mapCtx.beginPath();
+      mapCtx.arc(from.x, from.y, 4, 0, Math.PI * 2);
+      mapCtx.fillStyle = evt.blocked ? '#facc15' : `rgb(${rgb})`;
+      mapCtx.shadowColor = evt.blocked ? '#facc15' : `rgb(${rgb})`;
+      mapCtx.shadowBlur = 10;
+      mapCtx.fill();
+      mapCtx.shadowBlur = 0;
+
+      // Country label dengan background
+      mapCtx.font = 'bold 11px "Courier New"';
+      const cLabelW = mapCtx.measureText(evt.attackerCountry).width;
+      mapCtx.fillStyle = `rgba(10, 15, 30, ${alpha * 0.9})`;
+      mapCtx.fillRect(from.x + 6, from.y - 16, cLabelW + 8, 14);
+      mapCtx.fillStyle = `rgba(255, 100, 100, ${alpha})`;
+      mapCtx.fillText(evt.attackerCountry, from.x + 10, from.y - 6);
+    });
+
+    requestAnimationFrame(() => drawLoop(canvas));
+  }
+  // ============================================
+  // INCIDENTS
+  // ============================================
+  function renderIncidents() {
+    const container = document.getElementById('incidents-list');
+    if (!container) return;
+
+    const statusColors = {
+      RESOLVED: '#4ade80',
+      INVESTIGATING: '#facc15',
+      MITIGATED: '#60a5fa',
+      OPEN: '#f87171'
+    };
+
+    container.innerHTML = SiberData.INCIDENTS.map(inc => {
+      const c = statusColors[inc.status];
+      const age = (Date.now() - inc.openedAt) / 3600000;
+      return `
+        <div class="incident-card" style="border-left-color:${c};">
+          <div class="ic-head">
+            <div>
+              <div class="ic-id">${inc.id}</div>
+              <div class="ic-title">${inc.title}</div>
+            </div>
+            <span class="incident-status ${inc.status.toLowerCase()}">${inc.status}</span>
+          </div>
+          <div class="ic-summary">${inc.summary}</div>
+          <div class="ic-meta">
+            <span>Severity: ${inc.severity}</span>
+            <span>Events: ${inc.events}</span>
+            <span>Source: ${inc.source}</span>
+            <span>Age: ${age.toFixed(1)}h</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const counter = document.getElementById('incident-count');
+    if (counter) counter.textContent = `${SiberData.INCIDENTS.length} incidents`;
+  }
+
+  // ============================================
+  // FIREWALL RULES
+  // ============================================
+  function renderFirewallRules() {
+    const container = document.getElementById('firewall-rules');
+    if (!container) return;
+
+    const rules = [
+      { id: 'FW-001', action: 'DENY',  src: 'CN-China-Blocklist',   dst: 'ANY',           port: 'ANY',  hits: 45231 },
+      { id: 'FW-002', action: 'DENY',  src: 'RU-Russia-Blocklist',  dst: 'ANY',           port: 'ANY',  hits: 28104 },
+      { id: 'FW-003', action: 'DROP',  src: 'ANY',                  dst: 'IKN-Central-AI',port: '22',   hits: 15234 },
+      { id: 'FW-004', action: 'DROP',  src: 'ANY',                  dst: 'Edge-AI-Natuna',port: '22',   hits: 8921 },
+      { id: 'FW-005', action: 'ALLOW', src: '192.168.77.0/24',      dst: 'ANY',           port: 'ANY',  hits: 847293 },
+      { id: 'FW-006', action: 'DENY',  src: '10.0.0.0/8',           dst: 'PUBLIC',        port: 'ANY',  hits: 12 },
+      { id: 'FW-007', action: 'DROP',  src: '203.0.113.0/24',       dst: 'Mabes-AD-Jakarta', port: 'ANY', hits: 8934 }
+    ];
+
+    container.innerHTML = rules.map(r => `
+      <div class="fw-rule">
+        <div style="display:flex; gap:14px; align-items:center;">
+          <span style="color:#64748b;">${r.id}</span>
+          <span class="fw-action ${r.action.toLowerCase()}">${r.action}</span>
+        </div>
+        <div style="display:flex; gap:16px; align-items:center; color:#94a3b8;">
+          <span>${r.src}</span>
+          <span style="color:#64748b;">→</span>
+          <span>${r.dst}</span>
+          <span style="color:#64748b;">:</span>
+          <span style="color:#60a5fa;">${r.port}</span>
+        </div>
+        <div style="color:#64748b; font-size:0.7rem;">
+          ${r.hits.toLocaleString('id-ID')} hits
+        </div>
+      </div>
+    `).join('');
+
+    const counter = document.getElementById('rules-count');
+    if (counter) counter.textContent = `${rules.length} rules active`;
+  }
+
+  // ============================================
+  // BLOCKED IPS
+  // ============================================
+  function renderBlockedIPs() {
+    const container = document.getElementById('blocked-ips');
+    if (!container) return;
+
+    const state = SiberCore.getDefenseState();
+    const blocked = state.blockedIPs;
+
+    if (blocked.length === 0) {
+      container.innerHTML = '<div style="font-size:0.75rem; color:#64748b; padding:20px; text-align:center;">Belum ada IP yang diblokir</div>';
+      return;
+    }
+
+    container.innerHTML = blocked.map(ip => `
+      <div class="fw-rule" style="border-left-color:#ef4444;">
+        <div style="display:flex; gap:14px; align-items:center;">
+          <span class="fw-action deny">BLOCKED</span>
+          <span style="color:#e2e8f0; font-weight:700;">${ip}</span>
+        </div>
+        <div style="color:#64748b; font-size:0.7rem;">
+          Auto-blocked
+        </div>
+      </div>
+    `).join('');
+
+    const counter = document.getElementById('blocked-count');
+    if (counter) counter.textContent = `${blocked.length} IPs blocked`;
+  }
+</script>
+
+</body>
+</html>

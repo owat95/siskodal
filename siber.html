@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Siber — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      padding: 16px 0; font-size: 0.8rem; color: #94a3b8;
+      font-family: 'Courier New', monospace;
+    }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .siber-header { text-align: center; padding: 20px 0 40px; }
+    .siber-header .icon-big {
+      font-size: 4rem; margin-bottom: 16px;
+      filter: drop-shadow(0 0 30px rgba(239, 68, 68, 0.5));
+    }
+    .siber-header h1 {
+      font-size: 2.5rem; font-weight: 900; letter-spacing: 3px;
+      color: #fff;
+    }
+    .siber-header .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .siber-header .desc {
+      color: #94a3b8; margin-top: 16px; max-width: 780px;
+      margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem;
+    }
+
+    .alert-banner {
+      max-width: 900px; margin: 20px auto 30px;
+      padding: 16px 22px;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(239, 68, 68, 0.05));
+      border: 2px solid rgba(234, 179, 8, 0.5);
+      border-radius: 12px;
+      display: flex; gap: 16px; align-items: start;
+      animation: bannerPulse 3s ease-in-out infinite;
+    }
+    @keyframes bannerPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.15); }
+      50%      { box-shadow: 0 0 30px rgba(234, 179, 8, 0.35); }
+    }
+    .alert-banner .icon {
+      font-size: 1.8rem; flex-shrink: 0; color: #facc15;
+    }
+    .alert-banner .content h3 {
+      font-size: 0.85rem; letter-spacing: 1px; color: #facc15;
+      margin-bottom: 6px; font-weight: 800; text-transform: uppercase;
+    }
+    .alert-banner .content p {
+      font-size: 0.8rem; color: #cbd5e1; line-height: 1.5;
+    }
+
+    /* MITRE Grid */
+    .mitre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+    .mitre-card {
+      padding: 12px 14px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 10px;
+      border-left: 3px solid;
+      transition: all 0.2s;
+    }
+    .mitre-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+    .mitre-card .mc-icon {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+    .mitre-card .mc-code {
+      font-size: 0.6rem;
+      font-family: 'Courier New', monospace;
+      color: #64748b;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+    .mitre-card .mc-name {
+      font-size: 0.8rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Capability grid */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    .cap-card {
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .cap-card:hover {
+      border-color: rgba(239, 68, 68, 0.4);
+      transform: translateY(-2px);
+    }
+    .cap-card .cc-icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .cap-card .cc-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .cap-card .cc-desc {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .mp-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+    .mp-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Siber</span>
+  </div>
+
+  <header class="siber-header">
+    <div class="icon-big" style="color:#ef4444;">🛡️</div>
+    <h1>SIBER</h1>
+    <p class="sub">CYBER SECURITY OPERATIONS CENTER</p>
+    <p class="desc">
+      Pusat operasi keamanan siber TNI — monitoring 24/7, threat hunting,
+      incident response, dan defense-in-depth. Terintegrasi dengan
+      <strong>MITRE ATT&CK</strong> framework, NATO-aligned standards,
+      dan zero-trust architecture.
+    </p>
+  </header>
+
+  <div class="alert-banner">
+    <div class="icon">⚠️</div>
+    <div class="content">
+      <h3>Threat Level: ELEVATED</h3>
+      <p>
+        Terdeteksi aktivitas APT (Advanced Persistent Threat) dari 12 negara.
+        Sistem defense otomatis aktif — firewall, IDS/IPS, dan auto-block.
+        342 attacker unik dalam 24 jam terakhir.
+      </p>
+    </div>
+  </div>
+
+  <!-- MITRE ATT&CK Grid -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>MITRE ATT&CK FRAMEWORK</h2>
+    <p>14 tactics — standard industri untuk cyber threat intelligence</p>
+  </div>
+
+  <div class="mitre-grid" id="mitre-grid"></div>
+
+  <!-- Capability grid -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>KAPABILITAS SOC</h2>
+    <p>Defense-in-depth untuk kedaulatan siber NKRI</p>
+  </div>
+
+  <div class="cap-grid">
+    <div class="cap-card">
+      <span class="cc-icon">🔥</span>
+      <div class="cc-title">Next-Gen Firewall</div>
+      <div class="cc-desc">
+        NGFW HA dengan DPI, application control, dan IPS terintegrasi.
+        Rules berbasis MITRE ATT&CK.
+      </div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">👁️</span>
+      <div class="cc-title">Network Detection & Response</div>
+      <div class="cc-desc">
+        NDR dengan behavioral analysis. Deteksi lateral movement,
+        C2 beacon, dan data exfiltration.
+      </div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">💻</span>
+      <div class="cc-title">Endpoint Detection & Response</div>
+      <div class="cc-desc">
+        EDR di 100% endpoint. Behavioral analysis + automated response.
+        Threat hunting aktif 24/7.
+      </div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">📊</span>
+      <div class="cc-title">SIEM Correlation</div>
+      <div class="cc-desc">
+        Wazuh + custom C6ISR rules. Log retention 90 hari.
+        Real-time alerting dengan severity scoring.
+      </div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">🎯</span>
+      <div class="cc-title">Threat Hunting</div>
+      <div class="cc-desc">
+        Proactive hunting berbasis hypothesis. IOC matching,
+        TTP profiling, dan predictive analytics.
+      </div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">⚡</span>
+      <div class="cc-title">Auto Response</div>
+      <div class="cc-desc">
+        Auto-block IP, isolate host, terminate session.
+        Playbook-driven response untuk umum threats.
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center; margin-top:40px;">
+    <a href="/joc/siber-dashboard.html" class="mp-cta">
+      <i class="fas fa-shield-halved"></i> Buka SOC Dashboard →
+    </a>
+    <div style="margin-top:20px;">
+      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal
+      </a>
+    </div>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · Siber</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script src="/joc/js/siber-core.js" data-cfasync="false"></script>
+<script>
+  (function init() {
+    const grid = document.getElementById('mitre-grid');
+    SiberCore.getAllTactics().forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'mitre-card';
+      card.style.borderLeftColor = t.color;
+      card.innerHTML = `
+        <div class="mc-icon">${t.icon}</div>
+        <div class="mc-code">${t.code}</div>
+        <div class="mc-name">${t.name}</div>
+      `;
+      grid.appendChild(card);
+    });
+  })();
+</script>
+
+</body>
+</html>

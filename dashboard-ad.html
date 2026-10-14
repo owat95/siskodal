@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TNI AD — SISKODAL Dashboard</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard" data-matra="ad">
+
+  <aside class="dash-sidebar">
+    <div class="brand">
+      <span class="brand-mark" style="color:#4ade80;">★</span>
+      <div class="brand-text">
+        <strong>TNI AD</strong>
+        <span>Siskodal</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Dashboard</div>
+    <a href="#" class="nav-item active" data-tab="overview">
+      <i class="fas fa-chart-line"></i> Overview
+    </a>
+    <a href="#" class="nav-item" data-tab="personnel">
+      <i class="fas fa-users"></i> Personel
+    </a>
+
+    <div class="nav-section">Database</div>
+    <a href="#" class="nav-item" data-tab="province">
+      <i class="fas fa-map-marked-alt"></i> Provinsi
+    </a>
+    <a href="#" class="nav-item" data-tab="education">
+      <i class="fas fa-graduation-cap"></i> Pendidikan
+    </a>
+    <a href="#" class="nav-item" data-tab="international">
+      <i class="fas fa-globe"></i> Penugasan Intl
+    </a>
+
+    <div class="nav-section">AI Analytics</div>
+    <a href="#" class="nav-item" data-tab="succession">
+      <i class="fas fa-sitemap"></i> Succession Plan
+      <span style="margin-left:auto;font-size:0.65rem;background:#ef4444;color:#fff;padding:2px 6px;border-radius:4px;">5</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="kpi">
+      <i class="fas fa-chart-bar"></i> KPI Analytics
+    </a>
+
+    <div class="nav-section">Operasional</div>
+    <a href="#" class="nav-item" data-tab="assets">
+      <i class="fas fa-shield-halved"></i> Aset Darat
+    </a>
+    <a href="#" class="nav-item" data-tab="reports">
+      <i class="fas fa-file-alt"></i> Laporan
+    </a>
+
+    <div class="nav-section">Navigasi</div>
+    <a href="/joc/" class="nav-item">
+      <i class="fas fa-home"></i> Portal SISKODAL
+    </a>
+    <a href="/joc/map.html" class="nav-item">
+      <i class="fas fa-globe"></i> Peta NKRI
+    </a>
+  </aside>
+
+  <header class="dash-header">
+    <div class="title-block">
+      <h1>TNI ANGKATAN DARAT</h1>
+      <p id="page-subtitle">Personnel &amp; KPI Operations Center</p>
+    </div>
+    <div class="title-block">
+      <h1>...</h1>
+    </div>
+    <button class="btn-export" onclick="ExportPDF.exportPersonnel('ad')" title="Export laporan personel ke PDF">
+      <i class="fas fa-file-pdf"></i> Export PDF
+    </button>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="label">Live Time</span>
+        <span class="value" id="live-clock">--:--:--</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Personel</span>
+        <span class="value" id="header-total">50</span>
+      </div>
+      <div class="stat-item">
+        <span class="label">Status</span>
+        <span class="value" style="color:#4ade80;">● OPERATIONAL</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="dash-main">
+
+    <section class="tab-content active" id="tab-overview">
+      <div class="overview-grid">
+        <div class="overview-card" style="--accent:#059669;">
+          <div class="label">Total Personel</div>
+          <div class="value" id="stat-total">--</div>
+          <div class="meta">Aktif &amp; on-mission</div>
+        </div>
+        <div class="overview-card" style="--accent:#22c55e;">
+          <div class="label">Rata-rata KPI</div>
+          <div class="value" id="stat-kpi">--</div>
+          <div class="meta">Composite score (0-100)</div>
+        </div>
+        <div class="overview-card" style="--accent:#eab308;">
+          <div class="label">Ready Promosi</div>
+          <div class="value" id="stat-ready">--</div>
+          <div class="meta">Memenuhi syarat kenaikan pangkat</div>
+        </div>
+        <div class="overview-card" style="--accent:#ef4444;">
+          <div class="label">Open Positions</div>
+          <div class="value" id="stat-open">--</div>
+          <div class="meta">Posisi butuh pengganti</div>
+        </div>
+        <div class="overview-card" style="--accent:#a855f7;">
+          <div class="label">Pendidikan Tinggi</div>
+          <div class="value" id="stat-edu">--</div>
+          <div class="meta">Seskoad / Sesko TNI / Lemhannas</div>
+        </div>
+        <div class="overview-card" style="--accent:#06b6d4;">
+          <div class="label">Misi Internasional</div>
+          <div class="value" id="stat-intl">--</div>
+          <div class="meta">Personel dengan pengalaman PBB</div>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Posisi Kritis — AI Succession Recommendation</h3>
+          <a href="#" class="nav-item" data-tab="succession" style="padding:4px 12px;font-size:0.75rem;">
+            Lihat Semua →
+          </a>
+        </div>
+        <div class="panel-body">
+          <div class="open-positions-grid" id="overview-succession"></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-personnel">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Database Personel — TNI AD</h3>
+          <span style="font-size:0.8rem;color:#64748b;font-family:'Courier New',monospace;"
+                id="personnel-count">0 / 0</span>
+        </div>
+        <div class="panel-body">
+          <div class="filter-bar">
+            <input type="text" id="filter-search" placeholder="🔍 Cari nama / NRP...">
+            <select id="filter-rank"><option value="">Semua Pangkat</option></select>
+            <select id="filter-unit"><option value="">Semua Unit</option></select>
+            <select id="filter-specialty"><option value="">Semua Specialty</option></select>
+            <select id="filter-province"><option value="">Semua Provinsi</option></select>
+            <button id="filter-reset">Reset</button>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>NRP</th>
+                  <th>Nama</th>
+                  <th>Pangkat</th>
+                  <th>Unit</th>
+                  <th>Specialty</th>
+                  <th>Provinsi</th>
+                  <th>Pendidikan</th>
+                  <th>KPI</th>
+                  <th>AI Recommendation</th>
+                </tr>
+              </thead>
+              <tbody id="personnel-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-province">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Distribusi Personel per Provinsi</h3></div>
+        <div class="panel-body"><div class="province-grid" id="province-grid"></div></div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-education">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Riwayat Pendidikan Militer</h3></div>
+        <div class="panel-body"><div class="edu-stats-grid" id="edu-stats-grid"></div></div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-international">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Penugasan Internasional (PBB &amp; Bilateral)</h3></div>
+        <div class="panel-body"><div id="intl-missions-list"></div></div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-succession">
+      <section class="panel">
+        <div class="panel-header">
+          <h3>◤ Succession Planning — AI Recommendation</h3>
+          <span style="font-size:0.75rem;color:#64748b;">
+            Rank 30% · KPI 25% · Specialty 15% · Province 10% · Edu 10% · Intl 10%
+          </span>
+        </div>
+        <div class="panel-body"><div class="open-positions-grid" id="succession-grid"></div></div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-kpi">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ KPI Analytics</h3></div>
+        <div class="panel-body"><div id="kpi-analytics"></div></div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-assets">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Aset Darat — Batalyon &amp; Kodam</h3></div>
+        <div class="panel-body">
+          <p style="color:#94a3b8;">Modul aset akan diintegrasikan dengan peta NKRI. Coming soon.</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="tab-content" id="tab-reports">
+      <section class="panel">
+        <div class="panel-header"><h3>◤ Laporan</h3></div>
+        <div class="panel-body"><p style="color:#94a3b8;">Export PDF/Excel coming soon.</p></div>
+      </section>
+    </section>
+
+  </main>
+
+  <aside id="detail-panel" class="detail-panel"></aside>
+
+</div>
+<!-- jsPDF Libraries -->
+<script data-cfasync="false" src="/joc/js/jspdf.umd.min.js"></script>
+<script data-cfasync="false" src="/joc/js/jspdf-autotable.min.js"></script>
+
+<script src="/joc/js/kpi-engine.js" data-cfasync="false"></script>
+<script src="/joc/js/personnel-data.js" data-cfasync="false"></script>
+<script src="/joc/js/succession-ai.js" data-cfasync="false"></script>
+<script src="/joc/js/export-pdf.js" data-cfasync="false"></script>
+<script src="/joc/js/dashboard-ad.js" data-cfasync="false"></script>
+
+</body>
+</html>

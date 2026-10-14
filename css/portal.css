@@ -1,0 +1,357 @@
+/* ============================================================
+ * PORTAL.CSS — SISKODAL Menu Hub
+ * ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: #0a0f1e;
+  color: #e5e7eb;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+.portal-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ============================================ */
+/* HEADER */
+/* ============================================ */
+.portal-header {
+  position: relative;
+  padding: 60px 0 80px;
+  text-align: center;
+  overflow: hidden;
+  border-radius: 0 0 32px 32px;
+  margin: 0 -24px;
+  background: linear-gradient(180deg,
+    rgba(37, 99, 235, 0.15) 0%,
+    rgba(10, 15, 30, 0) 100%);
+}
+
+.header-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.portal-header h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
+}
+
+.portal-header .subtitle {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+.portal-header .title-tni {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-top: 12px;
+  font-weight: 300;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 30px;
+  color: #4ade80;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+/* ============================================ */
+/* MENU */
+/* ============================================ */
+.menu-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.menu-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.menu-header p {
+  color: #94a3b8;
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.menu-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s;
+  overflow: hidden;
+}
+
+.menu-card:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.menu-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: #3b82f6;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.menu-card:hover::before { opacity: 1; }
+
+.menu-card[data-color="green"]::before  { background: #22c55e; }
+.menu-card[data-color="purple"]::before { background: #a855f7; }
+.menu-card[data-color="red"]::before    { background: #ef4444; }
+.menu-card[data-color="yellow"]::before { background: #eab308; }
+.menu-card[data-color="blue"]::before   { background: #3b82f6; }
+.menu-card[data-color="teal"]::before   { background: #14b8a6; }
+.menu-card[data-color="cyan"]::before   { background: #06b6d4; }
+.menu-card[data-color="slate"]::before  { background: #64748b; }
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.menu-card[data-color="green"] .card-icon  { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.menu-card[data-color="purple"] .card-icon { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.menu-card[data-color="red"] .card-icon    { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.menu-card[data-color="yellow"] .card-icon { background: rgba(234, 179, 8, 0.15); color: #facc15; }
+.menu-card[data-color="blue"] .card-icon   { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.menu-card[data-color="teal"] .card-icon   { background: rgba(20, 184, 166, 0.15); color: #2dd4bf; }
+.menu-card[data-color="cyan"] .card-icon   { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+.menu-card[data-color="slate"] .card-icon  { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+
+.card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-content h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.card-content p {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.card-arrow {
+  color: #64748b;
+  font-size: 1rem;
+  transition: transform 0.25s, color 0.25s;
+}
+
+.menu-card:hover .card-arrow {
+  transform: translateX(4px);
+  color: #60a5fa;
+}
+
+.status-dot {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* ============================================ */
+/* MATRA CARDS */
+/* ============================================ */
+.matra-grid {
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+}
+
+.matra-card {
+  padding: 24px 24px;
+  border-width: 2px;
+}
+
+.matra-card[data-matra="ad"] { border-color: rgba(5, 150, 105, 0.4); }
+.matra-card[data-matra="al"] { border-color: rgba(30, 64, 175, 0.4); }
+.matra-card[data-matra="au"] { border-color: rgba(37, 99, 235, 0.4); }
+
+.matra-card[data-matra="ad"]:hover { border-color: #059669; }
+.matra-card[data-matra="al"]:hover { border-color: #1e40af; }
+.matra-card[data-matra="au"]:hover { border-color: #2563eb; }
+
+.matra-badge {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.matra-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================ */
+/* FOOTER */
+/* ============================================ */
+.portal-footer {
+  margin-top: 80px;
+  padding: 32px 0;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #94a3b8;
+}
+
+.brand-mark {
+  font-size: 24px;
+  color: #4ade80;
+}
+
+.footer-brand strong {
+  display: block;
+  color: #fff;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.footer-brand span {
+  font-size: 0.75rem;
+}
+
+.footer-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================ */
+/* RESPONSIVE */
+/* ============================================ */
+@media (max-width: 600px) {
+  .portal-header h1 { font-size: 2.4rem; letter-spacing: 2px; }
+  .portal-header .subtitle { font-size: 0.9rem; }
+  .menu-header h2 { font-size: 1.3rem; }
+  .menu-grid { grid-template-columns: 1fr; }
+  .matra-grid { grid-template-columns: 1fr; }
+}
+/* ============================================ */
+/* LIVE PILL — status badge                      */
+/* ============================================ */
+.live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+.live-pill.live {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  animation: live-pulse 2s ease-in-out infinite;
+}
+
+.live-pill.soon {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.live-pill.beta {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logistik — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    /* Khusus sub-portal */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 0;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
+    }
+    .breadcrumb a {
+      color: #60a5fa;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover {
+      color: #00e5ff;
+    }
+    .breadcrumb .sep {
+      color: #475569;
+    }
+    .breadcrumb .current {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .sub-portal-header {
+      text-align: center;
+      padding: 20px 0 40px;
+    }
+    .sub-portal-header .icon-big {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 30px rgba(234, 179, 8, 0.5));
+    }
+    .sub-portal-header h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
+    }
+    .sub-portal-header .sub {
+      color: #cbd5e1;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+    .sub-portal-header .desc {
+      color: #94a3b8;
+      margin-top: 16px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+
+    /* Menu grid — reuse dari portal */
+    .menu-grid.matra-grid {
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    }
+
+    /* Back button */
+    .back-portal {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 10px;
+      color: #60a5fa;
+      text-decoration: none;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin: 24px auto 0;
+      transition: all 0.2s;
+    }
+    .back-portal:hover {
+      background: rgba(59, 130, 246, 0.2);
+      transform: translateX(-3px);
+    }
+    .back-wrapper {
+      text-align: center;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="portal-wrapper">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+      <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+      <span class="sep">/</span>
+      <span class="current">Logistik</span>
+    </div>
+
+    <!-- HEADER -->
+    <header class="sub-portal-header">
+      <div class="icon-big" style="color:#eab308;">📦</div>
+      <h1>LOGISTIK</h1>
+      <p class="sub">MANAJEMEN LOGISTIK MILITER</p>
+      <p class="desc">
+        Sistem terintegrasi manajemen rantai pasok TNI — predictive logistics,
+        autonomous resupply, optimasi supply chain, digital twin maintenance,
+        dan keamanan siber rantai pasok. Didukung AI untuk prediksi dan
+        pengambilan keputusan operasional.
+      </p>
+    </header>
+
+    <!-- MENU MATRA -->
+    <div class="menu-header" style="margin-bottom:24px;">
+      <h2>PILIH MATRA</h2>
+      <p>Akses dashboard logistik per angkatan — dengan RBAC Zero Trust</p>
+    </div>
+
+    <div class="menu-grid matra-grid">
+
+      <!-- TNI AD -->
+      <a href="/joc/dashboard-logistik-ad.html" class="menu-card matra-card" data-matra="ad">
+        <div class="matra-badge" style="background:#059669;position:relative;">
+          AD
+          <span style="position:absolute;bottom:-2px;right:-2px;font-size:0.55rem;background:#a855f7;padding:1px 4px;border-radius:3px;color:#fff;">AI</span>
+        </div>
+        <div class="card-content">
+          <h3>LOGISTIK TNI ANGKATAN DARAT <span class="live-pill live">● LIVE</span></h3>
+          <p>Kodam · Batalyon · Artileri · Kavaleri</p>
+          <div class="matra-stats">
+            <span id="stat-log-ad-alu">-- Alutsista</span>
+            <span id="stat-log-ad-cyber">-- Threats</span>
+          </div>
+        </div>
+        <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+      </a>
+
+      <!-- TNI AL -->
+      <a href="/joc/dashboard-logistik-al.html" class="menu-card matra-card" data-matra="al">
+        <div class="matra-badge" style="background:#1e40af;position:relative;">
+          AL
+          <span style="position:absolute;bottom:-2px;right:-2px;font-size:0.55rem;background:#a855f7;padding:1px 4px;border-radius:3px;color:#fff;">AI</span>
+        </div>
+        <div class="card-content">
+          <h3>LOGISTIK TNI ANGKATAN LAUT <span class="live-pill live">● LIVE</span></h3>
+          <p>Lantamal · KRI · Marinir · Koarmada</p>
+          <div class="matra-stats">
+            <span id="stat-log-al-alu">-- Alutsista</span>
+            <span id="stat-log-al-cyber">-- Threats</span>
+          </div>
+        </div>
+        <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+      </a>
+
+      <!-- TNI AU -->
+      <a href="/joc/dashboard-logistik-au.html" class="menu-card matra-card" data-matra="au">
+        <div class="matra-badge" style="background:#2563eb;position:relative;">
+          AU
+          <span style="position:absolute;bottom:-2px;right:-2px;font-size:0.55rem;background:#a855f7;padding:1px 4px;border-radius:3px;color:#fff;">AI</span>
+        </div>
+        <div class="card-content">
+          <h3>LOGISTIK TNI ANGKATAN UDARA <span class="live-pill live">● LIVE</span></h3>
+          <p>Lanud · Skadron · Radar · PSU</p>
+          <div class="matra-stats">
+            <span id="stat-log-au-alu">-- Alutsista</span>
+            <span id="stat-log-au-cyber">-- Threats</span>
+          </div>
+        </div>
+        <div class="card-arrow"><i class="fas fa-chevron-right"></i></div>
+      </a>
+
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div class="back-wrapper">
+      <a href="/joc/" class="back-portal">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal SISKODAL
+      </a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="portal-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="brand-mark">◈</span>
+          <div>
+            <strong>R2 JOINT OPERATIONS CENTER</strong>
+            <span>Powered by RajaCyber · Modern System Integrator</span>
+          </div>
+        </div>
+        <div class="footer-meta">
+          <span>v1.0 — SISKODAL · Logistik</span>
+          <span>© 2026</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Live stats — reuse dari portal -->
+  <script src="/joc/js/logistics-data.js" data-cfasync="false"></script>
+  <script src="/joc/js/logistics-ai.js" data-cfasync="false"></script>
+  <script>
+    (function() {
+      function tryUpdate(attempts = 20) {
+        if (window.LogisticsAI && window.LogisticsData) {
+          updateStats();
+        } else if (attempts > 0) {
+          setTimeout(() => tryUpdate(attempts - 1), 100);
+        }
+      }
+
+      function updateStats() {
+        ['ad', 'al', 'au'].forEach(matra => {
+          const analysis = LogisticsAI.analyzeAll(matra);
+          const s = analysis.summary;
+          const aEl = document.getElementById(`stat-log-${matra}-alu`);
+          const cEl = document.getElementById(`stat-log-${matra}-cyber`);
+          if (aEl) aEl.textContent = `${s.totalAlutsista} Alutsista`;
+          if (cEl) cEl.textContent = `${s.cyberThreats} Threats`;
+        });
+        console.log('[LOGISTIK] Live stats loaded');
+      }
+
+      window.addEventListener('DOMContentLoaded', () => tryUpdate());
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analitik & AI — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb { display: flex; align-items: center; gap: 8px; padding: 16px 0; font-size: 0.8rem; color: #94a3b8; font-family: 'Courier New', monospace; }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .ana-header-page { text-align: center; padding: 20px 0 40px; }
+    .ana-header-page .icon-big { font-size: 4rem; margin-bottom: 16px; filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.5)); }
+    .ana-header-page h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; color: #fff; }
+    .ana-header-page .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .ana-header-page .desc { color: #94a3b8; margin-top: 16px; max-width: 780px; margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem; }
+
+    .live-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 40px; }
+    .live-stat { padding: 16px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 10px; border-left: 3px solid; }
+    .live-stat .value { font-size: 1.6rem; font-weight: 900; color: #fff; font-family: 'Courier New', monospace; line-height: 1; }
+    .live-stat .label { font-size: 0.65rem; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+
+    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 40px; }
+    .cap-card { padding: 18px; background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 12px; border-left: 3px solid #a855f7; transition: all 0.2s; }
+    .cap-card:hover { transform: translateY(-3px); border-left-color: #c084fc; }
+    .cap-card .cc-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+    .cap-card .cc-title { font-size: 0.85rem; font-weight: 800; color: #fff; letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase; }
+    .cap-card .cc-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.5; }
+
+    .cta-primary { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: linear-gradient(135deg, #00e5ff, #00ff9d); color: #04121a; font-weight: 800; font-size: 1rem; border-radius: 12px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.5px; }
+    .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 229, 255, 0.4); }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Analitik &amp; AI</span>
+  </div>
+
+  <header class="ana-header-page">
+    <div class="icon-big" style="color:#a855f7;">📊</div>
+    <h1>ANALITIK &amp; AI</h1>
+    <p class="sub">STRATEGIC ANALYTICS CENTER</p>
+    <p class="desc">
+      Pusat analitik terpadu dengan AI-powered insights. Time-series visualization
+      untuk KPI, personnel, logistik, dan threat intel. Dilengkapi confidence score
+      untuk setiap output AI, serta classification marking sesuai standar NATO.
+    </p>
+  </header>
+
+  <!-- LIVE STATS -->
+  <div class="live-stats" id="live-stats"></div>
+
+  <!-- CAPABILITIES -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>KAPABILITAS ANALITIK</h2>
+    <p>Data-driven decision support untuk operasi TNI</p>
+  </div>
+
+  <div class="cap-grid">
+    <div class="cap-card">
+      <span class="cc-icon">📈</span>
+      <div class="cc-title">Time-Series Analytics</div>
+      <div class="cc-desc">Trend analysis 7/30/90 hari untuk KPI, personnel, logistik, dan threat level.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">🤖</span>
+      <div class="cc-title">AI Confidence Score</div>
+      <div class="cc-desc">Setiap rekomendasi AI dilengkapi tingkat akurasi (HIGH/MEDIUM/LOW) dan disclaimer.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">🔒</span>
+      <div class="cc-title">Classification Marking</div>
+      <div class="cc-desc">Setiap visualisasi wajib memiliki penanda klasifikasi NATO: UNCLASS → TOP SECRET.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">📡</span>
+      <div class="cc-title">Data Freshness Monitor</div>
+      <div class="cc-desc">Real-time health check 13 sumber data — FRESH/STALE/OFFLINE dengan auto-fallback.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">🔍</span>
+      <div class="cc-title">Predictive Modeling</div>
+      <div class="cc-desc">Forecast 7 hari ke depan dengan Linear Regression + confidence interval.</div>
+    </div>
+    <div class="cap-card">
+      <span class="cc-icon">🎯</span>
+      <div class="cc-title">Admiralty Code</div>
+      <div class="cc-desc">Source credibility rating A-F + information accuracy 1-6 untuk setiap OSINT/INTEL feed.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center; margin-top:40px;">
+    <a href="/joc/analitik-dashboard.html" class="cta-primary">
+      <i class="fas fa-chart-line"></i> Buka Analytics Dashboard →
+    </a>
+    <div style="margin-top:20px;">
+      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal
+      </a>
+    </div>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · Analitik &amp; AI</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function init() {
+    // Live stats
+    const statsEl = document.getElementById('live-stats');
+    const stats = [
+      { color: '#22c55e', value: '87.3%', label: 'Readiness Avg' },
+      { color: '#3b82f6', value: '259K',  label: 'Personnel Tracked' },
+      { color: '#a855f7', value: '6',     label: 'AI Models Active' },
+      { color: '#eab308', value: '13',    label: 'Data Sources' },
+      { color: '#ef4444', value: 'ELEVATED', label: 'Threat Level' }
+    ];
+
+    statsEl.innerHTML = stats.map(s => `
+      <div class="live-stat" style="border-left-color:${s.color};">
+        <div class="value" style="color:${s.color};">${s.value}</div>
+        <div class="label">${s.label}</div>
+      </div>
+    `).join('');
+
+    console.log('[ANALITIK] Sub-portal loaded');
+  })();
+</script>
+
+</body>
+</html>

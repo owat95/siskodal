@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topologi Data — IKN Central Fusion — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <style>
+    :root {
+      --acq:     #22c55e;
+      --edge:    #14b8a6;
+      --core:    #a855f7;
+      --uplink:  #f59e0b;
+      --cop:     #ef4444;
+      --navy:    #3b82f6;
+      --air:     #0ea5e9;
+      --drone:   #06b6d4;
+      --cctv:    #ef4444;
+      --logistik:#eab308;
+      --kodam:   #22c55e;
+      --bg:      #0a0f1e;
+      --border:  rgba(148,163,184,0.15);
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:0; background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; min-height:100vh; overflow-x:hidden; }
+    .class-banner { background: linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d); color:#fecaca; text-align:center; padding:6px 16px; font-size:0.72rem; font-weight:700; letter-spacing:2px; border-bottom:1px solid #dc2626; }
+    .class-banner.bottom { border-top:1px solid #dc2626; border-bottom:none; font-weight:500; letter-spacing:0.5px; font-size:0.66rem; padding:8px 16px; }
+    .topo-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; background:linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,15,30,0.9)); border-bottom:1px solid var(--border); }
+    .topo-header .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { font-size:1.6rem; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); border-radius:10px; }
+    .topo-header h1 { margin:0; font-size:1rem; letter-spacing:2px; color:#e2e8f0; }
+    .topo-header .sub { margin:2px 0 0; font-size:0.72rem; color:#64748b; }
+    .header-stats { display:flex; gap:24px; align-items:center; }
+    .stat-item { display:flex; flex-direction:column; align-items:flex-end; font-size:0.7rem; }
+    .stat-item .label { color:#64748b; font-size:0.62rem; letter-spacing:1px; }
+    .stat-item .value { color:#4ade80; font-family:'Courier New',monospace; font-weight:600; font-size:0.85rem; }
+    .stat-item .value.warn { color:#facc15; }
+    .stat-item .value.core { color:#c084fc; }
+    .back-btn { display:flex; align-items:center; gap:6px; background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); color:#c084fc; padding:8px 14px; border-radius:6px; font-size:0.72rem; font-weight:600; text-decoration:none; cursor:pointer; transition:all 0.15s; }
+    .back-btn:hover { background:rgba(168,85,247,0.2); }
+    .topo-main { display:grid; grid-template-columns:1fr 340px; gap:16px; padding:16px 24px 20px; max-width:1800px; margin:0 auto; }
+    .topo-canvas { background: radial-gradient(circle at 50% 40%, rgba(168,85,247,0.05), transparent 60%), linear-gradient(180deg, #0f172a, #0a0f1e); border:1px solid var(--border); border-radius:12px; padding:12px; position:relative; overflow:hidden; min-height:820px; }
+    .topo-canvas::before { content:''; position:absolute; inset:0; background-image: linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px); background-size:40px 40px; pointer-events:none; }
+    svg.topo-svg { width:100%; height:820px; display:block; position:relative; z-index:1; }
+    .topo-node { cursor:pointer; transition:filter 0.2s; }
+    .topo-node:hover { filter:brightness(1.2); }
+    .topo-node.dimmed { opacity:0.35; }
+    .topo-node.selected .node-box { stroke-width:3; filter:drop-shadow(0 0 12px currentColor); }
+    .topo-link { fill:none; stroke-width:2; stroke-linecap:round; opacity:0.5; }
+    .topo-link.active { opacity:0.9; stroke-width:2.5; }
+    .topo-link.stream { stroke-dasharray:5 3; opacity:0.8; stroke-width:1.8; }
+    .topo-link.bandwidth { stroke-dasharray:2 4; opacity:0.9; stroke-width:2.5; }
+    .packet { filter:drop-shadow(0 0 6px currentColor); }
+    .layer-zone { fill:rgba(15,23,42,0.5); stroke:rgba(148,163,184,0.15); stroke-dasharray:2 4; stroke-width:1; }
+    .layer-label { font-size:9px; font-family:'Courier New', monospace; letter-spacing:2px; font-weight:700; }
+    .topo-legend { position:absolute; bottom:16px; left:16px; background:rgba(15,23,42,0.85); border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:0.7rem; display:flex; gap:16px; flex-wrap:wrap; z-index:2; }
+    .legend-item { display:flex; align-items:center; gap:6px; }
+    .legend-dot { width:10px; height:10px; border-radius:50%; }
+    .legend-bw { width:18px; height:0; border-top:2px dotted #f59e0b; }
+    .topo-sidebar { display:flex; flex-direction:column; gap:12px; }
+    .info-panel { background:linear-gradient(180deg, rgba(30,41,59,0.6), rgba(15,23,42,0.85)); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+    .info-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#c084fc; text-transform:uppercase; }
+    .info-row { display:flex; gap:10px; margin-bottom:7px; font-size:0.72rem; line-height:1.4; }
+    .info-row .key { color:#64748b; min-width:90px; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px; padding-top:1px; }
+    .info-row .val { flex:1; color:#cbd5e1; font-family:'Courier New',monospace; font-size:0.7rem; }
+    .info-row .val.highlight { color:#4ade80; }
+    .info-row .val.warn { color:#facc15; }
+    .info-row .val.core { color:#c084fc; }
+    .log-panel { flex:1; background:rgba(10,15,30,0.9); border:1px solid var(--border); border-radius:10px; padding:12px 14px; overflow:hidden; display:flex; flex-direction:column; max-height:340px; }
+    .log-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#c084fc; text-transform:uppercase; }
+    #log-stream { flex:1; overflow-y:auto; font-family:'Courier New',monospace; font-size:0.68rem; line-height:1.6; }
+    #log-stream .log-line { padding:2px 0; color:#94a3b8; animation:logFadeIn 0.3s; }
+    #log-stream .log-line .ts { color:#475569; }
+    #log-stream .log-line .tag { display:inline-block; min-width:70px; font-weight:700; }
+    #log-stream .log-line .tag.acq { color:#86efac; }
+    #log-stream .log-line .tag.edge { color:#2dd4bf; }
+    #log-stream .log-line .tag.core { color:#c084fc; }
+    #log-stream .log-line .tag.uplink { color:#fbbf24; }
+    #log-stream .log-line .tag.cop { color:#f87171; }
+    #log-stream .log-line .tag.ok { color:#4ade80; }
+    @keyframes logFadeIn { from { opacity:0; transform:translateX(-6px);} to { opacity:1; transform:translateX(0);} }
+    .flow-stats { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:10px; }
+    .flow-stat { background:rgba(168,85,247,0.06); border:1px solid rgba(168,85,247,0.15); border-radius:6px; padding:8px; text-align:center; }
+    .flow-stat .num { font-size:1.05rem; font-weight:700; color:#4ade80; font-family:'Courier New',monospace; }
+    .flow-stat .lbl { font-size:0.6rem; color:#64748b; letter-spacing:0.5px; text-transform:uppercase; }
+    .flow-stat.warn .num { color:#facc15; }
+    .flow-stat.core .num { color:#c084fc; }
+    @media (max-width: 1200px) { .topo-main { grid-template-columns:1fr; } .topo-sidebar { flex-direction:row; flex-wrap:wrap; } .info-panel, .log-panel { flex:1; min-width:280px; } }
+  </style>
+</head>
+<body>
+
+<div class="class-banner">
+  RAHASIA · 🛰️ TOPOLOGI DATA — CORE FUSION · Clearance: SECRET · 2026-10-06
+</div>
+
+<header class="topo-header">
+  <div class="brand">
+    <div class="brand-mark">🛰️</div>
+    <div>
+      <h1>IKN CENTRAL FUSION → NATIONAL COP</h1>
+      <p class="sub">Multi-INT fusion · LLM strategic engine · adaptive bandwidth · strategic command</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="label">Status</span>
+      <span class="value">● ACTIVE</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Aggregate Uplink</span>
+      <span class="value warn">~5 Mbps</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Compute</span>
+      <span class="value core">L40S ×4</span>
+    </div>
+    <a href="/joc/analitik-dashboard.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Kembali ke Analytics
+    </a>
+  </div>
+</header>
+
+<div class="topo-main">
+
+  <div class="topo-canvas">
+    <svg class="topo-svg" viewBox="0 0 1300 820" preserveAspectRatio="xMidYMid meet">
+
+      <defs>
+        <marker id="arrow-acq" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e"/>
+        </marker>
+        <marker id="arrow-edge" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#14b8a6"/>
+        </marker>
+        <marker id="arrow-core" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+        </marker>
+        <marker id="arrow-uplink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/>
+        </marker>
+        <marker id="arrow-cop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+        </marker>
+      </defs>
+
+      <!-- LAYER ZONES -->
+      <rect class="layer-zone" x="30" y="650" width="1240" height="140" rx="10"/>
+      <text class="layer-label" x="50" y="672" fill="#22c55e">LAYER 1 · AKUISISI &amp; SENSOR (MULTI-INT)</text>
+
+      <rect class="layer-zone" x="30" y="555" width="1240" height="80" rx="10"/>
+      <text class="layer-label" x="50" y="577" fill="#14b8a6">LAYER 2 · EDGE / PRE-PROCESSING GATEWAY</text>
+
+      <rect class="layer-zone" x="30" y="240" width="1240" height="300" rx="10"/>
+      <text class="layer-label" x="50" y="262" fill="#a855f7">LAYER 3 · CORE COMPUTE &amp; INFERENCE · L40S CLUSTER</text>
+
+      <rect class="layer-zone" x="30" y="135" width="1240" height="90" rx="10"/>
+      <text class="layer-label" x="50" y="157" fill="#f59e0b">LAYER 4 · UPLINK &amp; COMPRESSION MANAGEMENT</text>
+
+      <rect class="layer-zone" x="30" y="30" width="1240" height="90" rx="10"/>
+      <text class="layer-label" x="50" y="52" fill="#ef4444">LAYER 5 · NATIONAL COP (COMMON OPERATING PICTURE)</text>
+
+      <!-- ============ LINKS ============ -->
+      <!-- L1 → L2: multi-stream -->
+      <path id="path-acq-edge" class="topo-link stream" stroke="#22c55e"
+            d="M 650 650 L 650 635" marker-end="url(#arrow-acq)"/>
+
+      <!-- L2 → L3 -->
+      <path id="path-edge-core" class="topo-link active" stroke="#14b8a6"
+            d="M 650 555 L 650 540" marker-end="url(#arrow-edge)"/>
+
+      <!-- L3 → L4 (multiple streams from inside core) -->
+      <path id="path-core-uplink" class="topo-link bandwidth" stroke="#f59e0b"
+            d="M 650 240 L 650 225" marker-end="url(#arrow-uplink)"/>
+
+      <!-- L4 → L5 -->
+      <path id="path-uplink-cop" class="topo-link active" stroke="#ef4444"
+            d="M 650 135 L 650 120" marker-end="url(#arrow-cop)"/>
+
+      <!-- ============ ANIMATED PACKETS ============ -->
+      <!-- L1 → L2: many packets (multi-source) -->
+      <circle class="packet" r="3" fill="#22c55e">
+        <animateMotion dur="0.4s" repeatCount="indefinite"><mpath href="#path-acq-edge"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="3" fill="#4ade80">
+        <animateMotion dur="0.4s" begin="0.1s" repeatCount="indefinite"><mpath href="#path-acq-edge"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.4s" begin="0.1s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="3" fill="#86efac">
+        <animateMotion dur="0.4s" begin="0.2s" repeatCount="indefinite"><mpath href="#path-acq-edge"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.4s" begin="0.2s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- L2 → L3: throttled -->
+      <circle class="packet" r="4" fill="#14b8a6">
+        <animateMotion dur="0.6s" begin="0.5s" repeatCount="indefinite"><mpath href="#path-edge-core"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.6s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- L3 → L4: compact summary -->
+      <circle class="packet" r="5" fill="#f59e0b">
+        <animateMotion dur="0.5s" begin="1.2s" repeatCount="indefinite"><mpath href="#path-core-uplink"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.5s" begin="1.2s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- L4 → L5 -->
+      <circle class="packet" r="5" fill="#ef4444">
+        <animateMotion dur="0.5s" begin="1.7s" repeatCount="indefinite"><mpath href="#path-uplink-cop"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.5s" begin="1.7s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ============ LAYER 5 — NATIONAL COP ============ -->
+      <g class="topo-node" transform="translate(650, 75)" data-node="national-cop">
+        <rect class="node-box" x="-200" y="-30" width="400" height="60" rx="10"
+              fill="#0f172a" stroke="#ef4444" stroke-width="2.5"/>
+        <circle cx="-178" cy="-5" r="7" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-4" text-anchor="middle" fill="#f87171" font-size="13" font-weight="700" letter-spacing="1.5">
+          🏛️ NATIONAL COP — PUSAT KOMANDO STRATEGIS NASIONAL
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">
+          Dashboard Eksekutif · Decision Support · Strategic Alerts
+        </text>
+      </g>
+
+      <!-- ============ LAYER 4 — UPLINK ============ -->
+      <g class="topo-node" transform="translate(650, 180)" data-node="uplink">
+        <rect class="node-box" x="-180" y="-30" width="360" height="60" rx="10"
+              fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="0" y="-8" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700" letter-spacing="1">
+          📶 UPLINK &amp; COMPRESSION MANAGER
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">
+          Adaptive Bandwidth · Target ~5 Mbps · Secure VPN Tunnel
+        </text>
+      </g>
+
+      <!-- ============ LAYER 3 — CORE COMPUTE (L40S) ============ -->
+      <g class="topo-node" transform="translate(650, 390)" data-node="core">
+        <rect class="node-box" x="-350" y="-140" width="700" height="280" rx="14"
+              fill="#0f172a" stroke="#a855f7" stroke-width="2.5"/>
+        <circle cx="-328" cy="-115" r="7" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-112" text-anchor="middle" fill="#c084fc" font-size="14" font-weight="700" letter-spacing="1.5">
+          🧠 CORE COMPUTE — NVIDIA L40S ×4
+        </text>
+        <text x="0" y="-88" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="monospace">
+          MiniMax M3 / DeepSeek V4 · Multi-INT Fusion Core
+        </text>
+
+        <!-- Sub-module: Multi-INT Fusion -->
+        <rect x="-320" y="-65" width="640" height="80" rx="8"
+              fill="rgba(168,85,247,0.08)" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"/>
+        <text x="0" y="-45" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="700" letter-spacing="1">
+          ◈ MULTI-INT FUSION MODULE
+        </text>
+        <text x="0" y="-25" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Menggabungkan data spasial · visual · teks · temporal
+        </text>
+        <text x="0" y="-5" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">
+          Cross-source correlation · entity resolution · confidence scoring
+        </text>
+
+        <!-- Sub-module: Advanced Analytics -->
+        <rect x="-320" y="30" width="640" height="80" rx="8"
+              fill="rgba(168,85,247,0.08)" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"/>
+        <text x="0" y="50" text-anchor="middle" fill="#c084fc" font-size="11" font-weight="700" letter-spacing="1">
+          ◈ ADVANCED ANALYTICS ENGINE
+        </text>
+        <text x="0" y="70" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Strategic Pattern Analysis · Predictive Modeling
+        </text>
+        <text x="0" y="90" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">
+          Cross-region correlation · trend detection · anomaly scoring
+        </text>
+      </g>
+
+      <!-- ============ LAYER 2 — EDGE PRE-PROCESSING ============ -->
+      <g class="topo-node" transform="translate(650, 600)" data-node="edge-pre">
+        <rect class="node-box" x="-180" y="-30" width="360" height="60" rx="10"
+              fill="#0f172a" stroke="#14b8a6" stroke-width="2"/>
+        <text x="0" y="-8" text-anchor="middle" fill="#2dd4bf" font-size="12" font-weight="700" letter-spacing="1">
+          ⚡ EDGE FILTERING &amp; BUFFERING
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="monospace">
+          Bandwidth Throttling · Compression · Optimized for ~5 Mbps Uplink
+        </text>
+      </g>
+
+      <!-- ============ LAYER 1 — MULTI-INT ACQUISITION ============ -->
+      <!-- 6 source nodes fan-in -->
+      <g class="topo-node" transform="translate(180, 720)" data-node="src-navy">
+        <rect class="node-box" x="-70" y="-30" width="140" height="60" rx="8"
+              fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+        <circle cx="-48" cy="-10" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-8" text-anchor="middle" fill="#60a5fa" font-size="10" font-weight="700" letter-spacing="1">
+          🚢 NAVY
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          10.64.10.0/24
+        </text>
+      </g>
+      <g class="topo-node" transform="translate(370, 720)" data-node="src-air">
+        <rect class="node-box" x="-70" y="-30" width="140" height="60" rx="8"
+              fill="#0f172a" stroke="#0ea5e9" stroke-width="2"/>
+        <circle cx="-48" cy="-10" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-8" text-anchor="middle" fill="#38bdf8" font-size="10" font-weight="700" letter-spacing="1">
+          ✈️ AIR
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          10.66.10.0/24
+        </text>
+      </g>
+      <g class="topo-node" transform="translate(560, 720)" data-node="src-drone">
+        <rect class="node-box" x="-70" y="-30" width="140" height="60" rx="8"
+          fill="#0f172a" stroke="#06b6d4" stroke-width="2"/>
+        <circle cx="-48" cy="-10" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-8" text-anchor="middle" fill="#22d3ee" font-size="10" font-weight="700" letter-spacing="1">
+          🛸 DRONE
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          10.70.0.0/16
+        </text>
+      </g>
+      <g class="topo-node" transform="translate(750, 720)" data-node="src-cctv">
+        <rect class="node-box" x="-70" y="-30" width="140" height="60" rx="8"
+          fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+        <circle cx="-48" cy="-10" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-8" text-anchor="middle" fill="#f87171" font-size="10" font-weight="700" letter-spacing="1">
+          📹 CCTV/FLIR
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          10.20.0.0/16
+        </text>
+      </g>
+      <g class="topo-node" transform="translate(940, 720)" data-node="src-logistik">
+        <rect class="node-box" x="-70" y="-30" width="140" height="60" rx="8"
+          fill="#0f172a" stroke="#eab308" stroke-width="2"/>
+        <circle cx="-48" cy="-10" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-8" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="700" letter-spacing="1">
+          📦 LOGISTIK
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Building SOC
+        </text>
+      </g>
+      <g class="topo-node" transform="translate(1130, 720)" data-node="src-kodam">
+        <rect class="node-box" x="-70" y="-30" width="140" height="60" rx="8"
+          fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="-48" cy="-10" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-8" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="700" letter-spacing="1">
+          🎖️ KODAM ×27
+        </text>
+        <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
+          10.60-10.67
+        </text>
+      </g>
+
+    </svg>
+
+    <div class="topo-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#22c55e"></span> Acquisition</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#14b8a6"></span> Edge</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a855f7"></span> L40S Core</div>
+      <div class="legend-item"><span class="legend-bw"></span> Bandwidth mgmt</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#ef4444"></span> National COP</div>
+    </div>
+  </div>
+
+  <aside class="topo-sidebar">
+
+    <div class="info-panel">
+      <h3>◈ Flow Statistics</h3>
+      <div class="flow-stats">
+        <div class="flow-stat core">
+          <div class="num">L40S×4</div>
+          <div class="lbl">Compute</div>
+        </div>
+        <div class="flow-stat warn">
+          <div class="num">~5 Mbps</div>
+          <div class="lbl">Uplink</div>
+        </div>
+        <div class="flow-stat">
+          <div class="num">5</div>
+          <div class="lbl">Layers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel" id="node-details">
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val core">Core Compute — L40S ×4</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">Strategic AI Cluster</span></div>
+      <div class="info-row"><span class="key">Model</span><span class="val">MiniMax M3 / DeepSeek V4</span></div>
+      <div class="info-row"><span class="key">Fusion</span><span class="val">Multi-INT (spatial + visual + text + temporal)</span></div>
+      <div class="info-row"><span class="key">Analytics</span><span class="val">Pattern · Predictive · Cross-region</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val">~5 Mbps adaptive</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val">National COP</span></div>
+    </div>
+
+    <div class="info-panel" style="border-color: rgba(168,85,247,0.3);">
+      <h3 style="color: #c084fc;">🧠 Fusion Role</h3>
+      <div style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.6;">
+        IKN Central <strong>menerima event CoT</strong> dari semua aset
+        (Navy, Air, Drone, CCTV, Logistik, Kodam). Bukan raw video.
+        <br><br>
+        <strong>Multi-INT Fusion:</strong> menggabungkan data spasial, visual, teks, temporal — menghasilkan <em>situational understanding</em>.
+        <br><br>
+        <strong>LLM Engine:</strong> MiniMax M3 / DeepSeek V4 — strategic advisor, predictive modeling.
+        <br><br>
+        <strong>Output:</strong> ~5 Mbps structured strategic summary ke National COP.
+      </div>
+    </div>
+
+    <div class="log-panel">
+      <h3>◈ Live Stream Log</h3>
+      <div id="log-stream"></div>
+    </div>
+
+  </aside>
+</div>
+
+<div class="class-banner bottom">
+  RAHASIA · ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
+</div>
+
+<script src="/joc/js/classification.js?v=2.0" data-cfasync="false"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  const NODES = {
+    'national-cop': {
+      title: 'National COP',
+      class: 'Pusat Komando Strategis Nasional',
+      location: 'Tingkat nasional',
+      sensors: 'Dashboard eksekutif · strategic alerts',
+      uplink: 'Inbound dari IKN Central',
+      tactical: 'Decision support untuk pimpinan nasional',
+      next: '—', highlight: true
+    },
+    'uplink': {
+      title: 'Uplink & Compression Manager',
+      class: 'Bandwidth Management',
+      location: 'L4 · dalam IKN Central',
+      sensors: 'Aggregate 5 Mbps dari Core',
+      uplink: 'Adaptive bandwidth · secure VPN tunnel',
+      tactical: 'Encrypted tunnel ke National COP',
+      next: 'National COP', highlight: true
+    },
+    'core': {
+      title: 'Core Compute — L40S ×4',
+      class: 'Strategic AI Cluster',
+      location: 'IKN DC · L3 · 10.90.1.0/24',
+      sensors: 'Multi-INT Fusion · Advanced Analytics',
+      uplink: '~5 Mbps structured summary',
+      tactical: 'MiniMax M3 / DeepSeek V4 · Qwen2-VL multimodal',
+      next: 'Uplink Manager', highlight: true
+    },
+    'edge-pre': {
+      title: 'Edge Filtering & Buffering',
+      class: 'Pre-Processing Gateway',
+      location: 'L2 · regional input dari MW Hub',
+      sensors: 'Multi-source stream: CoT, STANAG 4609, ASTERIX',
+      uplink: 'Bandwidth throttling · compression',
+      tactical: 'Optimized for ~5 Mbps aggregate uplink',
+      next: 'Core Compute', highlight: true
+    },
+    'src-navy': {
+      title: 'Navy Source', class: 'Aset — Navy',
+      location: 'KRI · Lantamal · 10.64.x.x',
+      sensors: 'CoT dari kapal',
+      uplink: 'CoT event · ~200 Kbps',
+      tactical: 'Sudah dinormalisasi di AL Edge',
+      next: 'Edge Pre-Processing', highlight: true
+    },
+    'src-air': {
+      title: 'Air Source', class: 'Aset — AU',
+      location: 'Lanud · 10.66.x.x',
+      sensors: 'CoT dari pesawat + drone wingman',
+      uplink: 'CoT event · ~180 Kbps',
+      tactical: 'Sudah dinormalisasi di AU Edge',
+      next: 'Edge Pre-Processing', highlight: true
+    },
+    'src-drone': {
+      title: 'Drone Source', class: 'Aset — Drone',
+      location: 'GCS · 10.70.x.x',
+      sensors: 'CoT dari UAV reconnaissance',
+      uplink: 'CoT event · ~178 Kbps',
+      tactical: 'Sudah dinormalisasi di AU/AL Edge',
+      next: 'Edge Pre-Processing', highlight: true
+    },
+    'src-cctv': {
+      title: 'CCTV/FLIR Source', class: 'Aset — Perbatasan',
+      location: 'Fixed perimeter · 10.20.x.x',
+      sensors: 'Alert events dari Local Jetson',
+      uplink: 'Alert event · ~20 Kbps',
+      tactical: 'Hanya event — bukan video',
+      next: 'Edge Pre-Processing', highlight: true
+    },
+    'src-logistik': {
+      title: 'Logistik Source', class: 'Aset — Building',
+      location: 'Warehouse + HO',
+      sensors: 'Event dari VLM Jetson',
+      uplink: 'Structured event JSON',
+      tactical: 'Compliance + anomaly events',
+      next: 'Edge Pre-Processing', highlight: true
+    },
+    'src-kodam': {
+      title: 'Kodam ×27 Source', class: 'Aset — Territorial',
+      location: 'Kodam regional · 10.60–10.67.x.x',
+      sensors: 'Multi-sensor fusion dari Kodam Edge',
+      uplink: 'CoT event · ~250 Kbps aggregate',
+      tactical: 'Sudah difuse di Kodam Edge AI',
+      next: 'Edge Pre-Processing', highlight: true
+    }
+  };
+
+  const detailsPanel = document.getElementById('node-details');
+  function renderNodeDetails(nodeId) {
+    const n = NODES[nodeId];
+    if (!n) return;
+    detailsPanel.innerHTML = `
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val ${n.highlight ? 'core' : ''}">${n.title}</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">${n.class}</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">${n.location}</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">${n.sensors}</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val ${n.highlight ? 'warn' : ''}">${n.uplink}</span></div>
+      <div class="info-row"><span class="key">Details</span><span class="val">${n.tactical}</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val ${n.highlight ? 'highlight' : 'warn'}">${n.next}</span></div>
+    `;
+  }
+
+  document.querySelectorAll('.topo-node').forEach(node => {
+    node.addEventListener('click', () => {
+      const id = node.getAttribute('data-node');
+      if (!NODES[id]) return;
+      document.querySelectorAll('.topo-node').forEach(n => n.classList.remove('selected'));
+      node.classList.add('selected');
+      renderNodeDetails(id);
+    });
+  });
+
+  const logStream = document.getElementById('log-stream');
+
+  const LOG_TEMPLATES = [
+    { tag: 'acq',    text: 'ACQ: 6 sumber feed aktif — Navy 12, Air 8, Drone 5, CCTV 42, Logistik 18, Kodam 27' },
+    { tag: 'acq',    text: 'ACQ: aggregated 112 CoT events dalam 60 detik terakhir' },
+    { tag: 'edge',   text: 'EDGE: filtering noise — dropped 47 redundant events (dup radius 500m)' },
+    { tag: 'edge',   text: 'EDGE: compressing to ~5 Mbps · adaptive throttle aktif' },
+    { tag: 'core',   text: 'CORE: Multi-INT fusion — 65 unique entities resolved from 112 events' },
+    { tag: 'core',   text: 'CORE: MiniMax M3 running — cross-region correlation (N=65)' },
+    { tag: 'core',   text: 'CORE: pattern detected — 3 Kapal di Natuna, kurs 210°, ETA pattern unusual' },
+    { tag: 'core',   text: 'CORE: predictive — risk score Kalimantan Utara: 0.72 (was 0.45)' },
+    { tag: 'core',   text: 'CORE: strategic summary generated (JSON, 4.2 KB)' },
+    { tag: 'uplink', text: 'UPLINK: adaptive bandwidth — 4.8 Mbps ke National COP' },
+    { tag: 'uplink', text: 'UPLINK: VPN tunnel OK · encryption AES-256-GCM' },
+    { tag: 'cop',    text: 'COP: dashboard update — priority alert #PA-2026-0042' },
+    { tag: 'cop',    text: 'COP: strategic alert pushed ke pimpinan — Natuna sector' },
+    { tag: 'ok',     text: 'PIPELINE: E2E strategic fusion latency ~4.2s (batch processing)' }
+  ];
+
+  const TAG_CLASSES = { acq:'acq', edge:'edge', core:'core', uplink:'uplink', cop:'cop', ok:'ok' };
+
+  function makeLogLine(tpl) {
+    const now = new Date();
+    const ts = String(now.getHours()).padStart(2,'0') + ':' +
+               String(now.getMinutes()).padStart(2,'0') + ':' +
+               String(now.getSeconds()).padStart(2,'0');
+    return `<div class="log-line"><span class="ts">${ts}</span><span class="tag ${TAG_CLASSES[tpl.tag] || ''}">[${tpl.tag.toUpperCase()}]</span>${tpl.text}</div>`;
+  }
+
+  let logIdx = 0;
+  function pushLog() {
+    const tpl = LOG_TEMPLATES[logIdx % LOG_TEMPLATES.length];
+    logIdx++;
+    logStream.insertAdjacentHTML('beforeend', makeLogLine(tpl));
+    while (logStream.children.length > 40) logStream.removeChild(logStream.firstChild);
+    logStream.scrollTop = logStream.scrollHeight;
+  }
+  for (let i = 0; i < 6; i++) pushLog();
+  setInterval(pushLog, 1800);
+
+  console.log('[TOPO] IKN Central Fusion (5-layer pipeline) ready');
+})();
+</script>
+
+</body>
+</html>

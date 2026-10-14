@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topologi Data — Kodam Regional → IKN — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/dashboard.css">
+  <link rel="stylesheet" href="/joc/css/infrastructure.css">
+  <style>
+    :root {
+      --sensor:  #22c55e;
+      --edge:    #10b981;
+      --hub:     #8b5cf6;
+      --ikn:     #eab308;
+      --army:    #22c55e;
+      --bg:      #0a0f1e;
+      --border:  rgba(148,163,184,0.15);
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:0; background: var(--bg); color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; min-height:100vh; overflow-x:hidden; }
+    .class-banner { background: linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d); color:#fecaca; text-align:center; padding:6px 16px; font-size:0.72rem; font-weight:700; letter-spacing:2px; border-bottom:1px solid #dc2626; }
+    .class-banner.bottom { border-top:1px solid #dc2626; border-bottom:none; font-weight:500; letter-spacing:0.5px; font-size:0.66rem; padding:8px 16px; }
+    .topo-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; background:linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,15,30,0.9)); border-bottom:1px solid var(--border); }
+    .topo-header .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { font-size:1.6rem; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:10px; }
+    .topo-header h1 { margin:0; font-size:1rem; letter-spacing:2px; color:#e2e8f0; }
+    .topo-header .sub { margin:2px 0 0; font-size:0.72rem; color:#64748b; }
+    .header-stats { display:flex; gap:24px; align-items:center; }
+    .stat-item { display:flex; flex-direction:column; align-items:flex-end; font-size:0.7rem; }
+    .stat-item .label { color:#64748b; font-size:0.62rem; letter-spacing:1px; }
+    .stat-item .value { color:#4ade80; font-family:'Courier New',monospace; font-weight:600; font-size:0.85rem; }
+    .stat-item .value.warn { color:#facc15; }
+    .stat-item .value.green { color:#4ade80; }
+    .back-btn { display:flex; align-items:center; gap:6px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); color:#4ade80; padding:8px 14px; border-radius:6px; font-size:0.72rem; font-weight:600; text-decoration:none; cursor:pointer; transition:all 0.15s; }
+    .back-btn:hover { background:rgba(34,197,94,0.2); }
+    .topo-main { display:grid; grid-template-columns:1fr 340px; gap:16px; padding:16px 24px 20px; max-width:1800px; margin:0 auto; }
+    .topo-canvas { background: radial-gradient(circle at 50% 40%, rgba(34,197,94,0.05), transparent 60%), linear-gradient(180deg, #0f172a, #0a0f1e); border:1px solid var(--border); border-radius:12px; padding:12px; position:relative; overflow:hidden; min-height:820px; }
+    .topo-canvas::before { content:''; position:absolute; inset:0; background-image: linear-gradient(rgba(148,163,184,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.04) 1px, transparent 1px); background-size:40px 40px; pointer-events:none; }
+    svg.topo-svg { width:100%; height:820px; display:block; position:relative; z-index:1; }
+    .topo-node { cursor:pointer; transition:filter 0.2s; }
+    .topo-node:hover { filter:brightness(1.2); }
+    .topo-node.dimmed { opacity:0.35; }
+    .topo-node.selected .node-box { stroke-width:3; filter:drop-shadow(0 0 12px currentColor); }
+    .topo-link { fill:none; stroke-width:2; stroke-linecap:round; opacity:0.5; }
+    .topo-link.active { opacity:0.9; stroke-width:2.5; }
+    .topo-link.sensor { stroke-dasharray:5 3; opacity:0.85; stroke-width:1.8; }
+    .topo-link.dimmed { opacity:0.15; }
+    .packet { filter:drop-shadow(0 0 6px currentColor); }
+    .zone { fill:rgba(34,197,94,0.03); stroke:rgba(34,197,94,0.2); stroke-dasharray:4 6; stroke-width:1; }
+    .zone-label { fill:#4ade80; font-size:9px; font-family:'Courier New', monospace; letter-spacing:1.5px; opacity:0.75; }
+    .territory-zone { fill:rgba(34,197,94,0.02); stroke:rgba(34,197,94,0.15); stroke-dasharray:8 4; stroke-width:1; }
+    .territory-label { fill:#86efac; font-size:9px; font-family:'Courier New', monospace; letter-spacing:1.5px; opacity:0.6; }
+    .topo-legend { position:absolute; bottom:16px; left:16px; background:rgba(15,23,42,0.85); border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-size:0.7rem; display:flex; gap:16px; flex-wrap:wrap; z-index:2; }
+    .legend-item { display:flex; align-items:center; gap:6px; }
+    .legend-dot { width:10px; height:10px; border-radius:50%; }
+    .topo-sidebar { display:flex; flex-direction:column; gap:12px; }
+    .info-panel { background:linear-gradient(180deg, rgba(30,41,59,0.6), rgba(15,23,42,0.85)); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+    .info-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#4ade80; text-transform:uppercase; }
+    .info-row { display:flex; gap:10px; margin-bottom:7px; font-size:0.72rem; line-height:1.4; }
+    .info-row .key { color:#64748b; min-width:90px; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px; padding-top:1px; }
+    .info-row .val { flex:1; color:#cbd5e1; font-family:'Courier New',monospace; font-size:0.7rem; }
+    .info-row .val.highlight { color:#4ade80; }
+    .info-row .val.warn { color:#facc15; }
+    .info-row .val.green { color:#4ade80; }
+    .log-panel { flex:1; background:rgba(10,15,30,0.9); border:1px solid var(--border); border-radius:10px; padding:12px 14px; overflow:hidden; display:flex; flex-direction:column; max-height:340px; }
+    .log-panel h3 { margin:0 0 10px; font-size:0.75rem; letter-spacing:1.5px; color:#4ade80; text-transform:uppercase; }
+    #log-stream { flex:1; overflow-y:auto; font-family:'Courier New',monospace; font-size:0.68rem; line-height:1.6; }
+    #log-stream .log-line { padding:2px 0; color:#94a3b8; animation:logFadeIn 0.3s; }
+    #log-stream .log-line .ts { color:#475569; }
+    #log-stream .log-line .tag { display:inline-block; min-width:70px; font-weight:700; }
+    #log-stream .log-line .tag.sensor { color:#86efac; }
+    #log-stream .log-line .tag.edge { color:#10b981; }
+    #log-stream .log-line .tag.fusion { color:#2dd4bf; }
+    #log-stream .log-line .tag.hub { color:#8b5cf6; }
+    #log-stream .log-line .tag.ikn { color:#eab308; }
+    #log-stream .log-line .tag.alert { color:#f87171; }
+    #log-stream .log-line .tag.ok { color:#4ade80; }
+    @keyframes logFadeIn { from { opacity:0; transform:translateX(-6px);} to { opacity:1; transform:translateX(0);} }
+    .flow-stats { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:10px; }
+    .flow-stat { background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.15); border-radius:6px; padding:8px; text-align:center; }
+    .flow-stat .num { font-size:1.05rem; font-weight:700; color:#4ade80; font-family:'Courier New',monospace; }
+    .flow-stat .lbl { font-size:0.6rem; color:#64748b; letter-spacing:0.5px; text-transform:uppercase; }
+    .flow-stat.warn .num { color:#facc15; }
+    .flow-stat.green .num { color:#4ade80; }
+    @media (max-width: 1200px) { .topo-main { grid-template-columns:1fr; } .topo-sidebar { flex-direction:row; flex-wrap:wrap; } .info-panel, .log-panel { flex:1; min-width:280px; } }
+  </style>
+</head>
+<body>
+
+<div class="class-banner">
+  RAHASIA · 🎖️ TOPOLOGI DATA ASET · Clearance: SECRET · 2026-10-06
+</div>
+
+<header class="topo-header">
+  <div class="brand">
+    <div class="brand-mark">🎖️</div>
+    <div>
+      <h1>KODAM REGIONAL → IKN CENTRAL</h1>
+      <p class="sub">Multi-sensor aggregation · edge AI fusion · territorial command hierarchy</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-item">
+      <span class="label">Status</span>
+      <span class="value">● LIVE</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Sensor Types</span>
+      <span class="value green">6</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Sub-units</span>
+      <span class="value warn">38</span>
+    </div>
+    <a href="/joc/analitik-dashboard.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Kembali ke Analytics
+    </a>
+  </div>
+</header>
+
+<div class="topo-main">
+
+  <div class="topo-canvas">
+    <svg class="topo-svg" viewBox="0 0 1300 820" preserveAspectRatio="xMidYMid meet">
+
+      <defs>
+        <marker id="arrow-sensor" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e"/>
+        </marker>
+        <marker id="arrow-edge" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+        </marker>
+        <marker id="arrow-hub" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b5cf6"/>
+        </marker>
+        <marker id="arrow-ikn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#eab308"/>
+        </marker>
+        <marker id="arrow-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+        </marker>
+      </defs>
+
+      <!-- TERRITORY ZONE -->
+      <rect class="territory-zone" x="30" y="160" width="1150" height="640" rx="14"/>
+      <text class="territory-label" x="50" y="182">◈ TERRITORY · KODAM III/SILIWANGI · 7 KOREM · 22 KODIM · 180+ KORAMIL</text>
+
+      <!-- SENSOR ZONE (bottom) -->
+      <rect class="zone" x="50" y="620" width="1110" height="160" rx="12"/>
+      <text class="zone-label" x="66" y="642">◈ SENSOR LAYER · MULTI-DOMAIN DETECTION · CCTV · RADAR · DRONE · PATROL · SEISMIC · THERMAL</text>
+
+      <!-- ============ LINKS ============ -->
+      <!-- 6 sensors fan-in to Kodam Edge -->
+      <path id="path-s1" class="topo-link sensor" stroke="#22c55e"
+            d="M 140 620 Q 220 570, 320 550 L 450 510" marker-end="url(#arrow-sensor)"/>
+      <path id="path-s2" class="topo-link sensor" stroke="#22c55e"
+            d="M 340 620 Q 400 580, 480 550 L 520 510" marker-end="url(#arrow-sensor)"/>
+      <path id="path-s3" class="topo-link sensor" stroke="#22c55e"
+            d="M 540 620 L 540 510" marker-end="url(#arrow-sensor)"/>
+      <path id="path-s4" class="topo-link sensor" stroke="#22c55e"
+            d="M 740 620 Q 700 580, 640 550 L 600 510" marker-end="url(#arrow-sensor)"/>
+      <path id="path-s5" class="topo-link sensor" stroke="#22c55e"
+            d="M 940 620 Q 900 580, 780 550 L 660 510" marker-end="url(#arrow-sensor)"/>
+      <path id="path-s6" class="topo-link sensor" stroke="#22c55e"
+            d="M 1140 620 Q 1050 580, 900 550 L 720 510" marker-end="url(#arrow-sensor)"/>
+
+      <!-- Kodam Edge → Regional Hub -->
+      <path id="path-edge-hub" class="topo-link active" stroke="#10b981"
+            d="M 650 400 L 650 320" marker-end="url(#arrow-edge)"/>
+
+      <!-- Regional Hub → IKN -->
+      <path id="path-hub-ikn" class="topo-link active" stroke="#8b5cf6"
+            d="M 650 240 L 650 140" marker-end="url(#arrow-hub)"/>
+
+      <!-- Cross-matra coordination (bidirectional, dashed) -->
+      <path class="topo-link dimmed" stroke="#0ea5e9" stroke-dasharray="4 4"
+            d="M 800 280 L 1100 230" marker-end="url(#arrow-dim)"/>
+      <path class="topo-link dimmed" stroke="#3b82f6" stroke-dasharray="4 4"
+            d="M 800 290 L 1100 350" marker-end="url(#arrow-dim)"/>
+
+      <!-- ============ ANIMATED PACKETS ============ -->
+      <circle class="packet" r="4" fill="#22c55e">
+        <animateMotion dur="1s" repeatCount="indefinite"><mpath href="#path-s1"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#4ade80">
+        <animateMotion dur="1s" begin="0.15s" repeatCount="indefinite"><mpath href="#path-s2"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" begin="0.15s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#22c55e">
+        <animateMotion dur="0.8s" begin="0.3s" repeatCount="indefinite"><mpath href="#path-s3"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.8s" begin="0.3s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#4ade80">
+        <animateMotion dur="1s" begin="0.45s" repeatCount="indefinite"><mpath href="#path-s4"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1s" begin="0.45s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#22c55e">
+        <animateMotion dur="1.05s" begin="0.6s" repeatCount="indefinite"><mpath href="#path-s5"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.05s" begin="0.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="4" fill="#4ade80">
+        <animateMotion dur="1.15s" begin="0.75s" repeatCount="indefinite"><mpath href="#path-s6"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="1.15s" begin="0.75s" repeatCount="indefinite"/>
+      </circle>
+
+      <circle class="packet" r="5" fill="#10b981">
+        <animateMotion dur="0.7s" begin="1.6s" repeatCount="indefinite"><mpath href="#path-edge-hub"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.7s" begin="1.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="packet" r="5" fill="#8b5cf6">
+        <animateMotion dur="0.9s" begin="2.3s" repeatCount="indefinite"><mpath href="#path-hub-ikn"/></animateMotion>
+        <animate attributeName="opacity" values="0;1;1;0" dur="0.9s" begin="2.3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ============ NODES ============ -->
+      <!-- IKN CENTRAL -->
+      <g class="topo-node" transform="translate(650, 90)" data-node="ikn-central">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#eab308" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#eab308" font-size="13" font-weight="700" letter-spacing="1">
+          🛰️ IKN CENTRAL
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Multi-INT Fusion · Strategic Advisor · COP
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          IKN Kalimantan Timur · 10.90.1.0/24
+        </text>
+      </g>
+
+      <!-- REGIONAL HUB -->
+      <g class="topo-node" transform="translate(650, 270)" data-node="hub">
+        <rect class="node-box" x="-140" y="-45" width="280" height="90" rx="10"
+              fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+        <circle cx="-118" cy="-20" r="6" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-20" text-anchor="middle" fill="#8b5cf6" font-size="12" font-weight="700" letter-spacing="1">
+          🔄 REGIONAL HUB
+        </text>
+        <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
+          Kafka · Redis Streams · Event Router
+        </text>
+        <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Aggregasi multi-Kodam di region
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          Hub: mw-makassar · 10.80.2.0/24
+        </text>
+      </g>
+
+      <!-- KODAM EDGE AI (MAIN) -->
+      <g class="topo-node" transform="translate(650, 450)" data-node="kodam-edge">
+        <rect class="node-box" x="-200" y="-60" width="400" height="120" rx="12"
+              fill="#0f172a" stroke="#10b981" stroke-width="2.5"/>
+        <circle cx="-178" cy="-35" r="7" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-35" text-anchor="middle" fill="#10b981" font-size="14" font-weight="700" letter-spacing="1.5">
+          🎖️ KODAM III/SILIWANGI — EDGE AI
+        </text>
+        <text x="0" y="-12" text-anchor="middle" fill="#cbd5e1" font-size="11">
+          Jetson Orin AGX 64GB · 275 TOPS · 60W
+        </text>
+        <text x="0" y="8" text-anchor="middle" fill="#94a3b8" font-size="10">
+          Multi-sensor fusion · format normalization · real-time alert
+        </text>
+        <text x="0" y="26" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
+          YOLOv8n (object) + YAMNet (acoustic) + fusion engine
+        </text>
+        <text x="0" y="44" text-anchor="middle" fill="#facc15" font-size="9" font-family="monospace">
+          Aggregating: 7 Korem · 22 Kodim · 180+ Koramil
+        </text>
+      </g>
+
+      <!-- ============ SENSOR ROW (6 sensors) ============ -->
+
+      <!-- S1: CCTV Perimeter -->
+      <g class="topo-node" transform="translate(140, 720)" data-node="s-cctv">
+        <rect class="node-box" x="-75" y="-45" width="150" height="90" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="-53" cy="-22" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="700" letter-spacing="1">
+          📹 CCTV PERIMETER
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#94a3b8" font-size="9">
+          4K + IR · PTZ
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Pos jaga perbatasan
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          RTSP · H.265
+        </text>
+      </g>
+
+      <!-- S2: Ground Radar -->
+      <g class="topo-node" transform="translate(340, 720)" data-node="s-radar">
+        <rect class="node-box" x="-75" y="-45" width="150" height="90" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="-53" cy="-22" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="700" letter-spacing="1">
+          📡 GROUND RADAR
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#94a3b8" font-size="9">
+          GPR · 30 km range
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Deteksi darat & kendaraan
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          ASTERIX CAT-048
+        </text>
+      </g>
+
+      <!-- S3: Drone Taktis -->
+      <g class="topo-node" transform="translate(540, 720)" data-node="s-drone">
+        <rect class="node-box" x="-75" y="-45" width="150" height="90" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="-53" cy="-22" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="700" letter-spacing="1">
+          🛸 DRONE TAKTIS
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Short-range UAV
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Reconnaissance lokal
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          STANAG 4609 · CoT
+        </text>
+      </g>
+
+      <!-- S4: Patroli Mobile -->
+      <g class="topo-node" transform="translate(740, 720)" data-node="s-patrol">
+        <rect class="node-box" x="-75" y="-45" width="150" height="90" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="-53" cy="-22" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="700" letter-spacing="1">
+          🚙 PATROLI MOBILE
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Dashcam + bodycam
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Satuan bergerak
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          4G/5G tactical · MANET
+        </text>
+      </g>
+
+      <!-- S5: Seismic / Acoustic -->
+      <g class="topo-node" transform="translate(940, 720)" data-node="s-seismic">
+        <rect class="node-box" x="-75" y="-45" width="150" height="90" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="-53" cy="-22" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="700" letter-spacing="1">
+          📳 SEISMIC / ACOUSTIC
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Ground vibration
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Deteksi langkah kaki
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          LoRa · MQTT-CBOR
+        </text>
+      </g>
+
+      <!-- S6: Thermal / NV -->
+      <g class="topo-node" transform="translate(1140, 720)" data-node="s-thermal">
+        <rect class="node-box" x="-75" y="-45" width="150" height="90" rx="8"
+              fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+        <circle cx="-53" cy="-22" r="5" fill="#4ade80">
+          <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <text x="0" y="-22" text-anchor="middle" fill="#4ade80" font-size="10" font-weight="700" letter-spacing="1">
+          🌡️ THERMAL / NV
+        </text>
+        <text x="0" y="-2" text-anchor="middle" fill="#94a3b8" font-size="9">
+          Thermal + night vision
+        </text>
+        <text x="0" y="16" text-anchor="middle" fill="#cbd5e1" font-size="9">
+          Malam & cuaca buruk
+        </text>
+        <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          MISB-0601-KLV
+        </text>
+      </g>
+
+      <!-- Cross-matra coordination nodes (dimmed) -->
+      <g class="topo-node dimmed" transform="translate(1220, 230)" data-node="au-coord">
+        <rect class="node-box" x="-60" y="-25" width="120" height="50" rx="6"
+              fill="#0f172a" stroke="#0ea5e9" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-4" text-anchor="middle" fill="#0ea5e9" font-size="10" font-weight="700" letter-spacing="1">
+          AU KOARMADA
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          COORDINATION ONLY
+        </text>
+      </g>
+      <g class="topo-node dimmed" transform="translate(1220, 350)" data-node="al-coord">
+        <rect class="node-box" x="-60" y="-25" width="120" height="50" rx="6"
+              fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="0" y="-4" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="700" letter-spacing="1">
+          AL LANTAMAL
+        </text>
+        <text x="0" y="12" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
+          COORDINATION ONLY
+        </text>
+      </g>
+
+      <!-- Link labels -->
+      <g font-size="9" font-family="monospace" fill="#64748b">
+        <text x="230" y="580" fill="#4ade80">Multi-protocol ingest</text>
+        <text x="660" y="365" fill="#10b981">Event CoT</text>
+        <text x="660" y="205" fill="#8b5cf6">BGP · ASN 65410</text>
+        <text x="900" y="255" fill="#94a3b8">Cross-matra</text>
+      </g>
+
+    </svg>
+
+    <div class="topo-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#22c55e"></span> Sensors</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span> Kodam Edge</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span> Regional Hub</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#eab308"></span> IKN</div>
+      <div class="legend-item" style="opacity:0.5"><span class="legend-dot" style="background:#64748b"></span> Coordination</div>
+    </div>
+  </div>
+
+  <aside class="topo-sidebar">
+
+    <div class="info-panel">
+      <h3>◈ Flow Statistics</h3>
+      <div class="flow-stats">
+        <div class="flow-stat green">
+          <div class="num">6</div>
+          <div class="lbl">Sensor Types</div>
+        </div>
+        <div class="flow-stat">
+          <div class="num">38</div>
+          <div class="lbl">Sub-units</div>
+        </div>
+        <div class="flow-stat warn">
+          <div class="num">&lt;250ms</div>
+          <div class="lbl">Fusion Latency</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel" id="node-details">
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val green">Kodam III/Siliwangi</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">Regional Military Command</span></div>
+      <div class="info-row"><span class="key">Territory</span><span class="val">Jawa Barat + Banten</span></div>
+      <div class="info-row"><span class="key">Sub-units</span><span class="val">7 Korem · 22 Kodim · 180+ Koramil</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">6 jenis (CCTV, radar, drone, patrol, seismic, thermal)</span></div>
+      <div class="info-row"><span class="key">AI Model</span><span class="val">YOLOv8n + YAMNet + fusion engine</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val">Regional Hub → IKN Central</span></div>
+    </div>
+
+    <div class="info-panel" style="border-color: rgba(34,197,94,0.3);">
+      <h3 style="color: #4ade80;">🎖️ Multi-Sensor Fusion</h3>
+      <div style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.6;">
+        Kodam <strong>meng-agregasi 6 jenis sensor</strong> berbeda di tingkat regional:
+        <br>• Visual (CCTV, thermal)
+        <br>• Radar (ground surveillance)
+        <br>• Aerial (drone taktis)
+        <br>• Mobile (patroli)
+        <br>• Seismic/acoustic (perimeter)
+        <br><br>
+        Semua di-<strong>fuse di Kodam Edge</strong> (Jetson Orin AGX) sebelum dikirim ke Regional Hub. Video mentah <strong>tidak naik</strong> — cuma CoT metadata.
+      </div>
+    </div>
+
+    <div class="log-panel">
+      <h3>◈ Live Stream Log</h3>
+      <div id="log-stream"></div>
+    </div>
+
+  </aside>
+</div>
+
+<div class="class-banner bottom">
+  RAHASIA · ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
+</div>
+
+<script src="/joc/js/classification.js?v=2.0" data-cfasync="false"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  const NODES = {
+    'kodam-edge': {
+      title: 'Kodam III/Siliwangi Edge AI',
+      class: 'Regional Military Command — Edge AI Gateway',
+      location: 'Kodam III HQ · Bandung · 10.62.10.0/24',
+      sensors: '6 sensor types dari 7 Korem · 22 Kodim · 180+ Koramil',
+      uplink: 'CoT event → Regional Hub · ~250 Kbps aggregate',
+      tactical: 'Jetson Orin AGX 64GB · 275 TOPS · 60W · YOLOv8n + YAMNet + fusion engine',
+      next: 'Regional Hub Makassar',
+      highlight: true
+    },
+    's-cctv': {
+      title: 'CCTV Perimeter', class: 'Visual Sensor',
+      location: 'Pos jaga perbatasan · tersebar di wilayah Kodam',
+      sensors: '4K @ 30fps + IR + PTZ',
+      uplink: 'RTSP / H.265 → Kodam Edge',
+      tactical: 'YOLOv8n person + vehicle detection',
+      next: 'Kodam Edge AI', highlight: true
+    },
+    's-radar': {
+      title: 'Ground Radar', class: 'Radar Sensor',
+      location: 'Pos pengamatan strategis',
+      sensors: 'GPR · 30 km range · 360° sweep',
+      uplink: 'ASTERIX CAT-048 → Kodam Edge',
+      tactical: 'Ground surveillance · vehicle tracking',
+      next: 'Kodam Edge AI', highlight: true
+    },
+    's-drone': {
+      title: 'Drone Taktis', class: 'Aerial Sensor',
+      location: 'Skadron drone taktis Kodam',
+      sensors: 'Short-range UAV · 15 km radius',
+      uplink: 'STANAG 4609 + CoT → Kodam Edge',
+      tactical: 'Local reconnaissance · perimeter sweep',
+      next: 'Kodam Edge AI', highlight: true
+    },
+    's-patrol': {
+      title: 'Patroli Mobile', class: 'Mobile Sensor',
+      location: 'Satuan bergerak (mobile patrol)',
+      sensors: 'Dashcam + bodycam · real-time streaming',
+      uplink: '4G/5G tactical + MANET → Kodam Edge',
+      tactical: 'Live field feed · automatic location tagging',
+      next: 'Kodam Edge AI', highlight: true
+    },
+    's-seismic': {
+      title: 'Seismic / Acoustic', class: 'Ground Sensor',
+      location: 'Perimeter zone · buried sensor network',
+      sensors: 'Ground vibration + acoustic',
+      uplink: 'LoRa + MQTT-CBOR → Kodam Edge',
+      tactical: 'Footstep detection · YAMNet acoustic classifier',
+      next: 'Kodam Edge AI', highlight: true
+    },
+    's-thermal': {
+      title: 'Thermal / NV', class: 'Visual Sensor (night)',
+      location: 'Perimeter + strategic posts',
+      sensors: 'Thermal + night vision · all-weather',
+      uplink: 'MISB-0601-KLV → Kodam Edge',
+      tactical: '24/7 detection · low-light capability',
+      next: 'Kodam Edge AI', highlight: true
+    },
+    'hub': {
+      title: 'Regional Hub', class: 'Event Aggregation',
+      location: 'Makassar · 10.80.2.0/24',
+      sensors: 'Kafka · Redis Streams · Event Router',
+      uplink: '~1 Mbps aggregate',
+      tactical: 'Aggregasi multi-Kodam se-region',
+      next: 'IKN Central', highlight: true
+    },
+    'ikn-central': {
+      title: 'IKN Central', class: 'Strategic Command',
+      location: 'IKN Kalimantan Timur · 10.90.1.0/24',
+      sensors: 'Multi-INT Fusion · Strategic Advisor',
+      uplink: '~5 Mbps aggregate',
+      tactical: 'NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4',
+      next: 'COP Nasional', highlight: true
+    },
+    'au-coord': {
+      title: 'AU Koarmada (Coordination)', class: 'Cross-matra',
+      location: 'AU Regional',
+      sensors: '—', uplink: '—',
+      tactical: 'Coordination only · not data flow',
+      next: '—', highlight: false
+    },
+    'al-coord': {
+      title: 'AL Lantamal (Coordination)', class: 'Cross-matra',
+      location: 'AL Regional',
+      sensors: '—', uplink: '—',
+      tactical: 'Coordination only · not data flow',
+      next: '—', highlight: false
+    }
+  };
+
+  const detailsPanel = document.getElementById('node-details');
+  function renderNodeDetails(nodeId) {
+    const n = NODES[nodeId];
+    if (!n) return;
+    detailsPanel.innerHTML = `
+      <h3>◈ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val ${n.highlight ? 'green' : ''}">${n.title}</span></div>
+      <div class="info-row"><span class="key">Class</span><span class="val">${n.class}</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">${n.location}</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">${n.sensors}</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val ${n.highlight ? 'warn' : ''}">${n.uplink}</span></div>
+      <div class="info-row"><span class="key">Details</span><span class="val">${n.tactical}</span></div>
+      <div class="info-row"><span class="key">Next hop</span><span class="val ${n.highlight ? 'highlight' : 'warn'}">${n.next}</span></div>
+    `;
+  }
+
+  document.querySelectorAll('.topo-node').forEach(node => {
+    node.addEventListener('click', () => {
+      const id = node.getAttribute('data-node');
+      if (!NODES[id]) return;
+      document.querySelectorAll('.topo-node').forEach(n => n.classList.remove('selected'));
+      node.classList.add('selected');
+      renderNodeDetails(id);
+    });
+  });
+
+  const logStream = document.getElementById('log-stream');
+
+  const LOG_TEMPLATES = [
+    { tag: 'sensor', text: 'CCTV Pos-07: motion detected — sector 3A, 2 persons' },
+    { tag: 'sensor', text: 'RADAR: 3 vehicles tracked · bearing 285° · 12 km range' },
+    { tag: 'sensor', text: 'DRONE: recon sortie flight path — sector 4B cleared' },
+    { tag: 'sensor', text: 'PATROLI-02: mobile feed active · GPS lock · bandung south' },
+    { tag: 'sensor', text: 'SEISMIC-14: footsteps detected · pattern: 2 legs, slow walk' },
+    { tag: 'sensor', text: 'THERMAL-08: heat signature — 1 person, standing, sector 6C' },
+    { tag: 'edge',   text: 'EDGE: YOLOv8n running on CCTV frame — 1 person, 1 vehicle (15ms)' },
+    { tag: 'edge',   text: 'EDGE: YAMNet acoustic — footstep pattern classifier running' },
+    { tag: 'fusion', text: 'FUSION: combining 4 sensor readings — same target, confidence 91%' },
+    { tag: 'fusion', text: 'FUSION: CoT payload → 6.2 KB · emission to Regional Hub' },
+    { tag: 'edge',   text: 'EDGE: no cross-sensor conflict · 0 false positives' },
+    { tag: 'hub',    text: 'HUB: aggregated 12 CoT events from Kodam III' },
+    { tag: 'hub',    text: 'HUB: forward to IKN · BGP ASN 65410 → 65000' },
+    { tag: 'ikn',    text: 'IKN: sector update — Kodam III, activity normal' },
+    { tag: 'ok',     text: 'PIPELINE: E2E 245ms · 38 sub-units online · 0 packet loss' }
+  ];
+
+  const TAG_CLASSES = { sensor:'sensor', edge:'edge', fusion:'fusion', hub:'hub', ikn:'ikn', alert:'alert', ok:'ok' };
+
+  function makeLogLine(tpl) {
+    const now = new Date();
+    const ts = String(now.getHours()).padStart(2,'0') + ':' +
+               String(now.getMinutes()).padStart(2,'0') + ':' +
+               String(now.getSeconds()).padStart(2,'0');
+    return `<div class="log-line"><span class="ts">${ts}</span><span class="tag ${TAG_CLASSES[tpl.tag] || ''}">[${tpl.tag.toUpperCase()}]</span>${tpl.text}</div>`;
+  }
+
+  let logIdx = 0;
+  function pushLog() {
+    const tpl = LOG_TEMPLATES[logIdx % LOG_TEMPLATES.length];
+    logIdx++;
+    logStream.insertAdjacentHTML('beforeend', makeLogLine(tpl));
+    while (logStream.children.length > 40) logStream.removeChild(logStream.firstChild);
+    logStream.scrollTop = logStream.scrollHeight;
+  }
+  for (let i = 0; i < 6; i++) pushLog();
+  setInterval(pushLog, 1700);
+
+  console.log('[TOPO] Kodam Regional → IKN (multi-sensor fusion) ready');
+})();
+</script>
+
+</body>
+</html>

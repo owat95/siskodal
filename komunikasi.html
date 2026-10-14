@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Komunikasi Terpadu — SISKODAL</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/joc/css/portal.css">
+  <style>
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      padding: 16px 0; font-size: 0.8rem; color: #94a3b8;
+      font-family: 'Courier New', monospace;
+    }
+    .breadcrumb a { color: #60a5fa; text-decoration: none; }
+    .breadcrumb a:hover { color: #00e5ff; }
+    .breadcrumb .sep { color: #475569; }
+    .breadcrumb .current { color: #fff; font-weight: 700; }
+
+    .kom-header { text-align: center; padding: 20px 0 40px; }
+    .kom-header .icon-big {
+      font-size: 4rem; margin-bottom: 16px;
+      filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.5));
+    }
+    .kom-header h1 {
+      font-size: 2.5rem; font-weight: 900; letter-spacing: 3px;
+      color: #fff;
+    }
+    .kom-header .sub { color: #cbd5e1; margin-top: 8px; letter-spacing: 1px; }
+    .kom-header .desc {
+      color: #94a3b8; margin-top: 16px; max-width: 780px;
+      margin-left: auto; margin-right: auto; line-height: 1.6; font-size: 0.9rem;
+    }
+
+    /* Warning banner */
+    .warning-banner {
+      max-width: 900px; margin: 20px auto 30px;
+      padding: 16px 22px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+      border: 2px solid rgba(239, 68, 68, 0.4);
+      border-radius: 12px;
+      display: flex; gap: 16px; align-items: start;
+    }
+    .warning-banner .icon {
+      font-size: 1.8rem; flex-shrink: 0; color: #f87171;
+    }
+    .warning-banner .content h3 {
+      font-size: 0.85rem; letter-spacing: 1px; color: #f87171;
+      margin-bottom: 6px; font-weight: 800; text-transform: uppercase;
+    }
+    .warning-banner .content p {
+      font-size: 0.8rem; color: #cbd5e1; line-height: 1.5;
+    }
+
+    /* Mode cards */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px; margin-bottom: 40px;
+    }
+    .mode-card {
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px solid;
+      border-radius: 14px;
+      transition: all 0.2s;
+    }
+    .mode-card:hover { transform: translateY(-3px); }
+    .mode-card .mc-head {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+    }
+    .mode-card .mc-icon {
+      width: 48px; height: 48px; display: flex; align-items: center;
+      justify-content: center; border-radius: 10px;
+      font-size: 1.5rem;
+    }
+    .mode-card .mc-title {
+      font-size: 0.9rem; font-weight: 800; color: #fff; letter-spacing: 1px;
+    }
+    .mode-card .mc-sub {
+      font-size: 0.7rem; color: #94a3b8; margin-top: 3px;
+    }
+    .mode-card .mc-desc {
+      font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 12px;
+    }
+    .mode-card .mc-spec {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+      font-size: 0.7rem; font-family: 'Courier New', monospace;
+      padding-top: 12px; border-top: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    .mode-card .mc-spec span { color: #64748b; }
+    .mode-card .mc-spec strong { color: #e2e8f0; display: block; margin-top: 2px; }
+
+    /* Feature grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px; margin-bottom: 40px;
+    }
+    .feature-card {
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+    }
+    .feature-card .fc-icon {
+      font-size: 1.8rem; margin-bottom: 10px; display: block;
+    }
+    .feature-card .fc-title {
+      font-size: 0.85rem; font-weight: 800; color: #fff; letter-spacing: 0.5px;
+      margin-bottom: 6px; text-transform: uppercase;
+    }
+    .feature-card .fc-desc {
+      font-size: 0.75rem; color: #94a3b8; line-height: 1.5;
+    }
+
+    /* CTA button */
+    .mp-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, #00e5ff, #00ff9d);
+      color: #04121a; font-weight: 800; font-size: 0.9rem;
+      border-radius: 10px; text-decoration: none;
+      transition: all 0.2s; letter-spacing: 0.5px;
+    }
+    .mp-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 229, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<div class="portal-wrapper">
+
+  <div class="breadcrumb">
+    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <span class="sep">/</span>
+    <span class="current">Sistem Komunikasi Terpadu</span>
+  </div>
+
+  <header class="kom-header">
+    <div class="icon-big" style="color:#3b82f6;">📡</div>
+    <h1>SISTEM KOMUNIKASI TERPADU</h1>
+    <p class="sub">SECURE ON-PREMISE COMMUNICATION PLATFORM</p>
+    <p class="desc">
+      Platform komunikasi militer berbasis <strong>on-premise</strong> (kedaulatan data penuh).
+      Mendukung <strong>Android · iPhone · Desktop · Web</strong> dengan otentikasi
+      <strong>MAC Address Whitelist + Device Certificate</strong>. Auto-switch antara
+      Command Center · MANET · HF Fallback sesuai kondisi jaringan.
+    </p>
+  </header>
+
+  <!-- Warning banner -->
+  <div class="warning-banner">
+    <div class="icon">🚨</div>
+    <div class="content">
+      <h3>Kenapa Tidak Pakai WhatsApp?</h3>
+      <p>
+        Komunikasi militer via aplikasi publik (WhatsApp, Telegram) adalah
+        <strong>celah intelijen kelas satu</strong> — metadata bocor ke server luar negeri,
+        tidak bisa diaudit, dan tidak berfungsi saat VSAT/jaringan down.
+        R2 Chat hadir sebagai solusi kedaulatan komunikasi.
+      </p>
+    </div>
+  </div>
+
+  <!-- Mode cards -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>3 MODE OPERASI</h2>
+    <p>Auto-switch sesuai kondisi jaringan</p>
+  </div>
+
+  <div class="mode-grid">
+    <div class="mode-card" style="border-color:rgba(34,197,94,0.5);">
+      <div class="mc-head">
+        <div class="mc-icon" style="background:rgba(34,197,94,0.15); color:#4ade80;">🔒</div>
+        <div>
+          <div class="mc-title">COMMAND CENTER</div>
+          <div class="mc-sub">Primary Mode</div>
+        </div>
+      </div>
+      <div class="mc-desc">
+        Terhubung ke Mabes AD Chat Homeserver via LAN/WAN. Semua fitur aktif:
+        text, voice, video, file transfer.
+      </div>
+      <div class="mc-spec">
+        <div><span>LATENCY</span><strong>20–80 ms</strong></div>
+        <div><span>BANDWIDTH</span><strong>FULL</strong></div>
+        <div><span>CHANNELS</span><strong>Text · Voice · Video</strong></div>
+        <div><span>SECURITY</span><strong>TLS 1.3 + E2EE</strong></div>
+      </div>
+    </div>
+
+    <div class="mode-card" style="border-color:rgba(234,179,8,0.5);">
+      <div class="mc-head">
+        <div class="mc-icon" style="background:rgba(234,179,8,0.15); color:#facc15;">📡</div>
+        <div>
+          <div class="mc-title">MANET</div>
+          <div class="mc-sub">Contingency Mode</div>
+        </div>
+      </div>
+      <div class="mc-desc">
+        Mesh peer-to-peer via LoRa / WiFi Direct / Bluetooth. Store-and-forward,
+        tetap jalan saat Command Center tidak reachable.
+      </div>
+      <div class="mc-spec">
+        <div><span>LATENCY</span><strong>200–2000 ms</strong></div>
+        <div><span>BANDWIDTH</span><strong>LIMITED</strong></div>
+        <div><span>CHANNELS</span><strong>Text · Voice</strong></div>
+        <div><span>SECURITY</span><strong>ChaCha20-Poly1305</strong></div>
+      </div>
+    </div>
+
+    <div class="mode-card" style="border-color:rgba(239,68,68,0.5);">
+      <div class="mc-head">
+        <div class="mc-icon" style="background:rgba(239,68,68,0.15); color:#f87171;">📻</div>
+        <div>
+          <div class="mc-title">HF FALLBACK</div>
+          <div class="mc-sub">Emergency Mode</div>
+        </div>
+      </div>
+      <div class="mc-desc">
+        HF SSB 3–30 MHz via ROIP bridge. Text-only, untuk kondisi paling kritis
+        (semua jaringan IP down).
+      </div>
+      <div class="mc-spec">
+        <div><span>LATENCY</span><strong>2–8 detik</strong></div>
+        <div><span>BANDWIDTH</span><strong>MINIMAL</strong></div>
+        <div><span>CHANNELS</span><strong>Text only</strong></div>
+        <div><span>SECURITY</span><strong>Frequency Hopping</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature grid -->
+  <div class="menu-header" style="margin-bottom:20px;">
+    <h2>FITUR UTAMA</h2>
+    <p>Kedaulatan komunikasi untuk operasi militer</p>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="fc-icon">🔐</span>
+      <div class="fc-title">MAC Whitelist Auth</div>
+      <div class="fc-desc">
+        Device register MAC address → admin approve → certificate issued.
+        HP hilang? Revoke cert → langsung brick untuk chat.
+      </div>
+  </div>
+
+<div class="feature-card" style="cursor:pointer;" onclick="location.href='/meet/'">
+    <span class="fc-icon">📋</span>
+    <div class="fc-title">SISKODAL MEET</div>
+    <div class="fc-desc">
+      Koordinasi rapat on-prem via WhatsApp link. Vote titik kumpul, topik bahasan, PIC konsumsi — semua tercatat. Akses 2-layer: nomor terdaftar + operational code.
+    </div>
+    <div style="margin-top:10px;font-size:0.65rem;color:#22d3ee;letter-spacing:1px;font-weight:600;">
+      BUKA TOOL →
+    </div>
+  </div>
+
+  <div class="feature-card">
+      <span class="fc-icon">📱</span>
+      <div class="fc-title">Cross-Platform</div>
+      <div class="fc-desc">
+        Android · iPhone · Desktop (Win/Mac/Linux) · Web browser.
+        Satu akun, semua device — sync real-time.
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="fc-icon">🛡️</span>
+      <div class="fc-title">Classification Tags</div>
+      <div class="fc-desc">
+        Setiap pesan punya level klasifikasi: UNCLASS → TOP SECRET.
+        Clearance user otomatis filter visible messages.
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="fc-icon">🔒</span>
+      <div class="fc-title">End-to-End Encryption</div>
+      <div class="fc-desc">
+        AES-256-GCM + X25519 ECDH key exchange. Signal protocol (Olm/Megolm).
+        Zero-knowledge server.
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="fc-icon">⚡</span>
+      <div class="fc-title">Auto Mode Switch</div>
+      <div class="fc-desc">
+        Deteksi kondisi jaringan → auto-switch COMMAND/MANET/HF.
+        Sync backlog saat kembali online.
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="fc-icon">🏛️</span>
+      <div class="fc-title">On-Premise Sovereign</div>
+      <div class="fc-desc">
+        Server di Mabes AD / DR Makassar / IKN. Data tidak keluar dari NKRI.
+        Fully offline-capable.
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center; margin-top:40px;">
+    <a href="/joc/komunikasi-dashboard.html" class="mp-cta">
+      <i class="fas fa-satellite-dish"></i> Buka Dashboard Komunikasi →
+    </a>
+    <div style="margin-top:20px;">
+      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+        <i class="fas fa-arrow-left"></i> Kembali ke Portal
+      </a>
+    </div>
+  </div>
+
+  <footer class="portal-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">◈</span>
+        <div>
+          <strong>R2 JOINT OPERATIONS CENTER</strong>
+          <span>Powered by RajaCyber · Modern System Integrator</span>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>v1.0 — SISKODAL · Komunikasi</span>
+        <span>© 2026</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
