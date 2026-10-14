@@ -1,6 +1,6 @@
 /* ============================================================
- * PENGATURAN-CORE.JS — System Settings & Robustness Layer
- * Session · Retention · Backup · Emergency Purge
+ * PENGATURAN-CORE.JS â€” System Settings & Robustness Layer
+ * Session Â· Retention Â· Backup Â· Emergency Purge
  * ============================================================ */
 
 const PengaturanCore = (() => {
@@ -213,7 +213,7 @@ const PengaturanCore = (() => {
   function executeRetentionPurge(dryRun = false) {
     const preview = previewPurge();
     if (dryRun) {
-      console.log('[PENGATURAN] DRY RUN — Purge preview:', preview);
+      console.log('[PENGATURAN] DRY RUN â€” Purge preview:', preview);
       return { ok: true, dryRun: true, preview };
     }
 
@@ -355,7 +355,7 @@ const PengaturanCore = (() => {
 
     if (purgeWorkflow.approvals.length >= purgeWorkflow.requiredApprovals) {
       purgeWorkflow.status = 'READY';
-      console.log(`[PENGATURAN] Purge READY — ${purgeWorkflow.approvals.length} approvals`);
+      console.log(`[PENGATURAN] Purge READY â€” ${purgeWorkflow.approvals.length} approvals`);
     }
 
     return { ok: true, workflow: purgeWorkflow };

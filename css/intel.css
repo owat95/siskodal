@@ -1,5 +1,5 @@
 /* ============================================================ */
-/* INTEL.CSS — Strategic Intelligence Dashboard                 */
+/* INTEL.CSS â€” Strategic Intelligence Dashboard                 */
 /* ============================================================ */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -421,7 +421,7 @@ html, body {
 }
 
 .country-card .cc-capabilities li::before {
-  content: '▸';
+  content: 'â–¸';
   position: absolute;
   left: 0;
   color: #22d3ee;

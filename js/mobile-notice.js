@@ -1,6 +1,6 @@
-/* Mobile Notice — SISKODAL
+/* Mobile Notice â€” SISKODAL
  * Muncul di HP/tablet kecil, bisa di-dismiss & diingat pilihan user
- * v1.1 — tambah resize listener + UA fallback
+ * v1.1 â€” tambah resize listener + UA fallback
  */
 (function() {
   'use strict';
@@ -38,16 +38,16 @@
     overlay.innerHTML = `
       <div class="mobile-notice-backdrop"></div>
       <div class="mobile-notice-card">
-        <div class="mn-icon">📱</div>
+        <div class="mn-icon">ðŸ“±</div>
         <h2 class="mn-title">Tampilan Optimal di PC/Laptop</h2>
         <p class="mn-body">
-          SISKODAL dirancang untuk <strong>layar lebar</strong> —
+          SISKODAL dirancang untuk <strong>layar lebar</strong> â€”
           command center, peta 3D, dan dashboard operasional.
           Di smartphone, beberapa modul mungkin tidak tampil optimal.
         </p>
         <p class="mn-body-small">
           Untuk pengalaman terbaik, buka di PC/laptop dengan
-          resolusi minimal <strong>1280×720</strong>.
+          resolusi minimal <strong>1280Ã—720</strong>.
         </p>
         <div class="mn-actions">
           <button class="mn-btn mn-btn-primary" id="mn-continue">
@@ -57,7 +57,7 @@
             Jangan Tampilkan Lagi
           </button>
         </div>
-        <p class="mn-footer">Clearance: SECRET · TNI-AD · 2026</p>
+        <p class="mn-footer">Clearance: SECRET Â· TNI-AD Â· 2026</p>
       </div>
     `;
 
@@ -186,7 +186,7 @@
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(showNotice, 300);
     });
-    console.log('[MOBILE-NOTICE] Ready — isMobile():', isMobile());
+    console.log('[MOBILE-NOTICE] Ready â€” isMobile():', isMobile());
   }
 
   if (document.readyState === 'loading') {

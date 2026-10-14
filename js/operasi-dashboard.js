@@ -1,5 +1,5 @@
 /* ============================================================
- * OPERASI-DASHBOARD.JS — C2 UI Logic
+ * OPERASI-DASHBOARD.JS â€” C2 UI Logic
  * ============================================================ */
 
 const OperasiDashboard = (() => {
@@ -91,7 +91,7 @@ const OperasiDashboard = (() => {
       const u = OperasiData.getUnit(uid);
       if (!u) return '';
       const cat = OperasiData.UNIT_CATEGORIES[u.category];
-      return cat ? cat.icon : '●';
+      return cat ? cat.icon : 'â—';
     }).join(' ');
     const more = m.units.length > 4 ? ` +${m.units.length - 4}` : '';
 
@@ -103,8 +103,8 @@ const OperasiDashboard = (() => {
       <div class="mc-name">${m.name}</div>
       <div class="mc-type">${type.icon} ${type.label}</div>
       <div class="mc-stats">
-        <span>🎯 ${m.targets.length} target</span>
-        <span>◈ ${m.units.length} unit</span>
+        <span>ðŸŽ¯ ${m.targets.length} target</span>
+        <span>â—ˆ ${m.units.length} unit</span>
       </div>
       <div class="mc-progress">
         <div class="mc-progress-fill" style="width:${m.progress}%; background:${progressColor};"></div>
@@ -143,7 +143,7 @@ const OperasiDashboard = (() => {
     if (!m) {
       panel.innerHTML = `
         <div class="detail-empty">
-          <div class="icon">🎯</div>
+          <div class="icon">ðŸŽ¯</div>
           <p>Pilih mission di Kanban untuk melihat detail</p>
         </div>
       `;
@@ -175,10 +175,10 @@ const OperasiDashboard = (() => {
               <span class="u-icon">${cat.icon}</span>
               <div class="u-body">
                 <div class="u-name">${u.name}</div>
-                <div class="u-base">${u.base} · ${u.crew} crew</div>
+                <div class="u-base">${u.base} Â· ${u.crew} crew</div>
               </div>
               <span class="u-readiness" style="color:${rc};">${u.readiness}%</span>
-              ${editable ? `<button class="u-remove" onclick="OperasiDashboard.unassignUnit('${m.id}','${uid}')">✕</button>` : ''}
+              ${editable ? `<button class="u-remove" onclick="OperasiDashboard.unassignUnit('${m.id}','${uid}')">âœ•</button>` : ''}
             </div>
           `;
         }).join('');
@@ -193,7 +193,7 @@ const OperasiDashboard = (() => {
             <div class="target-item">
               <div class="t-name">${t.name}</div>
               <div class="t-meta">
-                <span>📍 ${t.area}</span>
+                <span>ðŸ“ ${t.area}</span>
                 <span>${t.source}</span>
                 <span>Conf: ${(t.confidence * 100).toFixed(0)}%</span>
               </div>
@@ -240,12 +240,12 @@ const OperasiDashboard = (() => {
       </div>
 
       <div class="detail-section">
-        <h4>◤ Objective</h4>
+        <h4>â—¤ Objective</h4>
         <div class="detail-objective">${m.objective}</div>
       </div>
 
       <div class="detail-section">
-        <h4>◤ Location &amp; Commander</h4>
+        <h4>â—¤ Location &amp; Commander</h4>
         <div class="detail-location">
           <i class="fas fa-map-marker-alt" style="color:${type.color};"></i>
           <span>${m.location.name}</span>
@@ -257,7 +257,7 @@ const OperasiDashboard = (() => {
       </div>
 
       <div class="detail-section">
-        <h4>◤ Statistics</h4>
+        <h4>â—¤ Statistics</h4>
         <div class="detail-stats-grid">
           <div class="detail-stat" style="border-left-color:${type.color};">
             <div class="val">${summary.unitCount}</div>
@@ -279,17 +279,17 @@ const OperasiDashboard = (() => {
       </div>
 
       <div class="detail-section">
-        <h4>◤ Units (${m.units.length})</h4>
+        <h4>â—¤ Units (${m.units.length})</h4>
         ${unitsHtml}
       </div>
 
       <div class="detail-section">
-        <h4>◤ Targets (${m.targets.length})</h4>
+        <h4>â—¤ Targets (${m.targets.length})</h4>
         ${targetsHtml}
       </div>
 
       <div class="detail-section">
-        <h4>◤ Operation Phases</h4>
+        <h4>â—¤ Operation Phases</h4>
         <div class="phase-list">
           ${phasesHtml}
         </div>
@@ -352,7 +352,7 @@ const OperasiDashboard = (() => {
       .join('');
 
     prioritySelect.innerHTML = Object.entries(OperasiData.PRIORITY)
-      .map(([k, v]) => `<option value="${k}">${v.code} — ${v.label}</option>`)
+      .map(([k, v]) => `<option value="${k}">${v.code} â€” ${v.label}</option>`)
       .join('');
 
     modal.classList.add('active');

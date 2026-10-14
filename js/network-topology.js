@@ -1,5 +1,5 @@
 /* ============================================================
- * NETWORK-TOPOLOGY.JS — v1.0
+ * NETWORK-TOPOLOGY.JS â€” v1.0
  * Node + link definition based on C6ISR Master Config
  * ============================================================ */
 
@@ -31,7 +31,7 @@ const NETWORK_TOPOLOGY = {
     { id: 'gw-al-surabaya',  name: 'Lantamal V Surabaya',  lat: -7.206,  lon: 112.735, type: 'al', layer: 'gateway' },
     { id: 'gw-al-kupang',    name: 'Lantamal VII Kupang',  lat: -10.163, lon: 123.603, type: 'al', layer: 'gateway' },
 
-    // === OUTER RING — 7 Provinsi Lingkar Luar ===
+    // === OUTER RING â€” 7 Provinsi Lingkar Luar ===
     { id: 'ring-sabang',   name: 'Ring Sabang',    lat: 5.893,  lon: 95.321,  type: 'ring', layer: 'ring' },
     { id: 'ring-natuna',   name: 'Ring Natuna',    lat: 3.950,  lon: 108.383, type: 'ring', layer: 'ring' },
     { id: 'ring-tarakan',  name: 'Ring Tarakan',   lat: 3.327,  lon: 117.576, type: 'ring', layer: 'ring' },
@@ -42,7 +42,7 @@ const NETWORK_TOPOLOGY = {
   ],
 
   // ============================================
-  // LINKS — PACE Strategy
+  // LINKS â€” PACE Strategy
   // types: fiber, vsat, manet, hf, ring-mesh
   // state: up, degraded, down
   // ============================================
@@ -83,7 +83,7 @@ const NETWORK_TOPOLOGY = {
   ],
 
   // ============================================
-  // COVERAGE — Per Sensor Type
+  // COVERAGE â€” Per Sensor Type
   // ============================================
   coverage: [
     { type: 'lora',      radiusKm: 15,  color: '#eab308', label: 'LoRa Sensor (15 km)' },

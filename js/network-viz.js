@@ -1,5 +1,5 @@
 /* ============================================================
- * NETWORK-VIZ.JS — v1.0
+ * NETWORK-VIZ.JS â€” v1.0
  * Cesium visualization: links, nodes, coverage circles
  * ============================================================ */
 
@@ -7,8 +7,8 @@ const NetworkViz = (() => {
   'use strict';
 
   let viewer = null;
-  let linkEntities = new Map();     // linkId → entity
-  let nodeEntities = new Map();     // nodeId → entity
+  let linkEntities = new Map();     // linkId â†’ entity
+  let nodeEntities = new Map();     // nodeId â†’ entity
   let coverageEntities = [];        // Array entities
   let coverageVisible = false;
 
@@ -107,7 +107,7 @@ const NetworkViz = (() => {
   }
 
   // ============================================
-  // LINK STYLE — Visual Style C
+  // LINK STYLE â€” Visual Style C
   // ============================================
   function getLinkStyle(type, state) {
     // Base colors per type
@@ -206,11 +206,11 @@ const NetworkViz = (() => {
   }
 
   // ============================================
-  // UPDATE ALL — Called on escalation change
+  // UPDATE ALL â€” Called on escalation change
   // ============================================
   function updateAll(linkStates, level) {
     if (!viewer) {
-      console.warn('[NET-VIZ] updateAll skipped — viewer not ready');
+      console.warn('[NET-VIZ] updateAll skipped â€” viewer not ready');
       return;
     }
     linkStates.forEach((state, linkId) => {
@@ -224,7 +224,7 @@ const NetworkViz = (() => {
     });
 
     viewer.scene.requestRender();
-    console.log(`[NET-VIZ] Updated ${linkEntities.size} links — level ${level}`);
+    console.log(`[NET-VIZ] Updated ${linkEntities.size} links â€” level ${level}`);
   }
 
   // ============================================

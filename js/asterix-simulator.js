@@ -1,5 +1,5 @@
 /* ============================================================
- * ASTERIX-SIMULATOR.JS — v1.0
+ * ASTERIX-SIMULATOR.JS â€” v1.0
  * Simulasi 3 Radar GCI + 20 track udara Indonesia
  * ============================================================ */
 
@@ -19,7 +19,7 @@ const ASTERIXSimulator = (() => {
   // AIRCRAFT DEFINITIONS
   // ============================================
   const AIRCRAFT_DEFS = [
-    // === F-16 Falcon (AU) — 6 unit ===
+    // === F-16 Falcon (AU) â€” 6 unit ===
     { callsign: 'FALCON01', type: 'fighter', modeS: 0x525001, sidc: '100301000011010100000000000000',
       route: [[-6.266, 106.891], [2.0, 108.0], [5.0, 110.0], [2.0, 115.0], [-6.266, 106.891]],
       speed: 450, fl: 250 },
@@ -39,7 +39,7 @@ const ASTERIXSimulator = (() => {
       route: [[-5.061, 119.554], [-6.0, 122.0], [-8.0, 124.0], [-6.0, 121.0], [-5.061, 119.554]],
       speed: 440, fl: 270 },
 
-    // === Su-30 (AU) — 2 unit ===
+    // === Su-30 (AU) â€” 2 unit ===
     { callsign: 'FLANKER01', type: 'fighter', modeS: 0x525010, sidc: '100301000011010100000000000000',
       route: [[-6.266, 106.891], [3.0, 108.0], [4.5, 110.0], [1.0, 112.0], [-6.266, 106.891]],
       speed: 480, fl: 280 },
@@ -47,7 +47,7 @@ const ASTERIXSimulator = (() => {
       route: [[-5.061, 119.554], [-3.0, 122.0], [0.0, 124.0], [-2.0, 122.0], [-5.061, 119.554]],
       speed: 480, fl: 280 },
 
-    // === Rafale (AU) — 2 unit ===
+    // === Rafale (AU) â€” 2 unit ===
     { callsign: 'RAFAEL01', type: 'fighter', modeS: 0x525020, sidc: '100301000011010100000000000000',
       route: [[-6.266, 106.891], [1.0, 104.0], [3.0, 105.0], [1.0, 108.0], [-6.266, 106.891]],
       speed: 460, fl: 300 },
@@ -55,7 +55,7 @@ const ASTERIXSimulator = (() => {
       route: [[-7.616, 111.434], [-8.5, 114.0], [-9.0, 117.0], [-8.0, 115.0], [-7.616, 111.434]],
       speed: 460, fl: 300 },
 
-    // === UAV MALE (AU) — 4 unit ===
+    // === UAV MALE (AU) â€” 4 unit ===
     { callsign: 'RAVEN01', type: 'uav', modeS: 0x525030, sidc: '100301000011040000000000000000',
       route: [[-6.266, 106.891], [2.0, 108.0], [5.0, 110.0], [2.0, 108.0], [-6.266, 106.891]],
       speed: 180, fl: 200 },
@@ -69,7 +69,7 @@ const ASTERIXSimulator = (() => {
       route: [[-2.533, 140.717], [-4.0, 138.0], [-6.0, 140.0], [-2.533, 140.717]],
       speed: 180, fl: 200 },
 
-    // === Helicopter (AU) — 3 unit ===
+    // === Helicopter (AU) â€” 3 unit ===
     { callsign: 'VIPER01', type: 'heli', modeS: 0x525040, sidc: '100301000011050100000000000000',
       route: [[-6.266, 106.891], [-7.0, 110.0], [-6.0, 112.0], [-6.266, 106.891]],
       speed: 150, fl: 50 },
@@ -80,7 +80,7 @@ const ASTERIXSimulator = (() => {
       route: [[-7.616, 111.434], [-8.0, 114.0], [-7.0, 115.0], [-7.616, 111.434]],
       speed: 150, fl: 50 },
 
-    // === Unknown / Hostile (untuk skenario) — 3 unit ===
+    // === Unknown / Hostile (untuk skenario) â€” 3 unit ===
     { callsign: 'UNKNOWN1', type: 'unknown', modeS: 0x000001, sidc: '100301000011000000000000000000',
       route: [[5.0, 110.0], [4.0, 112.0], [3.0, 114.0], [4.0, 112.0], [5.0, 110.0]],
       speed: 400, fl: 300, affiliation: 'unknown' },
@@ -121,7 +121,7 @@ const ASTERIXSimulator = (() => {
       domain: 'au',
       affiliation: def.affiliation || 'friend',
       lat, lon,
-      alt: def.fl * 100 * 0.3048,  // FL × 100 ft → meter
+      alt: def.fl * 100 * 0.3048,  // FL Ã— 100 ft â†’ meter
       fl: def.fl,
       speed: def.speed,             // knots
       heading: (heading + 360) % 360,
@@ -185,7 +185,7 @@ const ASTERIXSimulator = (() => {
     // Hitung polar (RHO = jarak NM, THETA = sudut dari radar)
     const dLat = track.lat - nearestRadar.lat;
     const dLon = track.lon - nearestRadar.lon;
-    const rho = Math.sqrt(dLat * dLat + dLon * dLon) * 60; // 1 deg ≈ 60 NM
+    const rho = Math.sqrt(dLat * dLat + dLon * dLon) * 60; // 1 deg â‰ˆ 60 NM
     const theta = (Math.atan2(dLon, dLat) * 180 / Math.PI + 360) % 360;
 
     // Encode ASTERIX
@@ -216,7 +216,7 @@ const ASTERIXSimulator = (() => {
 
     if (window.DEBUG_ASTERIX) {
       console.log(`[ASTERIX] ${track.callsign} via ${nearestRadar.name}`,
-        `RHO:${rho.toFixed(1)}NM THETA:${theta.toFixed(1)}° FL:${track.fl}`,
+        `RHO:${rho.toFixed(1)}NM THETA:${theta.toFixed(1)}Â° FL:${track.fl}`,
         `HEX:${ASTERIXCore.toHex(encoded).substring(0, 40)}...`);
     }
   }

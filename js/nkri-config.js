@@ -1,5 +1,5 @@
 /* ============================================================
- * NKRI-CONFIG.JS — Konfigurasi geografis NKRI
+ * NKRI-CONFIG.JS â€” Konfigurasi geografis NKRI
  * ============================================================ */
 
 const NKRI = {

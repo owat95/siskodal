@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Topologi Data — Datacenter IKN — SISKODAL</title>
+  <title>Topologi Data â€” Datacenter IKN â€” SISKODAL</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./css/dashboard.css">
@@ -91,21 +91,21 @@
 <body>
 
 <div class="class-banner">
-  RAHASIA · 🏢 TOPOLOGI DATA ASET · Clearance: SECRET · 2026-10-06
+  RAHASIA Â· ðŸ¢ TOPOLOGI DATA ASET Â· Clearance: SECRET Â· 2026-10-06
 </div>
 
 <header class="topo-header">
   <div class="brand">
-    <div class="brand-mark">🏢</div>
+    <div class="brand-mark">ðŸ¢</div>
     <div>
-      <h1>DATACENTER IKN → SOC</h1>
-      <p class="sub">Self-contained · air-gapped · physical security LLM · internal loop only</p>
+      <h1>DATACENTER IKN â†’ SOC</h1>
+      <p class="sub">Self-contained Â· air-gapped Â· physical security LLM Â· internal loop only</p>
     </div>
   </div>
   <div class="header-stats">
     <div class="stat-item">
       <span class="label">Status</span>
-      <span class="value">● LIVE</span>
+      <span class="value">â— LIVE</span>
     </div>
     <div class="stat-item">
       <span class="label">Latency</span>
@@ -152,14 +152,14 @@
 
       <!-- AIR-GAPPED ZONE -->
       <rect class="air-gap-zone" x="30" y="160" width="1150" height="620" rx="16"/>
-      <text class="air-gap-label" x="50" y="184">◈ AIR-GAPPED ZONE · NO EXTERNAL NETWORK · NO WIRELESS</text>
+      <text class="air-gap-label" x="50" y="184">â—ˆ AIR-GAPPED ZONE Â· NO EXTERNAL NETWORK Â· NO WIRELESS</text>
 
       <!-- DC FLOOR ZONE (contains sensors) -->
       <rect class="dc-zone" x="50" y="630" width="1110" height="130" rx="12"/>
-      <text class="dc-zone-label" x="66" y="652">◈ DC FLOOR · RACK AISLES A–D · RAISED FLOOR · N+1 UPS</text>
+      <text class="dc-zone-label" x="66" y="652">â—ˆ DC FLOOR Â· RACK AISLES Aâ€“D Â· RAISED FLOOR Â· N+1 UPS</text>
 
       <!-- ============ LINKS ============ -->
-      <!-- Sensors → VLM (fan-in) -->
+      <!-- Sensors â†’ VLM (fan-in) -->
       <path id="path-env-vlm" class="topo-link secure" stroke="#10b981"
             d="M 145 630 Q 200 590, 300 580 L 505 570"
             marker-end="url(#arrow-env)"/>
@@ -176,17 +176,17 @@
             d="M 1100 630 Q 920 610, 780 590"
             marker-end="url(#arrow-cctv)"/>
 
-      <!-- VLM → SOC -->
+      <!-- VLM â†’ SOC -->
       <path id="path-vlm-soc" class="topo-link active" stroke="#f59e0b"
             d="M 650 495 L 650 425"
             marker-end="url(#arrow-vlm)"/>
 
-      <!-- SOC → IKN Security Core -->
+      <!-- SOC â†’ IKN Security Core -->
       <path id="path-soc-ikn" class="topo-link active" stroke="#ef4444"
             d="M 650 335 L 650 275"
             marker-end="url(#arrow-soc)"/>
 
-      <!-- IKN Security Core → IKN Central -->
+      <!-- IKN Security Core â†’ IKN Central -->
       <path id="path-ikncentral" class="topo-link active" stroke="#eab308"
             d="M 650 185 L 650 115"
             marker-end="url(#arrow-ikn)"/>
@@ -242,16 +242,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-20" text-anchor="middle" fill="#eab308" font-size="13" font-weight="700" letter-spacing="1">
-          🛰️ IKN CENTRAL
+          ðŸ›°ï¸ IKN CENTRAL
         </text>
         <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
-          NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4
+          NVIDIA L40S Ã—4 Â· MiniMax M3 / DeepSeek V4
         </text>
         <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
-          Multi-INT Fusion · Strategic Advisor · COP
+          Multi-INT Fusion Â· Strategic Advisor Â· COP
         </text>
         <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          IKN Kalimantan Timur · 10.90.1.0/24
+          IKN Kalimantan Timur Â· 10.90.1.0/24
         </text>
       </g>
 
@@ -263,16 +263,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-20" text-anchor="middle" fill="#2dd4bf" font-size="12" font-weight="700" letter-spacing="1">
-          🏢 IKN SECURITY CORE
+          ðŸ¢ IKN SECURITY CORE
         </text>
         <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
-          Aggregation · Correlation · Alerting
+          Aggregation Â· Correlation Â· Alerting
         </text>
         <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
-          SIEM integration · append-only audit log
+          SIEM integration Â· append-only audit log
         </text>
         <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          Self-contained · no external egress
+          Self-contained Â· no external egress
         </text>
       </g>
 
@@ -284,13 +284,13 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-20" text-anchor="middle" fill="#ef4444" font-size="12" font-weight="700" letter-spacing="1">
-          🚨 SECURITY OPS CENTER
+          ðŸš¨ SECURITY OPS CENTER
         </text>
         <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
-          24/7 operator · on-site · SOP 5-min SLA
+          24/7 operator Â· on-site Â· SOP 5-min SLA
         </text>
         <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
-          Alert triage · escalation
+          Alert triage Â· escalation
         </text>
         <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
           On-premise IKN DC
@@ -305,16 +305,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-26" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700" letter-spacing="1">
-          🧠 LOCAL VLM JETSON
+          ðŸ§  LOCAL VLM JETSON
         </text>
         <text x="0" y="-6" text-anchor="middle" fill="#cbd5e1" font-size="10">
-          Jetson Orin AGX 64GB · 275 TOPS · 60W
+          Jetson Orin AGX 64GB Â· 275 TOPS Â· 60W
         </text>
         <text x="0" y="12" text-anchor="middle" fill="#94a3b8" font-size="9">
           VLM: Qwen2-VL / MiniCPM-V
         </text>
         <text x="0" y="30" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          In-DC rack RK-99 · tailgating · PPE check · rack access
+          In-DC rack RK-99 Â· tailgating Â· PPE check Â· rack access
         </text>
       </g>
 
@@ -327,16 +327,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-22" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700" letter-spacing="1">
-          🌡️ ENV SENSORS
+          ðŸŒ¡ï¸ ENV SENSORS
         </text>
         <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
-          Temp · RH · Smoke
+          Temp Â· RH Â· Smoke
         </text>
         <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
-          Water leak · Power
+          Water leak Â· Power
         </text>
         <text x="0" y="32" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          BMS · Modbus
+          BMS Â· Modbus
         </text>
       </g>
 
@@ -348,16 +348,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-22" text-anchor="middle" fill="#8b5cf6" font-size="11" font-weight="700" letter-spacing="1">
-          🔐 ACCESS CONTROL
+          ðŸ” ACCESS CONTROL
         </text>
         <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
           Badge + Biometric + PIN
         </text>
         <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
-          Mantrap door · 2-person rule
+          Mantrap door Â· 2-person rule
         </text>
         <text x="0" y="32" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          Audit log · append-only
+          Audit log Â· append-only
         </text>
       </g>
 
@@ -369,13 +369,13 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-13" text-anchor="middle" fill="#2dd4bf" font-size="10" font-weight="700" letter-spacing="1">
-          📹 CCTV AISLE A
+          ðŸ“¹ CCTV AISLE A
         </text>
         <text x="0" y="5" text-anchor="middle" fill="#94a3b8" font-size="9">
-          R01–R24 · cold aisle
+          R01â€“R24 Â· cold aisle
         </text>
         <text x="0" y="22" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
-          4K · 30fps · IR
+          4K Â· 30fps Â· IR
         </text>
       </g>
 
@@ -387,10 +387,10 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-13" text-anchor="middle" fill="#2dd4bf" font-size="10" font-weight="700" letter-spacing="1">
-          📹 CCTV AISLE B
+          ðŸ“¹ CCTV AISLE B
         </text>
         <text x="0" y="5" text-anchor="middle" fill="#94a3b8" font-size="9">
-          R25–R48 · hot aisle
+          R25â€“R48 Â· hot aisle
         </text>
         <text x="0" y="22" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
           Overhead + door cam
@@ -405,10 +405,10 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-13" text-anchor="middle" fill="#2dd4bf" font-size="10" font-weight="700" letter-spacing="1">
-          📹 CCTV AISLE C
+          ðŸ“¹ CCTV AISLE C
         </text>
         <text x="0" y="5" text-anchor="middle" fill="#94a3b8" font-size="9">
-          R49–R72 · GPU cluster
+          R49â€“R72 Â· GPU cluster
         </text>
         <text x="0" y="22" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
           Thermal + visible
@@ -454,7 +454,7 @@
         <text x="640" y="645" fill="#2dd4bf">RTSP</text>
         <text x="670" y="475" fill="#f59e0b">CoT event</text>
         <text x="670" y="315" fill="#ef4444">Internal only</text>
-        <text x="670" y="160" fill="#eab308">Airtight · 15ms E2E</text>
+        <text x="670" y="160" fill="#eab308">Airtight Â· 15ms E2E</text>
       </g>
 
     </svg>
@@ -472,7 +472,7 @@
   <aside class="topo-sidebar">
 
     <div class="info-panel">
-      <h3>◈ Flow Statistics</h3>
+      <h3>â—ˆ Flow Statistics</h3>
       <div class="flow-stats">
         <div class="flow-stat dc">
           <div class="num">&lt;2ms</div>
@@ -490,20 +490,20 @@
     </div>
 
     <div class="info-panel" id="node-details">
-      <h3>◈ Node Detail</h3>
-      <div class="info-row"><span class="key">Node</span><span class="val dc">CCTV — Rack Aisle A</span></div>
+      <h3>â—ˆ Node Detail</h3>
+      <div class="info-row"><span class="key">Node</span><span class="val dc">CCTV â€” Rack Aisle A</span></div>
       <div class="info-row"><span class="key">Class</span><span class="val">Internal DC Camera</span></div>
-      <div class="info-row"><span class="key">Location</span><span class="val">Rack aisle A · R01–R24 (cold aisle)</span></div>
-      <div class="info-row"><span class="key">Sensors</span><span class="val">4K @ 30fps · IR-capable · PTZ</span></div>
+      <div class="info-row"><span class="key">Location</span><span class="val">Rack aisle A Â· R01â€“R24 (cold aisle)</span></div>
+      <div class="info-row"><span class="key">Sensors</span><span class="val">4K @ 30fps Â· IR-capable Â· PTZ</span></div>
       <div class="info-row"><span class="key">AI Model</span><span class="val">VLM: Qwen2-VL / MiniCPM-V</span></div>
-      <div class="info-row"><span class="key">Uplink</span><span class="val">RTSP / H.265 · LAN &lt;2ms</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val">RTSP / H.265 Â· LAN &lt;2ms</span></div>
       <div class="info-row"><span class="key">Next hop</span><span class="val">Local VLM Jetson (in-DC)</span></div>
     </div>
 
     <div class="info-panel" style="border-color: rgba(239,68,68,0.3);">
-      <h3 style="color: #f87171;">🔒 Air-Gapped</h3>
+      <h3 style="color: #f87171;">ðŸ”’ Air-Gapped</h3>
       <div style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.5;">
-        Datacenter IKN beroperasi <strong style="color:#f87171;">fully air-gapped</strong> —
+        Datacenter IKN beroperasi <strong style="color:#f87171;">fully air-gapped</strong> â€”
         tidak ada koneksi keluar ke internet atau jaringan eksternal.
         <br><br>
         Semua CCTV, access control, dan environmental sensors hanya terhubung ke
@@ -512,7 +512,7 @@
     </div>
 
     <div class="log-panel">
-      <h3>◈ Live Stream Log</h3>
+      <h3>â—ˆ Live Stream Log</h3>
       <div id="log-stream"></div>
     </div>
 
@@ -520,7 +520,7 @@
 </div>
 
 <div class="class-banner bottom">
-  RAHASIA · ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
+  RAHASIA Â· âš  Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
 </div>
 
 <script src="./js/classification.js?v=2.0" data-cfasync="false"></script>
@@ -531,93 +531,93 @@
 
   const NODES = {
     'cctv-aisle-a': {
-      title: 'CCTV — Rack Aisle A', class: 'Internal DC Camera',
-      location: 'Rack aisle A · R01–R24 (cold aisle)',
-      sensors: '4K @ 30fps · IR-capable · PTZ',
-      uplink: 'RTSP / H.265 · LAN <2ms',
-      tactical: 'VLM: Qwen2-VL · 24/7 recording · 90-day retention',
+      title: 'CCTV â€” Rack Aisle A', class: 'Internal DC Camera',
+      location: 'Rack aisle A Â· R01â€“R24 (cold aisle)',
+      sensors: '4K @ 30fps Â· IR-capable Â· PTZ',
+      uplink: 'RTSP / H.265 Â· LAN <2ms',
+      tactical: 'VLM: Qwen2-VL Â· 24/7 recording Â· 90-day retention',
       next: 'Local VLM Jetson (in-DC)', highlight: true
     },
     'cctv-aisle-b': {
-      title: 'CCTV — Rack Aisle B', class: 'Internal DC Camera',
-      location: 'Rack aisle B · R25–R48 (hot aisle)',
-      sensors: '4K @ 30fps · overhead + door cam',
-      uplink: 'RTSP / H.265 · LAN <2ms',
-      tactical: 'Tailgating detection · badge correlation',
+      title: 'CCTV â€” Rack Aisle B', class: 'Internal DC Camera',
+      location: 'Rack aisle B Â· R25â€“R48 (hot aisle)',
+      sensors: '4K @ 30fps Â· overhead + door cam',
+      uplink: 'RTSP / H.265 Â· LAN <2ms',
+      tactical: 'Tailgating detection Â· badge correlation',
       next: 'Local VLM Jetson', highlight: true
     },
     'cctv-aisle-c': {
-      title: 'CCTV — Rack Aisle C', class: 'Internal DC Camera',
-      location: 'Rack aisle C · R49–R72 (GPU cluster)',
-      sensors: '4K + thermal · GPU rack monitoring',
-      uplink: 'RTSP / H.265 · LAN <2ms',
-      tactical: 'Thermal anomaly · rack intrusion detection',
+      title: 'CCTV â€” Rack Aisle C', class: 'Internal DC Camera',
+      location: 'Rack aisle C Â· R49â€“R72 (GPU cluster)',
+      sensors: '4K + thermal Â· GPU rack monitoring',
+      uplink: 'RTSP / H.265 Â· LAN <2ms',
+      tactical: 'Thermal anomaly Â· rack intrusion detection',
       next: 'Local VLM Jetson', highlight: true
     },
     'access': {
       title: 'Access Control System', class: 'Physical Access Control',
       location: 'All entry points + mantrap door',
       sensors: 'Badge reader + biometric + PIN',
-      uplink: '2-factor · encrypted · LAN',
-      tactical: 'Mantrap door · 2-person rule for GPU zone',
+      uplink: '2-factor Â· encrypted Â· LAN',
+      tactical: 'Mantrap door Â· 2-person rule for GPU zone',
       next: 'Local VLM Jetson', highlight: true
     },
     'env': {
       title: 'Environmental Sensors', class: 'BMS Integration',
       location: 'DC floor + rack rows',
-      sensors: 'Temp · RH · smoke · water leak · power',
-      uplink: 'Serial-over-IP / Modbus · LAN',
+      sensors: 'Temp Â· RH Â· smoke Â· water leak Â· power',
+      uplink: 'Serial-over-IP / Modbus Â· LAN',
       tactical: 'Auto-trigger fire suppression + cooling failover',
       next: 'Local VLM Jetson', highlight: true
     },
     'vlm': {
-      title: 'Local VLM Jetson', class: 'Edge AI — Vision-Language Model',
+      title: 'Local VLM Jetson', class: 'Edge AI â€” Vision-Language Model',
       location: 'In-DC secure rack (RK-99)',
       sensors: 'Ingest RTSP dari 12+ kamera + sensor',
-      uplink: 'CoT event → SOC · 15ms E2E',
-      tactical: 'Qwen2-VL / MiniCPM-V · 275 TOPS · 60W',
+      uplink: 'CoT event â†’ SOC Â· 15ms E2E',
+      tactical: 'Qwen2-VL / MiniCPM-V Â· 275 TOPS Â· 60W',
       next: 'Security Operations Center', highlight: true
     },
     'soc': {
       title: 'Security Operations Center', class: 'On-Site SOC',
-      location: 'IKN DC · adjacent room',
+      location: 'IKN DC Â· adjacent room',
       sensors: 'Alert triage dashboard',
       uplink: 'Escalation to IKN Security Core',
-      tactical: '24/7 operator · 5-min response SLA',
+      tactical: '24/7 operator Â· 5-min response SLA',
       next: 'IKN Security Core', highlight: true
     },
     'ikn-core': {
       title: 'IKN Security Core', class: 'Aggregation & Correlation',
-      location: 'IKN DC · core rack',
-      sensors: 'SIEM · correlation engine',
-      uplink: 'Append-only audit log · WORM',
-      tactical: 'Air-gapped · no external egress',
+      location: 'IKN DC Â· core rack',
+      sensors: 'SIEM Â· correlation engine',
+      uplink: 'Append-only audit log Â· WORM',
+      tactical: 'Air-gapped Â· no external egress',
       next: 'IKN Central (strategic)', highlight: true
     },
     'ikn-central': {
       title: 'IKN Central', class: 'Strategic Command',
-      location: 'IKN Kalimantan Timur · 10.90.1.0/24',
-      sensors: 'Multi-INT Fusion · Strategic Advisor',
+      location: 'IKN Kalimantan Timur Â· 10.90.1.0/24',
+      sensors: 'Multi-INT Fusion Â· Strategic Advisor',
       uplink: '~5 Mbps aggregate',
-      tactical: 'NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4',
+      tactical: 'NVIDIA L40S Ã—4 Â· MiniMax M3 / DeepSeek V4',
       next: 'COP Nasional', highlight: true
     },
     'ad-ext': {
       title: 'AD Edge (External)', class: 'Matra: Angkatan Darat',
-      location: 'Outside air-gap', sensors: '—', uplink: '—',
-      tactical: 'Jetson Orin Nano 8GB · SEPARATE NETWORK',
+      location: 'Outside air-gap', sensors: 'â€”', uplink: 'â€”',
+      tactical: 'Jetson Orin Nano 8GB Â· SEPARATE NETWORK',
       next: 'Tidak terhubung ke datacenter ini', highlight: false
     },
     'au-ext': {
       title: 'AU Edge (External)', class: 'Matra: Angkatan Udara',
-      location: 'Outside air-gap', sensors: '—', uplink: '—',
-      tactical: 'Jetson Orin Nano 8GB · SEPARATE NETWORK',
+      location: 'Outside air-gap', sensors: 'â€”', uplink: 'â€”',
+      tactical: 'Jetson Orin Nano 8GB Â· SEPARATE NETWORK',
       next: 'Tidak terhubung ke datacenter ini', highlight: false
     },
     'al-ext': {
       title: 'AL Edge (External)', class: 'Matra: Angkatan Laut',
-      location: 'Outside air-gap', sensors: '—', uplink: '—',
-      tactical: 'Jetson Orin Nano 8GB · SEPARATE NETWORK',
+      location: 'Outside air-gap', sensors: 'â€”', uplink: 'â€”',
+      tactical: 'Jetson Orin Nano 8GB Â· SEPARATE NETWORK',
       next: 'Tidak terhubung ke datacenter ini', highlight: false
     }
   };
@@ -627,7 +627,7 @@
     const n = NODES[nodeId];
     if (!n) return;
     detailsPanel.innerHTML = `
-      <h3>◈ Node Detail</h3>
+      <h3>â—ˆ Node Detail</h3>
       <div class="info-row"><span class="key">Node</span><span class="val ${n.highlight ? 'dc' : ''}">${n.title}</span></div>
       <div class="info-row"><span class="key">Class</span><span class="val">${n.class}</span></div>
       <div class="info-row"><span class="key">Location</span><span class="val">${n.location}</span></div>
@@ -651,20 +651,20 @@
   const logStream = document.getElementById('log-stream');
 
   const LOG_TEMPLATES = [
-    { tag: 'cctv',   text: 'CCTV-A: aisle scan — 2 personnel present, badge OK' },
-    { tag: 'cctv',   text: 'CCTV-B: motion detected — technician closing rack door' },
-    { tag: 'cctv',   text: 'CCTV-C: thermal scan — R60 rack temp 28°C (normal)' },
-    { tag: 'access', text: 'ACCESS: badge scan OK — ID 7841, clearance TOP, GPU zone' },
-    { tag: 'env',    text: 'ENV: aisle B temp 22.4°C · RH 46% · within spec' },
-    { tag: 'env',    text: 'ENV: water leak sensor aisle C — clear' },
-    { tag: 'vlm',    text: 'VLM: Qwen2-VL inference (68ms) — identify 2 persons, PPE complete' },
-    { tag: 'vlm',    text: 'VLM: tailgating check — 1 badge, 1 person · PASS' },
-    { tag: 'vlm',    text: 'VLM: emit CoT event → SOC · type: patrol_ok' },
-    { tag: 'soc',    text: 'SOC: alert triaged · severity LOW · logged, no action' },
-    { tag: 'soc',    text: 'SOC: shift report — 0 critical, 3 informational events' },
-    { tag: 'ikn',    text: 'IKN-CORE: append-only log write — hash chain OK' },
-    { tag: 'ikn',    text: 'IKN-CORE: air-gap integrity check — 0 external egress' },
-    { tag: 'ok',     text: 'PIPELINE: E2E 14ms · all sensors green · uptime 99.999%' }
+    { tag: 'cctv',   text: 'CCTV-A: aisle scan â€” 2 personnel present, badge OK' },
+    { tag: 'cctv',   text: 'CCTV-B: motion detected â€” technician closing rack door' },
+    { tag: 'cctv',   text: 'CCTV-C: thermal scan â€” R60 rack temp 28Â°C (normal)' },
+    { tag: 'access', text: 'ACCESS: badge scan OK â€” ID 7841, clearance TOP, GPU zone' },
+    { tag: 'env',    text: 'ENV: aisle B temp 22.4Â°C Â· RH 46% Â· within spec' },
+    { tag: 'env',    text: 'ENV: water leak sensor aisle C â€” clear' },
+    { tag: 'vlm',    text: 'VLM: Qwen2-VL inference (68ms) â€” identify 2 persons, PPE complete' },
+    { tag: 'vlm',    text: 'VLM: tailgating check â€” 1 badge, 1 person Â· PASS' },
+    { tag: 'vlm',    text: 'VLM: emit CoT event â†’ SOC Â· type: patrol_ok' },
+    { tag: 'soc',    text: 'SOC: alert triaged Â· severity LOW Â· logged, no action' },
+    { tag: 'soc',    text: 'SOC: shift report â€” 0 critical, 3 informational events' },
+    { tag: 'ikn',    text: 'IKN-CORE: append-only log write â€” hash chain OK' },
+    { tag: 'ikn',    text: 'IKN-CORE: air-gap integrity check â€” 0 external egress' },
+    { tag: 'ok',     text: 'PIPELINE: E2E 14ms Â· all sensors green Â· uptime 99.999%' }
   ];
 
   const TAG_CLASSES = { cctv:'cctv', vlm:'vlm', access:'access', env:'env', soc:'soc', ikn:'ikn', ok:'ok' };
@@ -688,7 +688,7 @@
   for (let i = 0; i < 6; i++) pushLog();
   setInterval(pushLog, 1800);
 
-  console.log('[TOPO] Datacenter IKN (air-gapped) → SOC → IKN Security Core ready');
+  console.log('[TOPO] Datacenter IKN (air-gapped) â†’ SOC â†’ IKN Security Core ready');
 })();
 </script>
 

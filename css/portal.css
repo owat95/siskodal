@@ -1,5 +1,5 @@
 /* ============================================================
- * PORTAL.CSS — SISKODAL Menu Hub
+ * PORTAL.CSS â€” SISKODAL Menu Hub
  * ============================================================ */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -316,7 +316,7 @@ html, body {
   .matra-grid { grid-template-columns: 1fr; }
 }
 /* ============================================ */
-/* LIVE PILL — status badge                      */
+/* LIVE PILL â€” status badge                      */
 /* ============================================ */
 .live-pill {
   display: inline-flex;

@@ -1,5 +1,5 @@
 /* ============================================================
- * KPI-ENGINE.JS — v1.0
+ * KPI-ENGINE.JS â€” v1.0
  * Military Personnel KPI + Promotion + Salary Band
  * ============================================================ */
 
@@ -102,7 +102,7 @@ const KPIEngine = (() => {
     const currentIdx = ranks.findIndex(r => r.code === person.rank);
     if (currentIdx === -1) return null;
     if (currentIdx === ranks.length - 1) {
-      return { eligible: false, reason: 'Pangkat tertinggi — tidak ada promosi' };
+      return { eligible: false, reason: 'Pangkat tertinggi â€” tidak ada promosi' };
     }
 
     const current = ranks[currentIdx];

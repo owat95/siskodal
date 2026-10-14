@@ -1,5 +1,5 @@
 /* ============================================================
- * PERSONNEL-DATA.JS — Database personel 3 matra (50 each)
+ * PERSONNEL-DATA.JS â€” Database personel 3 matra (50 each)
  * Enriched: province, education, international, karier
  * ============================================================ */
 
@@ -123,7 +123,7 @@ const PersonnelData = (() => {
     { code: 'MALINDO', name: 'Latma Malindo', location: 'Malaysia', role: 'Liaison Officer', duration: 1 },
     { code: 'RIMPAC', name: 'RIMPAC', location: 'Hawaii, USA', role: 'Naval Observer', duration: 2 },
     { code: 'INDO_US_NAVAL', name: 'Indo-US Naval Exercise', location: 'Jakarta', role: 'Exercise Planner', duration: 1 },
-    { code: 'OBSERVER_IRAN', name: 'Observer Mission', location: 'Iran', role: 'Military Attaché Support', duration: 6 },
+    { code: 'OBSERVER_IRAN', name: 'Observer Mission', location: 'Iran', role: 'Military AttachÃ© Support', duration: 6 },
     { code: 'DPKO_NY', name: 'DPKO Assignment', location: 'New York, USA', role: 'Staff Officer', duration: 24 }
   ];
 
@@ -289,7 +289,7 @@ const PersonnelData = (() => {
     get: (matra) => DATA[matra] || [],
     getAll: () => DATA,
     getById: (matra, id) => DATA[matra].find(p => p.id === id),
-    getRankName: (matra, code) => code // placeholder — akan di-override oleh KPIEngine
+    getRankName: (matra, code) => code // placeholder â€” akan di-override oleh KPIEngine
   };
 })();
 

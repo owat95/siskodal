@@ -1,5 +1,5 @@
 /* ============================================================
- * EXPORT-PDF.JS — Generate PDF reports (Personel + Logistik)
+ * EXPORT-PDF.JS â€” Generate PDF reports (Personel + Logistik)
  * Dependencies: jsPDF, jspdf-autotable (via CDN)
  * ============================================================ */
 
@@ -72,7 +72,7 @@ const ExportPDF = (() => {
     doc.setFontSize(7);
     doc.setTextColor(148, 163, 184);
     doc.text(subtitle, pageW - 14, 20, { align: 'right' });
-    doc.text(`${formatDate()} · ${formatTime()}`, pageW - 14, 25, { align: 'right' });
+    doc.text(`${formatDate()} Â· ${formatTime()}`, pageW - 14, 25, { align: 'right' });
 
     return 42; // Y position after header
   }
@@ -90,8 +90,8 @@ const ExportPDF = (() => {
 
       doc.setFontSize(7);
       doc.setTextColor(...COLORS.textMuted);
-      doc.text('R2 JOINT OPERATIONS CENTER — SISKODAL v1.0', 14, pageH - 7);
-      doc.text('CONFIDENTIAL · Restricted Distribution', pageW / 2, pageH - 7, { align: 'center' });
+      doc.text('R2 JOINT OPERATIONS CENTER â€” SISKODAL v1.0', 14, pageH - 7);
+      doc.text('CONFIDENTIAL Â· Restricted Distribution', pageW / 2, pageH - 7, { align: 'center' });
       doc.text(`Halaman ${i} / ${totalPages}`, pageW - 14, pageH - 7, { align: 'right' });
     }
   }
@@ -154,7 +154,7 @@ const ExportPDF = (() => {
     const positions = PersonnelData.OPEN_POSITIONS[matra] || [];
 
     let y = addHeader(doc, 'LAPORAN PERSONEL & KPI', 'Personnel Intelligence Report', matra);
-    y = addSectionTitle(doc, y, `DATABASE PERSONEL — ${MATRA_LABEL[matra]}`);
+    y = addSectionTitle(doc, y, `DATABASE PERSONEL â€” ${MATRA_LABEL[matra]}`);
 
     // Summary KPIs
     const avgKpi = personnel.reduce((s, p) => s + KPIEngine.computeComposite(p.kpi), 0) / personnel.length;
@@ -216,7 +216,7 @@ const ExportPDF = (() => {
 
     // Succession Planning
     if (y > 220) { doc.addPage(); y = addHeader(doc, 'LAPORAN PERSONEL & KPI', 'Succession Planning', matra); }
-    y = addSectionTitle(doc, y, 'AI SUCCESSION PLANNING — POSISI KRITIS');
+    y = addSectionTitle(doc, y, 'AI SUCCESSION PLANNING â€” POSISI KRITIS');
 
     const successionRows = [];
     positions.forEach(pos => {
@@ -283,7 +283,7 @@ const ExportPDF = (() => {
     const gudang = LogisticsData.getGudang(matra);
 
     let y = addHeader(doc, 'LAPORAN LOGISTIK & AI', 'AI-Powered Supply Chain Report', matra);
-    y = addSectionTitle(doc, y, `OVERVIEW — LOGISTIK ${MATRA_LABEL[matra]}`);
+    y = addSectionTitle(doc, y, `OVERVIEW â€” LOGISTIK ${MATRA_LABEL[matra]}`);
 
     // KPI Boxes
     y = addKpiBox(doc, y, [
@@ -303,12 +303,12 @@ const ExportPDF = (() => {
     y = addSectionTitle(doc, y, 'AI EXECUTIVE SUMMARY');
 
     const summaryLines = [];
-    if (s.criticalFuel > 0) summaryLines.push(`• ${s.criticalFuel} alutsista butuh refuel segera`);
-    if (s.criticalParts > 0) summaryLines.push(`• ${s.criticalParts} spare part diprediksi rusak dalam 14 hari`);
-    if (s.autonomousOps > 0) summaryLines.push(`• ${s.autonomousOps} misi autonomous resupply direkomendasikan`);
-    if (s.supplyImbalances > 0) summaryLines.push(`• ${s.supplyImbalances} gudang perlu redistribusi`);
-    if (s.cyberThreats > 0) summaryLines.push(`• ${s.cyberThreats} anomali siber terdeteksi`);
-    if (summaryLines.length === 0) summaryLines.push('• Semua sistem logistik nominal');
+    if (s.criticalFuel > 0) summaryLines.push(`â€¢ ${s.criticalFuel} alutsista butuh refuel segera`);
+    if (s.criticalParts > 0) summaryLines.push(`â€¢ ${s.criticalParts} spare part diprediksi rusak dalam 14 hari`);
+    if (s.autonomousOps > 0) summaryLines.push(`â€¢ ${s.autonomousOps} misi autonomous resupply direkomendasikan`);
+    if (s.supplyImbalances > 0) summaryLines.push(`â€¢ ${s.supplyImbalances} gudang perlu redistribusi`);
+    if (s.cyberThreats > 0) summaryLines.push(`â€¢ ${s.cyberThreats} anomali siber terdeteksi`);
+    if (summaryLines.length === 0) summaryLines.push('â€¢ Semua sistem logistik nominal');
 
     doc.setFontSize(8);
     doc.setTextColor(...COLORS.textDark);
@@ -367,7 +367,7 @@ const ExportPDF = (() => {
 
     // Predictive Fuel
     if (y > 210) { doc.addPage(); y = addHeader(doc, 'LAPORAN LOGISTIK', 'Predictive Fuel', matra); }
-    y = addSectionTitle(doc, y, 'PREDICTIVE FUEL DEPLETION — AI ANALYSIS');
+    y = addSectionTitle(doc, y, 'PREDICTIVE FUEL DEPLETION â€” AI ANALYSIS');
 
     const fuelSorted = [...analysis.fuelPredictions].sort((a, b) => a.daysRemaining - b.daysRemaining);
     doc.autoTable({
@@ -446,7 +446,7 @@ const ExportPDF = (() => {
     // Cyber Threats
     if (analysis.cyberThreats.length > 0) {
       if (y > 220) { doc.addPage(); y = addHeader(doc, 'LAPORAN LOGISTIK', 'Cyber Threats', matra); }
-      y = addSectionTitle(doc, y, 'CYBER THREAT HUNTING — SUPPLY CHAIN');
+      y = addSectionTitle(doc, y, 'CYBER THREAT HUNTING â€” SUPPLY CHAIN');
 
       doc.autoTable({
         startY: y,

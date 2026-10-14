@@ -1,5 +1,5 @@
 /* ============================================================
- * SIBER-CORE.JS — Cyber Threat Engine (MITRE ATT&CK aligned)
+ * SIBER-CORE.JS â€” Cyber Threat Engine (MITRE ATT&CK aligned)
  * ============================================================ */
 
 const SiberCore = (() => {
@@ -9,20 +9,20 @@ const SiberCore = (() => {
   // MITRE ATT&CK TACTICS
   // ============================================
   const MITRE_TACTICS = {
-    TA0043: { code: 'TA0043', name: 'Reconnaissance',         color: '#94a3b8', icon: '🔍' },
-    TA0042: { code: 'TA0042', name: 'Resource Development',   color: '#64748b', icon: '⚙️' },
-    TA0001: { code: 'TA0001', name: 'Initial Access',         color: '#f97316', icon: '🚪' },
-    TA0002: { code: 'TA0002', name: 'Execution',              color: '#ef4444', icon: '⚡' },
-    TA0003: { code: 'TA0003', name: 'Persistence',            color: '#dc2626', icon: '📌' },
-    TA0004: { code: 'TA0004', name: 'Privilege Escalation',   color: '#b91c1c', icon: '⬆️' },
-    TA0005: { code: 'TA0005', name: 'Defense Evasion',        color: '#991b1b', icon: '🥷' },
-    TA0006: { code: 'TA0006', name: 'Credential Access',      color: '#7c2d12', icon: '🔑' },
-    TA0007: { code: 'TA0007', name: 'Discovery',              color: '#a855f7', icon: '👁️' },
-    TA0008: { code: 'TA0008', name: 'Lateral Movement',       color: '#7e22ce', icon: '➡️' },
-    TA0009: { code: 'TA0009', name: 'Collection',             color: '#6b21a8', icon: '📦' },
-    TA0011: { code: 'TA0011', name: 'Command and Control',    color: '#eab308', icon: '📡' },
-    TA0010: { code: 'TA0010', name: 'Exfiltration',           color: '#facc15', icon: '📤' },
-    TA0040: { code: 'TA0040', name: 'Impact',                 color: '#ef4444', icon: '💥' }
+    TA0043: { code: 'TA0043', name: 'Reconnaissance',         color: '#94a3b8', icon: 'ðŸ”' },
+    TA0042: { code: 'TA0042', name: 'Resource Development',   color: '#64748b', icon: 'âš™ï¸' },
+    TA0001: { code: 'TA0001', name: 'Initial Access',         color: '#f97316', icon: 'ðŸšª' },
+    TA0002: { code: 'TA0002', name: 'Execution',              color: '#ef4444', icon: 'âš¡' },
+    TA0003: { code: 'TA0003', name: 'Persistence',            color: '#dc2626', icon: 'ðŸ“Œ' },
+    TA0004: { code: 'TA0004', name: 'Privilege Escalation',   color: '#b91c1c', icon: 'â¬†ï¸' },
+    TA0005: { code: 'TA0005', name: 'Defense Evasion',        color: '#991b1b', icon: 'ðŸ¥·' },
+    TA0006: { code: 'TA0006', name: 'Credential Access',      color: '#7c2d12', icon: 'ðŸ”‘' },
+    TA0007: { code: 'TA0007', name: 'Discovery',              color: '#a855f7', icon: 'ðŸ‘ï¸' },
+    TA0008: { code: 'TA0008', name: 'Lateral Movement',       color: '#7e22ce', icon: 'âž¡ï¸' },
+    TA0009: { code: 'TA0009', name: 'Collection',             color: '#6b21a8', icon: 'ðŸ“¦' },
+    TA0011: { code: 'TA0011', name: 'Command and Control',    color: '#eab308', icon: 'ðŸ“¡' },
+    TA0010: { code: 'TA0010', name: 'Exfiltration',           color: '#facc15', icon: 'ðŸ“¤' },
+    TA0040: { code: 'TA0040', name: 'Impact',                 color: '#ef4444', icon: 'ðŸ’¥' }
   };
 
   // ============================================

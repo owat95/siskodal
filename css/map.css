@@ -1,5 +1,5 @@
 /* ============================================ */
-/* R2 JOC — Tactical Map CSS                     */
+/* R2 JOC â€” Tactical Map CSS                     */
 /* ============================================ */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -216,7 +216,7 @@ html, body {
 .esc-btn[data-level="3"].active { background: #ef4444; color: #fff; border-color: #ef4444; }
 
 /* ============================================ */
-/* FOOTER — TIMELINE                             */
+/* FOOTER â€” TIMELINE                             */
 /* ============================================ */
 #hud-footer {
   position: absolute;

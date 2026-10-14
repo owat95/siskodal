@@ -1,5 +1,5 @@
 /* ============================================================
- * INTEL-DASHBOARD.JS — Strategic Intelligence UI
+ * INTEL-DASHBOARD.JS â€” Strategic Intelligence UI
  * ============================================================ */
 
 const IntelDashboard = (() => {
@@ -83,15 +83,15 @@ const IntelDashboard = (() => {
       const classColor = classColors[intel.classification] || '#64748b';
 
       const actions = intel.status === 'PENDING'
-        ? `<button class="action-btn verify" onclick="IntelDashboard.verifyIntel('${intel.id}')">✓ Verify</button>
-           <button class="action-btn dismiss" onclick="IntelDashboard.dismissIntel('${intel.id}')">✗ Dismiss</button>`
+        ? `<button class="action-btn verify" onclick="IntelDashboard.verifyIntel('${intel.id}')">âœ“ Verify</button>
+           <button class="action-btn dismiss" onclick="IntelDashboard.dismissIntel('${intel.id}')">âœ— Dismiss</button>`
         : `<span style="font-size:0.7rem; color:#64748b;">${intel.status}</span>`;
 
       return `
         <tr>
           <td class="intel-id">${intel.id}</td>
           <td>
-            <span class="admiralty-badge" style="background:${score.color}22; color:${score.color}; border:1px solid ${score.color}55;" title="${adm.reliability.label} · ${adm.accuracy.label}">
+            <span class="admiralty-badge" style="background:${score.color}22; color:${score.color}; border:1px solid ${score.color}55;" title="${adm.reliability.label} Â· ${adm.accuracy.label}">
               <span class="ab-rel">${adm.reliability.code}</span>
               <span class="ab-slash">/</span>
               <span class="ab-acc">${adm.accuracy.code}</span>
@@ -221,7 +221,7 @@ const IntelDashboard = (() => {
       datasets[key].data.push({
         x: t.probability * 100,
         y: t.impact * 100,
-        label: `${t.actor} — ${t.category}`,
+        label: `${t.actor} â€” ${t.category}`,
         type: t.type,
         region: t.region
       });
@@ -247,7 +247,7 @@ const IntelDashboard = (() => {
                   `${d.label}`,
                   `Type: ${d.type}`,
                   `Region: ${d.region}`,
-                  `Probability: ${d.x}% · Impact: ${d.y}%`
+                  `Probability: ${d.x}% Â· Impact: ${d.y}%`
                 ];
               }
             }
@@ -423,9 +423,9 @@ const IntelDashboard = (() => {
           </td>
           <td style="text-align:right;">
             ${intel.status === 'PENDING'
-              ? `<button class="action-btn verify" onclick="IntelDashboard.verifyIntel('${intel.id}')">✓</button>
-                 <button class="action-btn dismiss" onclick="IntelDashboard.dismissIntel('${intel.id}')">✗</button>`
-              : `<span style="font-size:0.7rem; color:#64748b;">—</span>`}
+              ? `<button class="action-btn verify" onclick="IntelDashboard.verifyIntel('${intel.id}')">âœ“</button>
+                 <button class="action-btn dismiss" onclick="IntelDashboard.dismissIntel('${intel.id}')">âœ—</button>`
+              : `<span style="font-size:0.7rem; color:#64748b;">â€”</span>`}
           </td>
         </tr>
       `;
@@ -466,9 +466,9 @@ const IntelDashboard = (() => {
     const r = IntelCore.verify(id, 'Analis SOC', 'Manual verification');
     if (r.ok) {
       renderOSINTFeed();
-      renderOverviewRecent();   // ← TAMBAH
+      renderOverviewRecent();   // â† TAMBAH
       renderStats();
-      updateBadges();            // ← TAMBAH
+      updateBadges();            // â† TAMBAH
       console.log(`[INTEL-DASH] Verified: ${id}`);
     }
   }
@@ -479,9 +479,9 @@ const IntelDashboard = (() => {
     const r = IntelCore.dismiss(id, reason || 'No reason provided', 'Analis SOC');
     if (r.ok) {
       renderOSINTFeed();
-      renderOverviewRecent();   // ← TAMBAH
+      renderOverviewRecent();   // â† TAMBAH
       renderStats();
-      updateBadges();            // ← TAMBAH
+      updateBadges();            // â† TAMBAH
       console.log(`[INTEL-DASH] Dismissed: ${id}`);
     }
   }

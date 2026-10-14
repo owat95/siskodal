@@ -1,5 +1,5 @@
 /* ============================================================
- * SIBER-DATA.JS — Mock data: attacker IPs, threat events, incidents
+ * SIBER-DATA.JS â€” Mock data: attacker IPs, threat events, incidents
  * ============================================================ */
 
 const SiberData = (() => {
@@ -147,7 +147,7 @@ const SiberData = (() => {
   const INCIDENTS = [
     {
       id: 'INC-2026-0001',
-      title: 'Coordinated Brute Force — Selat Malaka Edge AI',
+      title: 'Coordinated Brute Force â€” Selat Malaka Edge AI',
       severity: 'HIGH',
       status: 'RESOLVED',
       openedAt: Date.now() - 86400000,
@@ -158,7 +158,7 @@ const SiberData = (() => {
     },
     {
       id: 'INC-2026-0002',
-      title: 'C2 Beacon — IKN Central AI',
+      title: 'C2 Beacon â€” IKN Central AI',
       severity: 'CRITICAL',
       status: 'INVESTIGATING',
       openedAt: Date.now() - 7200000,

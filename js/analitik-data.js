@@ -1,5 +1,5 @@
 /* ============================================================
- * ANALITIK-DATA.JS — Time-Series Data Generator & Aggregator
+ * ANALITIK-DATA.JS â€” Time-Series Data Generator & Aggregator
  * ============================================================ */
 
 const AnalitikData = (() => {
@@ -117,7 +117,7 @@ const AnalitikData = (() => {
     return [
       {
         id: 'ins-001',
-        icon: '📈',
+        icon: 'ðŸ“ˆ',
         color: '#22c55e',
         title: 'Personnel Readiness Meningkat',
         text: 'Readiness rata-rata naik <strong>+12%</strong> dalam 7 hari terakhir. Kodam Brawijaya & Siliwangi leading.',
@@ -127,7 +127,7 @@ const AnalitikData = (() => {
       },
       {
         id: 'ins-002',
-        icon: '⚠️',
+        icon: 'âš ï¸',
         color: '#eab308',
         title: 'Fuel Stock Warning',
         text: 'Gudang Jayapura & Merauke di bawah threshold. Prediksi restock dalam <strong>3 hari</strong> jika tidak ada resupply.',
@@ -137,7 +137,7 @@ const AnalitikData = (() => {
       },
       {
         id: 'ins-003',
-        icon: '🛡️',
+        icon: 'ðŸ›¡ï¸',
         color: '#a855f7',
         title: 'Cyber Threat ELEVATED',
         text: 'Deteksi APT dari 12 negara. Auto-block aktif. <strong>23 critical events</strong> dalam 24 jam terakhir.',
@@ -147,7 +147,7 @@ const AnalitikData = (() => {
       },
       {
         id: 'ins-004',
-        icon: '📊',
+        icon: 'ðŸ“Š',
         color: '#60a5fa',
         title: 'Mission Success Rate 87%',
         text: 'Dari 6 mission aktif, 3 executing dengan progress rata-rata <strong>45%</strong>. ETA completion: 5-10 hari.',

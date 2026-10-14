@@ -1,5 +1,5 @@
 /* ============================================================
- * PENGATURAN-DASHBOARD.JS — Settings UI Logic
+ * PENGATURAN-DASHBOARD.JS â€” Settings UI Logic
  * ============================================================ */
 
 const PengaturanDashboard = (() => {
@@ -27,7 +27,7 @@ const PengaturanDashboard = (() => {
     startSessionTimer();
     startClock();
     previewRetentionPurge();
-    // ← TAMBAH
+    // â† TAMBAH
     renderRemoteStats();
     renderRemoteTable();
     wireRemoteFilters();
@@ -114,9 +114,9 @@ const PengaturanDashboard = (() => {
     const toast = document.createElement('div');
     toast.className = 'session-warning-toast';
     toast.innerHTML = `
-      <div class="swt-icon">⏱️</div>
+      <div class="swt-icon">â±ï¸</div>
       <div class="swt-text">
-        <strong>IDLE WARNING</strong> — Session akan berakhir dalam
+        <strong>IDLE WARNING</strong> â€” Session akan berakhir dalam
         <strong>${Math.ceil(remainingMin)} menit</strong>.
         Klik atau gerakkan mouse untuk tetap aktif.
       </div>
@@ -135,9 +135,9 @@ const PengaturanDashboard = (() => {
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,15,30,0.98);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;color:#f87171;font-family:monospace;';
     overlay.innerHTML = `
-      <div style="font-size:4rem;">🔒</div>
+      <div style="font-size:4rem;">ðŸ”’</div>
       <div style="font-size:1.5rem;letter-spacing:2px;font-weight:900;">SESSION ENDED</div>
-      <div style="color:#94a3b8;font-size:0.9rem;">Idle timeout — please re-authenticate</div>
+      <div style="color:#94a3b8;font-size:0.9rem;">Idle timeout â€” please re-authenticate</div>
       <button onclick="location.reload()" style="margin-top:20px;padding:12px 32px;background:linear-gradient(135deg,#3b82f6,#22c55e);color:#fff;border:none;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;font-size:1rem;">
         RE-AUTHENTICATE
       </button>
@@ -192,7 +192,7 @@ const PengaturanDashboard = (() => {
     delete meta.eventType;
     delete meta.sessionId;
     delete meta.userId;
-    return Object.entries(meta).map(([k, v]) => `${k}: ${v}`).join(' · ') || '—';
+    return Object.entries(meta).map(([k, v]) => `${k}: ${v}`).join(' Â· ') || 'â€”';
   }
 
   // ============================================
@@ -234,9 +234,9 @@ const PengaturanDashboard = (() => {
       textEl.innerHTML = `
         Total: <strong style="color:#facc15;">${preview.totalSize}</strong> akan dihapus<br>
         <span style="font-family:'Courier New',monospace;font-size:0.7rem;">
-          • Audit Log: ${preview.items.auditLog.count.toLocaleString('id-ID')} events · ${PengaturanCore.formatBytes(preview.items.auditLog.bytes)}<br>
-          • Cyber Events: ${preview.items.cyberEvent.count.toLocaleString('id-ID')} events · ${PengaturanCore.formatBytes(preview.items.cyberEvent.bytes)}<br>
-          • Intel Data: ${preview.items.intelData.count.toLocaleString('id-ID')} items · ${PengaturanCore.formatBytes(preview.items.intelData.bytes)}
+          â€¢ Audit Log: ${preview.items.auditLog.count.toLocaleString('id-ID')} events Â· ${PengaturanCore.formatBytes(preview.items.auditLog.bytes)}<br>
+          â€¢ Cyber Events: ${preview.items.cyberEvent.count.toLocaleString('id-ID')} events Â· ${PengaturanCore.formatBytes(preview.items.cyberEvent.bytes)}<br>
+          â€¢ Intel Data: ${preview.items.intelData.count.toLocaleString('id-ID')} items Â· ${PengaturanCore.formatBytes(preview.items.intelData.bytes)}
         </span>
       `;
     }
@@ -244,11 +244,11 @@ const PengaturanDashboard = (() => {
   }
 
   function executeRetentionPurge() {
-    if (!confirm('⚠ Yakin execute retention purge?\n\nSemua data kedaluwarsa akan dihapus permanen.')) return;
+    if (!confirm('âš  Yakin execute retention purge?\n\nSemua data kedaluwarsa akan dihapus permanen.')) return;
 
     const r = PengaturanCore.executeRetentionPurge(false);
     if (r.ok) {
-      alert(`✓ Purge berhasil\n\n${r.purged.totalSize} telah dibebaskan.`);
+      alert(`âœ“ Purge berhasil\n\n${r.purged.totalSize} telah dibebaskan.`);
       renderStorage();
       renderSessionLog();
     }
@@ -290,7 +290,7 @@ const PengaturanDashboard = (() => {
 
     area.innerHTML = `
       <div class="backup-progress">
-        <div class="bp-label">◤ BACKUP IN PROGRESS</div>
+        <div class="bp-label">â—¤ BACKUP IN PROGRESS</div>
         <div class="bp-bar-wrap">
           <div class="bp-bar" id="bkp-progress-bar" style="width: 0%;"></div>
         </div>
@@ -315,11 +315,11 @@ const PengaturanDashboard = (() => {
           area.innerHTML = `
             <div class="backup-progress" style="border-left-color:#22c55e;background:rgba(34,197,94,0.08);">
               <div style="display:flex;align-items:center;gap:10px;">
-                <span style="font-size:1.5rem;">✓</span>
+                <span style="font-size:1.5rem;">âœ“</span>
                 <div>
                   <div style="font-size:0.85rem;color:#4ade80;font-weight:700;">BACKUP SUCCESS</div>
                   <div style="font-size:0.72rem;color:#94a3b8;font-family:'Courier New',monospace;margin-top:4px;">
-                    ${backup.id} · ${PengaturanCore.formatBytes(backup.size)} · ${backup.duration}s
+                    ${backup.id} Â· ${PengaturanCore.formatBytes(backup.size)} Â· ${backup.duration}s
                   </div>
                 </div>
               </div>
@@ -505,10 +505,10 @@ const PengaturanDashboard = (() => {
     if (!wf.result) return '';
     return `
       <div style="margin-top:16px;padding:14px;background:rgba(34,197,94,0.08);border-left:3px solid #22c55e;border-radius:0 6px 6px 0;">
-        <div style="font-size:0.75rem;color:#4ade80;font-weight:800;letter-spacing:1px;margin-bottom:8px;">✓ PURGE COMPLETED</div>
+        <div style="font-size:0.75rem;color:#4ade80;font-weight:800;letter-spacing:1px;margin-bottom:8px;">âœ“ PURGE COMPLETED</div>
         <div style="font-size:0.7rem;font-family:'Courier New',monospace;color:#cbd5e1;line-height:1.6;">
           ${Object.entries(wf.result).map(([k, v]) => 
-            `• ${k}: ${v.items} items (${v.status})`
+            `â€¢ ${k}: ${v.items} items (${v.status})`
           ).join('<br>')}
         </div>
       </div>
@@ -550,7 +550,7 @@ const PengaturanDashboard = (() => {
       renderPurgeStatus();
       renderSessionLog();
       setTimeout(() => {
-        alert('🚨 EMERGENCY PURGE COMPLETED\n\nSemua data sensitif lokal telah dihapus secara aman.');
+        alert('ðŸš¨ EMERGENCY PURGE COMPLETED\n\nSemua data sensitif lokal telah dihapus secara aman.');
       }, 300);
     }
   }
@@ -570,7 +570,7 @@ const PengaturanDashboard = (() => {
   }
 
   function resetConfig() {
-    if (!confirm('⚠ Reset configuration ke default?\n\nSemua perubahan akan hilang.')) return;
+    if (!confirm('âš  Reset configuration ke default?\n\nSemua perubahan akan hilang.')) return;
     PengaturanCore.resetConfig();
     location.reload();
   }
@@ -672,7 +672,7 @@ const PengaturanDashboard = (() => {
           </td>
           <td>
             <div style="font-size:0.78rem;color:#fff;font-weight:600;">${site.shortName}</div>
-            <div style="font-size:0.65rem;color:#64748b;font-family:monospace;">${site.hq || '—'}</div>
+            <div style="font-size:0.65rem;color:#64748b;font-family:monospace;">${site.hq || 'â€”'}</div>
           </td>
           <td>
             <span style="font-size:0.65rem;padding:2px 6px;border-radius:3px;background:${typeColor}22;color:${typeColor};border:1px solid ${typeColor}55;font-family:monospace;">

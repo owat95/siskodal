@@ -1,5 +1,5 @@
 /* ============================================================
- * NETWORK-EMULATOR.JS — v1.0
+ * NETWORK-EMULATOR.JS â€” v1.0
  * Failover logic, event system, PACE state machine
  * ============================================================ */
 
@@ -16,7 +16,7 @@ const NetworkEmulator = (() => {
   };
 
   let currentLevel = 1;
-  let linkStates = new Map();  // linkId → 'up' | 'degraded' | 'down'
+  let linkStates = new Map();  // linkId â†’ 'up' | 'degraded' | 'down'
   let onEventCallback = null;
   let stats = { up: 0, degraded: 0, down: 0 };
 
@@ -29,7 +29,7 @@ const NetworkEmulator = (() => {
       linkStates.set(link.id, link.state || 'up');
     });
     recalcStats();
-    console.log(`[NET-EMU] Initialized — ${NETWORK_TOPOLOGY.links.length} links`);
+    console.log(`[NET-EMU] Initialized â€” ${NETWORK_TOPOLOGY.links.length} links`);
   }
 
   // ============================================
@@ -40,32 +40,32 @@ const NetworkEmulator = (() => {
     currentLevel = level;
 
     if (level === 1) {
-      // NORMAL — semua kembali up
+      // NORMAL â€” semua kembali up
       NETWORK_TOPOLOGY.links.forEach(link => {
         linkStates.set(link.id, 'up');
       });
-      logEvent('NORMAL — Semua link aktif', 'info');
+      logEvent('NORMAL â€” Semua link aktif', 'info');
     }
 
     if (level === 2) {
-      // ELEVATED — degradasi fiber
+      // ELEVATED â€” degradasi fiber
       NETWORK_TOPOLOGY.links.forEach(link => {
         if (link.type === 'fiber') {
           linkStates.set(link.id, 'degraded');
         }
       });
-      logEvent('ELEVATED — Fiber degraded, VSAT standby', 'warning');
+      logEvent('ELEVATED â€” Fiber degraded, VSAT standby', 'warning');
     }
 
     if (level === 3) {
-      // CRITICAL — fiber cut, VSAT down, MANET aktif
+      // CRITICAL â€” fiber cut, VSAT down, MANET aktif
       NETWORK_TOPOLOGY.links.forEach(link => {
         if (link.type === 'fiber') linkStates.set(link.id, 'down');
         if (link.type === 'vsat')  linkStates.set(link.id, 'down');
         if (link.type === 'ring')  linkStates.set(link.id, 'up'); // Ring tetap
       });
       activateMANET();
-      logEvent('CRITICAL — Fiber CUT, VSAT DOWN, MANET AKTIF', 'critical');
+      logEvent('CRITICAL â€” Fiber CUT, VSAT DOWN, MANET AKTIF', 'critical');
       logEvent('AI Advisor: Alihkan UAV ke area gap', 'info');
     }
 

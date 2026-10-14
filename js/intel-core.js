@@ -1,5 +1,5 @@
 /* ============================================================
- * INTEL-CORE.JS — Source Credibility + Verification Workflow
+ * INTEL-CORE.JS â€” Source Credibility + Verification Workflow
  * ============================================================ */
 
 const IntelCore = (() => {
@@ -216,7 +216,7 @@ const IntelCore = (() => {
     let autoDismissed = 0;
 
     pending.forEach(intel => {
-      // Rule 1: A1, A2, B1, B2 with CRITICAL/HIGH severity → auto verify
+      // Rule 1: A1, A2, B1, B2 with CRITICAL/HIGH severity â†’ auto verify
       const highCred = ['A1', 'A2', 'B1', 'B2'].includes(intel.admiralty);
       const highSev = ['CRITICAL', 'HIGH'].includes(intel.severity);
       if (highCred && highSev) {
@@ -225,7 +225,7 @@ const IntelCore = (() => {
         return;
       }
 
-      // Rule 2: D, E, F reliability → auto dismiss
+      // Rule 2: D, E, F reliability â†’ auto dismiss
       if (['D', 'E', 'F'].includes(intel.admiralty[0])) {
         dismiss(intel.id, 'Source reliability too low', 'AI-Auto-Verifier');
         autoDismissed++;

@@ -1,5 +1,5 @@
 /* ============================================================
- * AI-CONFIDENCE.JS — AI Model Confidence & Fallibility Tracking
+ * AI-CONFIDENCE.JS â€” AI Model Confidence & Fallibility Tracking
  * Setiap output AI wajib punya confidence score + disclaimer
  * ============================================================ */
 
@@ -43,7 +43,7 @@ const AIConfidence = (() => {
       baseAccuracy: 0.91,
       lastValidation: Date.now() - 3 * 3600 * 1000,
       sampleSize: 3421,
-      knownIssues: ['Unusual terrain affects accuracy ±12%'],
+      knownIssues: ['Unusual terrain affects accuracy Â±12%'],
       version: 'v1.4'
     },
     'succession-ai': {
@@ -80,7 +80,7 @@ const AIConfidence = (() => {
       confidence *= (0.7 + context.dataQuality * 0.3);
     }
 
-    // Freshness: stale data → lower confidence
+    // Freshness: stale data â†’ lower confidence
     if (context.dataAgeSec) {
       if (context.dataAgeSec > 300) confidence *= 0.85;
       else if (context.dataAgeSec > 60) confidence *= 0.95;
@@ -120,7 +120,7 @@ const AIConfidence = (() => {
   function getDisclaimer(level, model) {
     if (level === 'HIGH') return `Model akurasi tinggi. Human oversight tetap diperlukan untuk keputusan operasional.`;
     if (level === 'MEDIUM') return `Model akurasi sedang. Cross-check dengan sumber lain sebelum mengambil tindakan.`;
-    return `⚠ Model akurasi rendah. Hasil AI <strong>wajib diverifikasi</strong> oleh analis manusia. Jangan gunakan sebagai satu-satunya dasar keputusan.`;
+    return `âš  Model akurasi rendah. Hasil AI <strong>wajib diverifikasi</strong> oleh analis manusia. Jangan gunakan sebagai satu-satunya dasar keputusan.`;
   }
 
   // ============================================
@@ -174,7 +174,7 @@ const AIConfidence = (() => {
 
     container.innerHTML = `
       <div class="ai-confidence-badge" title="${c.disclaimer}">
-        <span class="acb-icon">🤖</span>
+        <span class="acb-icon">ðŸ¤–</span>
         <span class="acb-model">${c.model.name}</span>
         <span class="acb-score" style="color:${c.color};">
           ${c.confidencePct}%

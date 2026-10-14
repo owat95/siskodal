@@ -1,5 +1,5 @@
 /* ============================================================
- * SIEM-MOCK.JS — v1.0
+ * SIEM-MOCK.JS â€” v1.0
  * Simulasi Zero Trust + SIEM untuk dashboard
  * ============================================================ */
 
@@ -12,15 +12,15 @@ const SIEMMock = (() => {
   const CONFIG = {
     maxEvents: 200,
     correlationWindowSec: 60,
-    autoBlockThreshold: 5   // 5 failed logins → auto-block
+    autoBlockThreshold: 5   // 5 failed logins â†’ auto-block
   };
 
   // ============================================
   // STATE
   // ============================================
   let events = [];
-  let blockedIPs = new Map();  // ip → { reason, timestamp }
-  let activeSessions = new Map(); // user → { ip, tier, loginTime, lastActivity }
+  let blockedIPs = new Map();  // ip â†’ { reason, timestamp }
+  let activeSessions = new Map(); // user â†’ { ip, tier, loginTime, lastActivity }
   let rules = [];
   let running = false;
   let eventGenInterval = null;
@@ -59,7 +59,7 @@ const SIEMMock = (() => {
     // Generate events setiap 3 detik (simulasi log)
     eventGenInterval = setInterval(generateRandomEvent, 3000);
 
-    logEvent('SIEM', 'System initialized — Wazuh mock active', 'info');
+    logEvent('SIEM', 'System initialized â€” Wazuh mock active', 'info');
     console.log('[SIEM] Mock initialized');
   }
 
@@ -169,7 +169,7 @@ const SIEMMock = (() => {
   const alerts_emitted = new Map();
 
   function emitAlert(alert) {
-    const msg = `[SIEM:${alert.severity}] ${alert.ruleName} — ${JSON.stringify(alert.matches)}`;
+    const msg = `[SIEM:${alert.severity}] ${alert.ruleName} â€” ${JSON.stringify(alert.matches)}`;
     console.log(msg);
     if (window.assetManager) {
       window.assetManager.logEvent(
@@ -262,7 +262,7 @@ const SIEMMock = (() => {
     }
 
     if (window.assetManager) {
-      window.assetManager.logEvent('⚠ SCENARIO: Brute force attack simulated', 'warning');
+      window.assetManager.logEvent('âš  SCENARIO: Brute force attack simulated', 'warning');
     }
   }
 
@@ -276,7 +276,7 @@ const SIEMMock = (() => {
       size: '2.3 GB'
     });
     if (window.assetManager) {
-      window.assetManager.logEvent('⚠ SCENARIO: Data exfiltration detected', 'critical');
+      window.assetManager.logEvent('âš  SCENARIO: Data exfiltration detected', 'critical');
     }
   }
 

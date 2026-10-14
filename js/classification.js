@@ -1,5 +1,5 @@
 /* ============================================================
- * CLASSIFICATION.JS — Data Classification Marking (NATO Standard)
+ * CLASSIFICATION.JS â€” Data Classification Marking (NATO Standard)
  * Setiap halaman WAJIB punya classification banner
  * ============================================================ */
 
@@ -49,12 +49,12 @@ const Classification = (() => {
     top.style.borderBottom = `2px solid ${level.color}`;
     top.innerHTML = `
       <span class="cb-label" style="color:${level.color};">${level.label}</span>
-      <span class="cb-sep">·</span>
+      <span class="cb-sep">Â·</span>
       <span class="cb-info">
-        <span class="cb-item">👤 ${currentUser.name}</span>
-        <span class="cb-item">🔐 Clearance: <strong style="color:${level.color};">${currentUser.clearance}</strong></span>
-        <span class="cb-item">📅 ${new Date().toISOString().split('T')[0]}</span>
-        <span class="cb-item cb-handling">Handle via NOFORN · TNI-AD</span>
+        <span class="cb-item">ðŸ‘¤ ${currentUser.name}</span>
+        <span class="cb-item">ðŸ” Clearance: <strong style="color:${level.color};">${currentUser.clearance}</strong></span>
+        <span class="cb-item">ðŸ“… ${new Date().toISOString().split('T')[0]}</span>
+        <span class="cb-item cb-handling">Handle via NOFORN Â· TNI-AD</span>
       </span>
     `;
 
@@ -70,9 +70,9 @@ const Classification = (() => {
     bottom.style.borderTop = `2px solid ${level.color}`;
     bottom.innerHTML = `
       <span class="cb-label" style="color:${level.color};">${level.label}</span>
-      <span class="cb-sep">·</span>
+      <span class="cb-sep">Â·</span>
       <span class="cb-info cb-warning">
-        ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai
+        âš  Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai
         dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
       </span>
     `;

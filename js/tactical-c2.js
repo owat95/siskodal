@@ -1,5 +1,5 @@
 /* ============================================================
- * TACTICAL-C2.JS — Mobile C2 App (Mockup)
+ * TACTICAL-C2.JS â€” Mobile C2 App (Mockup)
  * Version: 1.0.0
  * ============================================================ */
 (function() {
@@ -61,7 +61,7 @@
       nvBtn.innerHTML = isNV
         ? '<i class="fas fa-eye-slash"></i> Normal Mode'
         : '<i class="fas fa-eye"></i> Night Vision Mode';
-      showToast(isNV ? '🌙 NIGHT VISION ACTIVE' : '☀️ NORMAL MODE ACTIVE', 'info');
+      showToast(isNV ? 'ðŸŒ™ NIGHT VISION ACTIVE' : 'â˜€ï¸ NORMAL MODE ACTIVE', 'info');
     });
   }
 
@@ -69,7 +69,7 @@
   const alertBtn = document.getElementById('alert-btn');
   if (alertBtn) {
     alertBtn.addEventListener('click', () => {
-      showToast('⚠ CONTACT DETECTED — SECTOR 3 · 3 PAX · 500M FRONT', 'danger');
+      showToast('âš  CONTACT DETECTED â€” SECTOR 3 Â· 3 PAX Â· 500M FRONT', 'danger');
       const chatBtn = document.querySelector('[data-sheet="chat"]');
       if (chatBtn) chatBtn.classList.add('active');
     });
@@ -149,7 +149,7 @@
   document.querySelectorAll('.unit-item').forEach(item => {
     item.addEventListener('click', () => {
       const callsign = item.querySelector('.callsign');
-      if (callsign) showToast('◈ FOCUS: ' + callsign.textContent, 'info');
+      if (callsign) showToast('â—ˆ FOCUS: ' + callsign.textContent, 'info');
     });
   });
 
@@ -158,13 +158,13 @@
     marker.style.cursor = 'pointer';
     marker.addEventListener('click', () => {
       const unit = marker.getAttribute('data-unit');
-      if (unit) showToast('◈ TARGET: ' + unit + ' · TAP UNTUK DETAIL', 'info');
+      if (unit) showToast('â—ˆ TARGET: ' + unit + ' Â· TAP UNTUK DETAIL', 'info');
     });
   });
 
   // ============ SIMULATE INCOMING CONTACT ============
   setTimeout(() => {
-    showToast('⚠ HOSTILE CONTACT UPDATED · MOVING EAST', 'danger');
+    showToast('âš  HOSTILE CONTACT UPDATED Â· MOVING EAST', 'danger');
   }, 12000);
   // ============ MOBILE FLOATING CONTROLS ============
   // Clone fungsi NV & Alert untuk mobile
@@ -186,14 +186,14 @@
           ? '<i class="fas fa-eye-slash"></i> Normal Mode'
           : '<i class="fas fa-eye"></i> Night Vision Mode';
       }
-      showToast(isNV ? '🌙 NIGHT VISION ACTIVE' : '☀️ NORMAL MODE', 'info');
+      showToast(isNV ? 'ðŸŒ™ NIGHT VISION ACTIVE' : 'â˜€ï¸ NORMAL MODE', 'info');
     });
   }
 
   if (mobileAlertBtn) {
     mobileAlertBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      showToast('⚠ CONTACT DETECTED — SECTOR 3', 'danger');
+      showToast('âš  CONTACT DETECTED â€” SECTOR 3', 'danger');
       const chatBtn = document.querySelector('[data-sheet="chat"]');
       if (chatBtn) chatBtn.click();
     });
@@ -343,7 +343,7 @@
     `;
     
     const info = [
-      'VIEWPORT: ' + window.innerWidth + '×' + window.innerHeight,
+      'VIEWPORT: ' + window.innerWidth + 'Ã—' + window.innerHeight,
       'DPR: ' + window.devicePixelRatio,
       'TOUCH: ' + ('ontouchstart' in window ? 'YES' : 'NO'),
       'UA: ' + navigator.userAgent.substring(0, 60),
@@ -353,8 +353,8 @@
       'SCRIPT: ' + (typeof window !== 'undefined' ? 'LOADED' : 'FAILED'),
     ];
     
-    diag.innerHTML = '<div style="font-weight:700;margin-bottom:6px;color:#fff;">◈ TACTICAL-C2 DIAGNOSTIC</div>' +
-      info.map(line => '· ' + line).join('<br>') +
+    diag.innerHTML = '<div style="font-weight:700;margin-bottom:6px;color:#fff;">â—ˆ TACTICAL-C2 DIAGNOSTIC</div>' +
+      info.map(line => 'Â· ' + line).join('<br>') +
       '<br><div style="margin-top:8px;color:#facc15;">Tap anywhere to dismiss</div>';
     
     document.body.appendChild(diag);
@@ -413,5 +413,5 @@
       btn.classList.add('active');
     });
   });
-  console.log('[TACTICAL-C2] Ready · MIL-STD-2525 · offline-first · on-prem IKN');
+  console.log('[TACTICAL-C2] Ready Â· MIL-STD-2525 Â· offline-first Â· on-prem IKN');
 })();

@@ -1,5 +1,5 @@
 /* ============================================================
- * OPERASI-CORE.JS — Mission State Machine + Unit Assignment
+ * OPERASI-CORE.JS â€” Mission State Machine + Unit Assignment
  * ============================================================ */
 
 const OperasiCore = (() => {
@@ -24,7 +24,7 @@ const OperasiCore = (() => {
   }
 
   // ============================================
-  // STATE MACHINE — VALID TRANSITIONS
+  // STATE MACHINE â€” VALID TRANSITIONS
   // ============================================
   const VALID_TRANSITIONS = {
     PLANNING:  ['APPROVED', 'ABORTED'],
@@ -43,7 +43,7 @@ const OperasiCore = (() => {
     if (!mission) return { ok: false, reason: 'NOT_FOUND' };
 
     if (!canTransition(mission.status, newStatus)) {
-      return { ok: false, reason: `INVALID_TRANSITION: ${mission.status} → ${newStatus}` };
+      return { ok: false, reason: `INVALID_TRANSITION: ${mission.status} â†’ ${newStatus}` };
     }
 
     const oldStatus = mission.status;
@@ -58,7 +58,7 @@ const OperasiCore = (() => {
     }
 
     notifyListeners({ type: 'STATUS_CHANGE', missionId, from: oldStatus, to: newStatus });
-    console.log(`[OPS-CORE] ${missionId}: ${oldStatus} → ${newStatus}`);
+    console.log(`[OPS-CORE] ${missionId}: ${oldStatus} â†’ ${newStatus}`);
     return { ok: true, from: oldStatus, to: newStatus };
   }
 
@@ -90,7 +90,7 @@ const OperasiCore = (() => {
 
     mission.units.push(unitId);
     notifyListeners({ type: 'UNIT_ASSIGNED', missionId, unitId });
-    console.log(`[OPS-CORE] Assigned ${unit.name} → ${mission.name}`);
+    console.log(`[OPS-CORE] Assigned ${unit.name} â†’ ${mission.name}`);
     return { ok: true };
   }
 

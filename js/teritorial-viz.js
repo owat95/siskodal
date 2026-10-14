@@ -1,6 +1,6 @@
 /* ============================================================
- * TERITORIAL-VIZ.JS — Kodam Polygon Renderer untuk Cesium
- * 27 Kodam · 38 Provinsi · Data 2026
+ * TERITORIAL-VIZ.JS â€” Kodam Polygon Renderer untuk Cesium
+ * 27 Kodam Â· 38 Provinsi Â· Data 2026
  * ============================================================ */
 
 const TeritorialViz = (() => {
@@ -21,7 +21,7 @@ const TeritorialViz = (() => {
   let onHoverCallback = null;
 
   // ============================================
-  // PROVINCE → KODAM MAPPING (explicit)
+  // PROVINCE â†’ KODAM MAPPING (explicit)
   // ============================================
   const PROVINCE_TO_KODAM = {
     'aceh': 'kodam-iskandar-muda',
@@ -143,11 +143,11 @@ const TeritorialViz = (() => {
   function addPolygon(rings, baseColor, accentColor, kodam) {
     if (!rings || rings.length === 0) return null;
 
-    // Only outer ring (index 0) — holes not processed for simplicity
+    // Only outer ring (index 0) â€” holes not processed for simplicity
     const outerRing = rings[0];
     if (!outerRing || outerRing.length < 3) return null;
 
-    // Flatten: [[lon,lat], [lon,lat], ...] → [lon, lat, lon, lat, ...]
+    // Flatten: [[lon,lat], [lon,lat], ...] â†’ [lon, lat, lon, lat, ...]
     const flat = [];
     outerRing.forEach(coord => {
       flat.push(coord[0], coord[1]);
@@ -229,7 +229,7 @@ const TeritorialViz = (() => {
       if (!kodam.korem || kodam.korem.length === 0) return;
       if (!kodamKoremEntities[kodam.id]) kodamKoremEntities[kodam.id] = [];
 
-      // Approximate korem coords — spread around HQ using index
+      // Approximate korem coords â€” spread around HQ using index
       kodam.korem.forEach((korem, idx) => {
         const offsetLat = (idx - (kodam.korem.length - 1) / 2) * 0.4;
         const offsetLon = Math.sin(idx * 1.5) * 0.6;
@@ -295,7 +295,7 @@ const TeritorialViz = (() => {
           }
         }
       }
-      // Click on empty space → deselect
+      // Click on empty space â†’ deselect
       deselectAll();
       if (onSelectCallback) onSelectCallback(null);
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);

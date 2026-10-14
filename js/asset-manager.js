@@ -1,5 +1,5 @@
 /* ============================================================
- * ASSET-MANAGER.JS — v2.4 CLEAN
+ * ASSET-MANAGER.JS â€” v2.4 CLEAN
  * + AIS Simulator
  * + ASTERIX Simulator
  * + Network Emulator
@@ -110,9 +110,9 @@ class AssetManager {
 
   onEscalationChange(level) {
     const msgs = {
-      1: 'Status NORMAL — Semua sistem operasional',
-      2: 'Status ELEVATED — Peningkatan aktivitas terdeteksi',
-      3: 'Status CRITICAL — Fiber cut, VSAT down, MANET aktif'
+      1: 'Status NORMAL â€” Semua sistem operasional',
+      2: 'Status ELEVATED â€” Peningkatan aktivitas terdeteksi',
+      3: 'Status CRITICAL â€” Fiber cut, VSAT down, MANET aktif'
     };
     this.logEvent(msgs[level], level === 3 ? 'critical' : 'info');
   }
@@ -261,7 +261,7 @@ async function bootstrap() {
     }
     wireControls();
 
-    assetManager.logEvent('SYSTEM READY — NKRI COP initialized', 'info');
+    assetManager.logEvent('SYSTEM READY â€” NKRI COP initialized', 'info');
     console.log('[BOOTSTRAP] All systems ready');
 
     // Init strategic advisor
@@ -280,7 +280,7 @@ async function bootstrap() {
     setTimeout(() => {
       if (window.AISSimulator) {
         AISSimulator.start();
-        assetManager.logEvent(`AIS Simulator started — ${AISSimulator.getShips().length} ships`, 'info');
+        assetManager.logEvent(`AIS Simulator started â€” ${AISSimulator.getShips().length} ships`, 'info');
         console.log(`[AIS-SIM] ${AISSimulator.getShips().length} ships registered`);
       } else {
         console.warn('[AIS-SIM] Simulator not loaded');
@@ -291,7 +291,7 @@ async function bootstrap() {
     setTimeout(() => {
       if (window.ASTERIXSimulator) {
         ASTERIXSimulator.start();
-        assetManager.logEvent(`ASTERIX Simulator started — ${ASTERIXSimulator.getTracks().length} tracks`, 'info');
+        assetManager.logEvent(`ASTERIX Simulator started â€” ${ASTERIXSimulator.getTracks().length} tracks`, 'info');
         console.log(`[ASTERIX-SIM] ${ASTERIXSimulator.getTracks().length} tracks registered`);
       } else {
         console.warn('[ASTERIX-SIM] Not loaded');

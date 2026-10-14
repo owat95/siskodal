@@ -1,6 +1,6 @@
 /* ============================================================
- * ICR-EDGE-AI.JS — Edge AI Pipeline Simulation
- * Sensor → Edge (Jetson) → Middleware → IKN
+ * ICR-EDGE-AI.JS â€” Edge AI Pipeline Simulation
+ * Sensor â†’ Edge (Jetson) â†’ Middleware â†’ IKN
  * ============================================================ */
 
 const ICREdgeAI = (() => {
@@ -42,14 +42,14 @@ const ICREdgeAI = (() => {
       { type: 'NORMAL_THERMAL',        confidence: [0.85, 0.99], classification: 'UNCLASS',      discipline: 'IMINT',    msg: 'Kondisi thermal normal' }
     ],
     lora: [
-      { type: 'SEISMIC_ANOMALY',       confidence: [0.70, 0.95], classification: 'CONFIDENTIAL', discipline: 'MASINT',   msg: 'Anomali seismik — kemungkinan kendaraan berat' },
+      { type: 'SEISMIC_ANOMALY',       confidence: [0.70, 0.95], classification: 'CONFIDENTIAL', discipline: 'MASINT',   msg: 'Anomali seismik â€” kemungkinan kendaraan berat' },
       { type: 'MAGNETIC_DETECT',       confidence: [0.65, 0.92], classification: 'RESTRICTED',   discipline: 'MASINT',   msg: 'Anomali magnetik terdeteksi' },
       { type: 'NORMAL_SEISMIC',        confidence: [0.88, 0.99], classification: 'UNCLASS',      discipline: 'MASINT',   msg: 'Seismik normal' }
     ],
     ais: [
       { type: 'VESSEL_NO_AIS',         confidence: [0.80, 0.98], classification: 'CONFIDENTIAL', discipline: 'OSINT',    msg: 'Kapal tanpa AIS terdeteksi' },
-      { type: 'AIS_POSITION_JUMP',     confidence: [0.75, 0.95], classification: 'SECRET',       discipline: 'OSINT',    msg: 'Anomali posisi AIS — indikasi spoofing' },
-      { type: 'MMSI_INVALID',          confidence: [0.70, 0.90], classification: 'CONFIDENTIAL', discipline: 'OSINT',    msg: 'MMSI tidak valid — foreign vessel' },
+      { type: 'AIS_POSITION_JUMP',     confidence: [0.75, 0.95], classification: 'SECRET',       discipline: 'OSINT',    msg: 'Anomali posisi AIS â€” indikasi spoofing' },
+      { type: 'MMSI_INVALID',          confidence: [0.70, 0.90], classification: 'CONFIDENTIAL', discipline: 'OSINT',    msg: 'MMSI tidak valid â€” foreign vessel' },
       { type: 'NORMAL_VESSEL',         confidence: [0.85, 0.99], classification: 'UNCLASS',      discipline: 'OSINT',    msg: 'Kapal normal' }
     ]
   };
@@ -103,7 +103,7 @@ const ICREdgeAI = (() => {
     const isNormal = event.type.startsWith('NORMAL');
 
     if (passConfidence && !isNormal) {
-      // EVENT PASSES — enrich & compress
+      // EVENT PASSES â€” enrich & compress
       event.edgeProcessed = true;
       event.edgeLatencyMs = event.edgeProcessingMs;
       event.transmittedPayloadBytes = 1024 + Math.random() * 2048; // 1-3 KB (metadata + crop)
@@ -133,7 +133,7 @@ const ICREdgeAI = (() => {
   }
 
   // ============================================
-  // HEARTBEAT — Uplink status
+  // HEARTBEAT â€” Uplink status
   // ============================================
   function generateHeartbeat(site) {
     return {
@@ -163,7 +163,7 @@ const ICREdgeAI = (() => {
       processAtEdge(event);
     }, intervalMs);
 
-    console.log(`[ICR-EDGE] Started — interval ${intervalMs}ms`);
+    console.log(`[ICR-EDGE] Started â€” interval ${intervalMs}ms`);
   }
 
   function stop() {
@@ -188,7 +188,7 @@ const ICREdgeAI = (() => {
         confidence: 0.95,
         classification: 'SECRET',
         discipline: 'IMINT',
-        message: 'Pergerakan militer asing di perbatasan — high confidence'
+        message: 'Pergerakan militer asing di perbatasan â€” high confidence'
       },
       hostile_radar: {
         sensorType: 'radar',
@@ -204,7 +204,7 @@ const ICREdgeAI = (() => {
         confidence: 0.88,
         classification: 'SECRET',
         discipline: 'OSINT',
-        message: 'AIS spoofing terdeteksi — foreign vessel suspected'
+        message: 'AIS spoofing terdeteksi â€” foreign vessel suspected'
       },
       thermal_contact: {
         sensorType: 'flir',

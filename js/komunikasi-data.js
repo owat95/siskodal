@@ -1,5 +1,5 @@
 /* ============================================================
- * KOMUNIKASI-DATA.JS — Devices, Users, Channels, Messages
+ * KOMUNIKASI-DATA.JS â€” Devices, Users, Channels, Messages
  * ============================================================ */
 
 const KomunikasiData = (() => {
@@ -9,26 +9,26 @@ const KomunikasiData = (() => {
   // USERS / CALL SIGNS
   // ============================================
   const USERS = [
-    // AD — Darat
+    // AD â€” Darat
     { id: 'U001', callSign: 'ALPHA-01',   name: 'Letkol Budi Santoso',    nrp: '149751543', unit: 'Kodam Jaya',              matra: 'ad', role: 'COMMANDER', clearance: 'SECRET',       online: true  },
     { id: 'U002', callSign: 'ALPHA-02',   name: 'Mayor Agus Wijaya',      nrp: '145566358', unit: 'Kodam III/Siliwangi',     matra: 'ad', role: 'OFFICER',   clearance: 'CONFIDENTIAL', online: true  },
     { id: 'U003', callSign: 'BRAVO-01',   name: 'Kapten Hendra Hutapea',  nrp: '120274305', unit: 'Kodam XVII/Cenderawasih', matra: 'ad', role: 'OFFICER',   clearance: 'CONFIDENTIAL', online: false },
     { id: 'U004', callSign: 'BRAVO-02',   name: 'Lettu Cahyo Utama',      nrp: '121186728', unit: 'Batalyon Infanteri 315',  matra: 'ad', role: 'OFFICER',   clearance: 'RESTRICTED',   online: true  },
     { id: 'U005', callSign: 'CHARLIE-01', name: 'Serma Iwan Handoko',     nrp: '145738040', unit: 'Kopassus',                matra: 'ad', role: 'OPERATOR',  clearance: 'SECRET',       online: true  },
 
-    // AL — Laut
+    // AL â€” Laut
     { id: 'U101', callSign: 'DELTA-01',   name: 'Kolonel Laut Vino Nugroho', nrp: '231621141', unit: 'Lantamal I Belawan',   matra: 'al', role: 'COMMANDER', clearance: 'SECRET',       online: true  },
     { id: 'U102', callSign: 'DELTA-02',   name: 'Letkol Laut Hendra Wardana', nrp: '217107638', unit: 'Lantamal II Padang',  matra: 'al', role: 'OFFICER',   clearance: 'CONFIDENTIAL', online: true  },
     { id: 'U103', callSign: 'ECHO-01',    name: 'Mayor Laut Zaki Situmorang', nrp: '280626929', unit: 'Denjaka',             matra: 'al', role: 'OFFICER',   clearance: 'SECRET',       online: true  },
     { id: 'U104', callSign: 'ECHO-02',    name: 'Kapten Laut Bayu Wijaya',   nrp: '289320987', unit: 'Koarmada II',          matra: 'al', role: 'OFFICER',   clearance: 'RESTRICTED',   online: false },
 
-    // AU — Udara
+    // AU â€” Udara
     { id: 'U201', callSign: 'GOLF-01',    name: 'Kolonel Pnb. Iwan Sihombing', nrp: '377160493', unit: 'Skadron Udara 15', matra: 'au', role: 'COMMANDER', clearance: 'SECRET',       online: true  },
     { id: 'U202', callSign: 'GOLF-02',    name: 'Letkol Pnb. Fajar Wijaya',    nrp: '347359182', unit: 'Skadron Udara 11', matra: 'au', role: 'OFFICER',   clearance: 'CONFIDENTIAL', online: true  },
     { id: 'U203', callSign: 'HOTEL-01',   name: 'Mayor Pnb. Andi Kurniawan',   nrp: '323410108', unit: 'Lanud Hasanuddin', matra: 'au', role: 'OFFICER',   clearance: 'CONFIDENTIAL', online: true  },
     { id: 'U204', callSign: 'HOTEL-02',   name: 'Kapten Pnb. Wahyu Santoso',   nrp: '336458719', unit: 'Skadron Udara 31', matra: 'au', role: 'OFFICER',   clearance: 'RESTRICTED',   online: true  },
 
-    // JOC — Command
+    // JOC â€” Command
     { id: 'U901', callSign: 'WHISKEY-01', name: 'Jendral TNI (Command)', nrp: 'CMD-001', unit: 'Mabes AD', matra: 'joc', role: 'COMMANDER', clearance: 'TOP_SECRET', online: true },
     { id: 'U902', callSign: 'XRAY-01',    name: 'Ops Officer JOC',       nrp: 'CMD-002', unit: 'Mabes AD', matra: 'joc', role: 'OPERATOR',  clearance: 'SECRET',     online: true }
   ];

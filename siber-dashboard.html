@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SOC Dashboard — SISKODAL</title>
+  <title>SOC Dashboard â€” SISKODAL</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./css/dashboard.css">
@@ -16,7 +16,7 @@
   <!-- SIDEBAR -->
   <aside class="dash-sidebar">
     <div class="brand">
-      <span class="brand-mark" style="color:#ef4444;">🛡️</span>
+      <span class="brand-mark" style="color:#ef4444;">ðŸ›¡ï¸</span>
       <div class="brand-text">
         <strong>SOC</strong>
         <span>Siskodal</span>
@@ -28,7 +28,7 @@
     <a href="#" class="nav-item" data-tab="map"><i class="fas fa-globe"></i> Live Attack Map</a>
     <a href="#" class="nav-item" data-tab="feed">
       <i class="fas fa-stream"></i> Threat Feed
-      <span style="margin-left:auto;font-size:0.65rem;background:#ef4444;color:#fff;padding:1px 6px;border-radius:4px;font-weight:800;" id="live-badge">●</span>
+      <span style="margin-left:auto;font-size:0.65rem;background:#ef4444;color:#fff;padding:1px 6px;border-radius:4px;font-weight:800;" id="live-badge">â—</span>
     </a>
 
     <div class="nav-section">Response</div>
@@ -49,7 +49,7 @@
     <div class="header-stats">
       <div class="stat-item">
         <span class="label">Threat Level</span>
-        <span class="value" id="threat-level" style="color:#facc15;">● ELEVATED</span>
+        <span class="value" id="threat-level" style="color:#facc15;">â— ELEVATED</span>
       </div>
       <div class="stat-item">
         <span class="label">Live Time</span>
@@ -57,7 +57,7 @@
       </div>
       <div class="stat-item">
         <span class="label">Defense</span>
-        <span class="value" style="color:#4ade80;">● ACTIVE</span>
+        <span class="value" style="color:#4ade80;">â— ACTIVE</span>
       </div>
     </div>
   </header>
@@ -68,10 +68,10 @@
     <!-- TAB: OVERVIEW -->
     <section class="tab-content active" id="tab-overview">
       <div class="threat-level-banner" style="border-color:#eab308; background:rgba(234,179,8,0.08);">
-        <div class="tl-icon">⚠️</div>
+        <div class="tl-icon">âš ï¸</div>
         <div class="tl-content" style="flex:1;">
           <h3 style="color:#facc15;">THREAT LEVEL: ELEVATED</h3>
-          <p>342 attacker unik terdeteksi dalam 24 jam · Auto-block aktif · 3 insiden sedang di-investigasi</p>
+          <p>342 attacker unik terdeteksi dalam 24 jam Â· Auto-block aktif Â· 3 insiden sedang di-investigasi</p>
         </div>
       </div>
 
@@ -110,8 +110,8 @@
 
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Defense Controls</h3>
-          <span style="font-size:0.7rem;color:#22c55e;">● ACTIVE</span>
+          <h3>â—¤ Defense Controls</h3>
+          <span style="font-size:0.7rem;color:#22c55e;">â— ACTIVE</span>
         </div>
         <div class="panel-body">
           <div class="defense-panel" id="defense-panel"></div>
@@ -120,8 +120,8 @@
 
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Recent Threat Events</h3>
-          <span style="font-size:0.7rem;color:#ef4444;">● LIVE</span>
+          <h3>â—¤ Recent Threat Events</h3>
+          <span style="font-size:0.7rem;color:#ef4444;">â— LIVE</span>
         </div>
         <div class="panel-body">
           <div id="overview-feed"></div>
@@ -133,8 +133,8 @@
     <section class="tab-content" id="tab-map">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Live Attack Map — Global Threat Visualization</h3>
-          <span style="font-size:0.7rem;color:#ef4444;font-family:'Courier New',monospace;">● LIVE ATTACKS</span>
+          <h3>â—¤ Live Attack Map â€” Global Threat Visualization</h3>
+          <span style="font-size:0.7rem;color:#ef4444;font-family:'Courier New',monospace;">â— LIVE ATTACKS</span>
         </div>
         <div class="panel-body">
           <div class="attack-map-container">
@@ -153,7 +153,7 @@
     <section class="tab-content" id="tab-feed">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Threat Feed — Real-time Events</h3>
+          <h3>â—¤ Threat Feed â€” Real-time Events</h3>
           <span style="font-size:0.7rem;color:#94a3b8;" id="feed-count">0 events</span>
         </div>
         <div class="panel-body">
@@ -166,7 +166,7 @@
     <section class="tab-content" id="tab-incidents">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Incident Response Queue</h3>
+          <h3>â—¤ Incident Response Queue</h3>
           <span style="font-size:0.7rem;color:#94a3b8;" id="incident-count">--</span>
         </div>
         <div class="panel-body">
@@ -179,7 +179,7 @@
     <section class="tab-content" id="tab-firewall">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Firewall Rules — NGFW Configuration</h3>
+          <h3>â—¤ Firewall Rules â€” NGFW Configuration</h3>
           <span style="font-size:0.7rem;color:#94a3b8;" id="rules-count">--</span>
         </div>
         <div class="panel-body">
@@ -189,7 +189,7 @@
 
       <section class="panel" style="margin-top:20px;">
         <div class="panel-header">
-          <h3>◤ Auto-Blocked IPs</h3>
+          <h3>â—¤ Auto-Blocked IPs</h3>
           <span style="font-size:0.7rem;color:#22c55e;" id="blocked-count">--</span>
         </div>
         <div class="panel-body">
@@ -247,7 +247,7 @@
     // Start simulation
     startSimulation();
 
-    // Attack map — only start when tab visible
+    // Attack map â€” only start when tab visible
     setTimeout(() => {
       startAttackMap();
     }, 500);
@@ -311,10 +311,10 @@
 
     const state = SiberCore.getDefenseState();
     const controls = [
-      { key: 'firewallEnabled', label: 'Next-Gen Firewall', icon: '🔥' },
-      { key: 'idsEnabled',      label: 'Intrusion Detection (IDS)', icon: '👁️' },
-      { key: 'ipsEnabled',      label: 'Intrusion Prevention (IPS)', icon: '🛡️' },
-      { key: 'autoBlockEnabled',label: 'Auto IP Block', icon: '⚡' }
+      { key: 'firewallEnabled', label: 'Next-Gen Firewall', icon: 'ðŸ”¥' },
+      { key: 'idsEnabled',      label: 'Intrusion Detection (IDS)', icon: 'ðŸ‘ï¸' },
+      { key: 'ipsEnabled',      label: 'Intrusion Prevention (IPS)', icon: 'ðŸ›¡ï¸' },
+      { key: 'autoBlockEnabled',label: 'Auto IP Block', icon: 'âš¡' }
     ];
 
     container.innerHTML = controls.map(c => `
@@ -375,7 +375,7 @@
           <div class="te-source">
             <span class="te-country">${evt.attackerCountry}</span>
             <span>${evt.attackerIP}</span>
-            <span style="color:#64748b;">→</span>
+            <span style="color:#64748b;">â†’</span>
             <span style="color:#60a5fa;">${evt.targetName || 'Unknown'}</span>
           </div>
           <div style="display:flex; gap:6px;">
@@ -388,10 +388,10 @@
         <div class="te-meta">
           <span class="te-tactic">${tactic ? tactic.icon + ' ' + tactic.name : evt.tactic}</span>
           <span class="te-technique">${evt.technique}</span>
-          <span class="te-ai" style="background:${aiC.bg}; color:${aiC.color};">🤖 AI: ${ai.level} (${ai.score})</span>
+          <span class="te-ai" style="background:${aiC.bg}; color:${aiC.color};">ðŸ¤– AI: ${ai.level} (${ai.score})</span>
           <span>Conf: ${evt.confidence ? (evt.confidence * 100).toFixed(0) : '--'}%</span>
-          ${blocked ? `<span class="te-blocked ${evt.autoBlocked ? 'auto' : ''}">${evt.autoBlocked ? '⚡ AUTO-BLOCKED' : '✓ BLOCKED'}</span>` : ''}
-          <span>🕐 ${new Date(evt.timestamp).toLocaleTimeString('id-ID')}</span>
+          ${blocked ? `<span class="te-blocked ${evt.autoBlocked ? 'auto' : ''}">${evt.autoBlocked ? 'âš¡ AUTO-BLOCKED' : 'âœ“ BLOCKED'}</span>` : ''}
+          <span>ðŸ• ${new Date(evt.timestamp).toLocaleTimeString('id-ID')}</span>
         </div>
       </div>
     `;
@@ -435,7 +435,7 @@
 
     setTimeout(() => {
       resizeCanvas(canvas);
-      console.log('[SIBER] Map start — canvas', canvas.width, 'x', canvas.height);
+      console.log('[SIBER] Map start â€” canvas', canvas.width, 'x', canvas.height);
       drawLoop(canvas);
     }, 300);
 
@@ -746,7 +746,7 @@
         </div>
         <div style="display:flex; gap:16px; align-items:center; color:#94a3b8;">
           <span>${r.src}</span>
-          <span style="color:#64748b;">→</span>
+          <span style="color:#64748b;">â†’</span>
           <span>${r.dst}</span>
           <span style="color:#64748b;">:</span>
           <span style="color:#60a5fa;">${r.port}</span>

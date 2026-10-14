@@ -1,5 +1,5 @@
 /* ============================================================
- * LOGISTICS-DATA.JS — Mock data logistik per matra
+ * LOGISTICS-DATA.JS â€” Mock data logistik per matra
  * ============================================================ */
 
 const LogisticsData = (() => {

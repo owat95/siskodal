@@ -1,5 +1,5 @@
 /* ============================================================
- * MILSYMBOL-LAYER.JS — MIL-STD-2525 renderer untuk Cesium
+ * MILSYMBOL-LAYER.JS â€” MIL-STD-2525 renderer untuk Cesium
  * ============================================================ */
 
 const SIDC = {

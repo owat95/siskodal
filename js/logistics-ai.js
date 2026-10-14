@@ -1,5 +1,5 @@
 /* ============================================================
- * LOGISTICS-AI.JS — AI Engine untuk 5 area logistik militer
+ * LOGISTICS-AI.JS â€” AI Engine untuk 5 area logistik militer
  * ============================================================ */
 
 const LogisticsAI = (() => {
@@ -41,10 +41,10 @@ const LogisticsAI = (() => {
       daysRemaining: Math.round(daysRemaining * 10) / 10,
       severity,
       recommendation: severity === 'CRITICAL'
-        ? `REFUEL SEGERA — sisa ${Math.round(daysRemaining * 10) / 10} hari`
+        ? `REFUEL SEGERA â€” sisa ${Math.round(daysRemaining * 10) / 10} hari`
         : severity === 'HIGH'
         ? `Jadwalkan refuel dalam 24 jam`
-        : `Aman — monitor rutin`
+        : `Aman â€” monitor rutin`
     };
   }
 
@@ -71,7 +71,7 @@ const LogisticsAI = (() => {
       failureRisk: Math.round(failureRisk),
       severity,
       prediction: severity === 'CRITICAL'
-        ? `Kemungkinan rusak dalam 7-14 hari — jadwalkan ganti spare part`
+        ? `Kemungkinan rusak dalam 7-14 hari â€” jadwalkan ganti spare part`
         : severity === 'HIGH'
         ? `Monitor intensif, siapkan spare part`
         : `Kondisi normal`
@@ -102,7 +102,7 @@ const LogisticsAI = (() => {
             vehicle: item.severity === 'CRITICAL' ? 'UAV MALE (Otonom)' : 'UGV Konvoi',
             priority: item.severity,
             etaHours: item.severity === 'CRITICAL' ? 4 : 12,
-            risk: item.severity === 'CRITICAL' ? 'Mengirim UAV tanpa awak — zero risiko personel' : 'Konvoi darat — medium risk'
+            risk: item.severity === 'CRITICAL' ? 'Mengirim UAV tanpa awak â€” zero risiko personel' : 'Konvoi darat â€” medium risk'
           });
         }
       }

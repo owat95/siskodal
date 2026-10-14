@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Topologi Data — CCTV/FLIR Perbatasan → IKN — SISKODAL</title>
+  <title>Topologi Data â€” CCTV/FLIR Perbatasan â†’ IKN â€” SISKODAL</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./css/dashboard.css">
@@ -88,21 +88,21 @@
 <body>
 
 <div class="class-banner">
-  RAHASIA · 📹 TOPOLOGI DATA ASET · Clearance: SECRET · 2026-10-06
+  RAHASIA Â· ðŸ“¹ TOPOLOGI DATA ASET Â· Clearance: SECRET Â· 2026-10-06
 </div>
 
 <header class="topo-header">
   <div class="brand">
-    <div class="brand-mark">📹</div>
+    <div class="brand-mark">ðŸ“¹</div>
     <div>
-      <h1>CCTV/FLIR PERBATASAN → IKN CENTRAL</h1>
-      <p class="sub">Multispectral perimeter · fixed infra · lowest latency · always-on</p>
+      <h1>CCTV/FLIR PERBATASAN â†’ IKN CENTRAL</h1>
+      <p class="sub">Multispectral perimeter Â· fixed infra Â· lowest latency Â· always-on</p>
     </div>
   </div>
   <div class="header-stats">
     <div class="stat-item">
       <span class="label">Status</span>
-      <span class="value">● LIVE</span>
+      <span class="value">â— LIVE</span>
     </div>
     <div class="stat-item">
       <span class="label">Latency E2E</span>
@@ -146,33 +146,33 @@
 
       <!-- SENSOR ZONE (border) -->
       <rect class="sensor-zone" x="60" y="480" width="700" height="200" rx="12"/>
-      <text class="sensor-zone-label" x="76" y="500">◈ PERIMETER ZONE · 24/7 MONITORING · MULTISPECTRAL (RGB + IR)</text>
+      <text class="sensor-zone-label" x="76" y="500">â—ˆ PERIMETER ZONE Â· 24/7 MONITORING Â· MULTISPECTRAL (RGB + IR)</text>
 
       <!-- ============ LINKS ============ -->
-      <!-- CCTV Pole 1 → Local Jetson -->
+      <!-- CCTV Pole 1 â†’ Local Jetson -->
       <path id="path-cctv1" class="topo-link active" stroke="#ef4444"
             d="M 220 590 C 300 570, 380 560, 450 550"
             marker-end="url(#arrow-cctv)"/>
-      <!-- CCTV Pole 2 → Local Jetson -->
+      <!-- CCTV Pole 2 â†’ Local Jetson -->
       <path id="path-cctv2" class="topo-link active" stroke="#ef4444"
             d="M 220 640 C 300 630, 380 590, 450 570"
             marker-end="url(#arrow-cctv)"/>
-      <!-- CCTV Pole 3 → Local Jetson -->
+      <!-- CCTV Pole 3 â†’ Local Jetson -->
       <path id="path-cctv3" class="topo-link active" stroke="#ef4444"
             d="M 380 660 C 420 640, 450 610, 470 590"
             marker-end="url(#arrow-cctv)"/>
 
-      <!-- Jetson → Fiber Bridge (solid, very short) -->
+      <!-- Jetson â†’ Fiber Bridge (solid, very short) -->
       <path id="path-jetson-fiber" class="topo-link active" stroke="#f59e0b"
             d="M 560 555 L 620 555"
             marker-end="url(#arrow-jetson)"/>
 
-      <!-- Fiber Bridge → MW -->
+      <!-- Fiber Bridge â†’ MW -->
       <path id="path-fiber-mw" class="topo-link active" stroke="#10b981"
             d="M 720 510 C 800 450, 880 380, 960 320"
             marker-end="url(#arrow-fiber)"/>
 
-      <!-- MW → IKN -->
+      <!-- MW â†’ IKN -->
       <path id="path-mw-ikn" class="topo-link active" stroke="#eab308"
             d="M 960 240 L 960 140"
             marker-end="url(#arrow-ikn)"/>
@@ -221,10 +221,10 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.4s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-22" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="700" letter-spacing="1">
-          📹 CCTV + FLIR POLE
+          ðŸ“¹ CCTV + FLIR POLE
         </text>
         <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
-          Tower 15m · dual-sensor
+          Tower 15m Â· dual-sensor
         </text>
         <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
           RGB 4K + Thermal IR
@@ -242,13 +242,13 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-12" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="700" letter-spacing="1">
-          📹 CCTV POLE B
+          ðŸ“¹ CCTV POLE B
         </text>
         <text x="0" y="8" text-anchor="middle" fill="#94a3b8" font-size="9">
           Sector: Kaltim-02
         </text>
         <text x="0" y="24" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
-          RGB + IR · pan-tilt-zoom
+          RGB + IR Â· pan-tilt-zoom
         </text>
       </g>
 
@@ -260,13 +260,13 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-12" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="700" letter-spacing="1">
-          📹 CCTV POLE C
+          ðŸ“¹ CCTV POLE C
         </text>
         <text x="0" y="8" text-anchor="middle" fill="#94a3b8" font-size="9">
           Sector: Papua-01
         </text>
         <text x="0" y="24" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
-          RGB + IR · 60 GHz radar
+          RGB + IR Â· 60 GHz radar
         </text>
       </g>
 
@@ -278,16 +278,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-22" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700" letter-spacing="1">
-          🧠 LOCAL JETSON
+          ðŸ§  LOCAL JETSON
         </text>
         <text x="0" y="-2" text-anchor="middle" fill="#cbd5e1" font-size="9">
-          Orin Nano 8GB · 40 TOPS
+          Orin Nano 8GB Â· 40 TOPS
         </text>
         <text x="0" y="16" text-anchor="middle" fill="#94a3b8" font-size="9">
-          InfraVisNet-L · multispectral
+          InfraVisNet-L Â· multispectral
         </text>
         <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          Bunker · underground · -20°C
+          Bunker Â· underground Â· -20Â°C
         </text>
       </g>
 
@@ -299,7 +299,7 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-18" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700" letter-spacing="1">
-          🔗 FIBER BRIDGE
+          ðŸ”— FIBER BRIDGE
         </text>
         <text x="0" y="2" text-anchor="middle" fill="#cbd5e1" font-size="9">
           10G single-mode
@@ -317,16 +317,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.7s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-20" text-anchor="middle" fill="#a855f7" font-size="13" font-weight="700" letter-spacing="1">
-          🔄 MIDDLEWARE HUB
+          ðŸ”„ MIDDLEWARE HUB
         </text>
         <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
-          Kafka · Redis Streams · Normalizer
+          Kafka Â· Redis Streams Â· Normalizer
         </text>
         <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
           Border event aggregation
         </text>
         <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          Hub: mw-balikpapan · 10.80.3.0/24
+          Hub: mw-balikpapan Â· 10.80.3.0/24
         </text>
       </g>
 
@@ -338,16 +338,16 @@
           <animate attributeName="opacity" values="1;0.3;1" dur="1.3s" repeatCount="indefinite"/>
         </circle>
         <text x="0" y="-20" text-anchor="middle" fill="#eab308" font-size="13" font-weight="700" letter-spacing="1">
-          🛰️ IKN CENTRAL
+          ðŸ›°ï¸ IKN CENTRAL
         </text>
         <text x="0" y="0" text-anchor="middle" fill="#cbd5e1" font-size="10">
-          NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4
+          NVIDIA L40S Ã—4 Â· MiniMax M3 / DeepSeek V4
         </text>
         <text x="0" y="18" text-anchor="middle" fill="#94a3b8" font-size="9">
-          Multi-INT Fusion · Strategic Advisor · COP
+          Multi-INT Fusion Â· Strategic Advisor Â· COP
         </text>
         <text x="0" y="34" text-anchor="middle" fill="#64748b" font-size="9" font-family="monospace">
-          IKN Kalimantan Timur · 10.90.1.0/24
+          IKN Kalimantan Timur Â· 10.90.1.0/24
         </text>
       </g>
 
@@ -359,7 +359,7 @@
           AD EDGE NODE
         </text>
         <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
-          Ground units · separate pipeline
+          Ground units Â· separate pipeline
         </text>
         <text x="0" y="26" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
           Not in this data path
@@ -374,7 +374,7 @@
           AU EDGE NODE
         </text>
         <text x="0" y="10" text-anchor="middle" fill="#94a3b8" font-size="9">
-          Air surveillance · separate pipeline
+          Air surveillance Â· separate pipeline
         </text>
         <text x="0" y="26" text-anchor="middle" fill="#64748b" font-size="8" font-family="monospace">
           Not in this data path
@@ -399,7 +399,7 @@
         <text x="565" y="530" fill="#f59e0b">Local LAN &lt;2ms</text>
         <text x="680" y="530" fill="#10b981">Fiber &lt;5ms</text>
         <text x="810" y="380" fill="#10b981">Backbone</text>
-        <text x="972" y="195" fill="#eab308">BGP · ASN 65309</text>
+        <text x="972" y="195" fill="#eab308">BGP Â· ASN 65309</text>
       </g>
 
     </svg>
@@ -417,7 +417,7 @@
   <aside class="topo-sidebar">
 
     <div class="info-panel">
-      <h3>◈ Flow Statistics</h3>
+      <h3>â—ˆ Flow Statistics</h3>
       <div class="flow-stats">
         <div class="flow-stat cctv">
           <div class="num">&lt;2ms</div>
@@ -435,21 +435,21 @@
     </div>
 
     <div class="info-panel" id="node-details">
-      <h3>◈ Node Detail</h3>
+      <h3>â—ˆ Node Detail</h3>
       <div class="info-row"><span class="key">Node</span><span class="val cctv">CCTV + FLIR Pole</span></div>
       <div class="info-row"><span class="key">Class</span><span class="val">Perimeter Sensor Tower</span></div>
       <div class="info-row"><span class="key">Location</span><span class="val">Perbatasan Kaltim / Papua</span></div>
       <div class="info-row"><span class="key">Sensors</span><span class="val">RGB 4K + Thermal IR + 60GHz radar</span></div>
       <div class="info-row"><span class="key">AI Model</span><span class="val">InfraVisNet-L (YOLOv11n)</span></div>
-      <div class="info-row"><span class="key">Uplink</span><span class="val">RTSP / H.265 → Local Jetson</span></div>
+      <div class="info-row"><span class="key">Uplink</span><span class="val">RTSP / H.265 â†’ Local Jetson</span></div>
       <div class="info-row"><span class="key">Next hop</span><span class="val">Local Jetson (bunker)</span></div>
     </div>
 
     <div class="info-panel" style="border-color: rgba(16,185,129,0.3);">
-      <h3 style="color: #10b981;">✔ Lowest Latency</h3>
+      <h3 style="color: #10b981;">âœ” Lowest Latency</h3>
       <div style="font-size: 0.7rem; color: #cbd5e1; line-height: 1.5;">
         Karena fixed infrastructure (fiber optik), CCTV/FLIR ini punya
-        <strong style="color: #10b981;">latency terendah</strong> dari semua aset —
+        <strong style="color: #10b981;">latency terendah</strong> dari semua aset â€”
         <strong>&lt;80ms end-to-end</strong> dari pole sampai IKN.
         <br><br>
         Cocok untuk <strong>perimeter alert real-time</strong> dan
@@ -458,7 +458,7 @@
     </div>
 
     <div class="log-panel">
-      <h3>◈ Live Stream Log</h3>
+      <h3>â—ˆ Live Stream Log</h3>
       <div id="log-stream"></div>
     </div>
 
@@ -466,7 +466,7 @@
 </div>
 
 <div class="class-banner bottom">
-  RAHASIA · ⚠ Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
+  RAHASIA Â· âš  Dokumen ini mengandung informasi berklasifikasi. Penanganan tidak sesuai dapat berakibat sanksi hukum sesuai UU No. 36/1999 &amp; UU ITE.
 </div>
 
 <script src="./js/classification.js?v=2.0" data-cfasync="false"></script>
@@ -481,8 +481,8 @@
       class: 'Perimeter Sensor Tower',
       location: 'Kaltim-01 (border Kalimantan Timur)',
       sensors: 'RGB 4K + Thermal IR + 60 GHz radar',
-      uplink: 'RTSP / H.265 → Local Jetson',
-      tactical: 'InfraVisNet-L (YOLOv11n) · multispectral',
+      uplink: 'RTSP / H.265 â†’ Local Jetson',
+      tactical: 'InfraVisNet-L (YOLOv11n) Â· multispectral',
       next: 'Local Jetson (underground bunker)',
       highlight: true
     },
@@ -490,9 +490,9 @@
       title: 'CCTV Pole B',
       class: 'Perimeter Sensor Tower',
       location: 'Kaltim-02 (border Kalimantan Timur)',
-      sensors: 'RGB + IR · pan-tilt-zoom',
-      uplink: 'RTSP / H.265 → Local Jetson',
-      tactical: 'PTZ capability · 300m range',
+      sensors: 'RGB + IR Â· pan-tilt-zoom',
+      uplink: 'RTSP / H.265 â†’ Local Jetson',
+      tactical: 'PTZ capability Â· 300m range',
       next: 'Local Jetson',
       highlight: true
     },
@@ -501,19 +501,19 @@
       class: 'Perimeter Sensor Tower',
       location: 'Papua-01 (border Papua)',
       sensors: 'RGB + IR + 60 GHz radar',
-      uplink: 'RTSP / H.265 → Local Jetson',
+      uplink: 'RTSP / H.265 â†’ Local Jetson',
       tactical: 'Radar-augmented detection',
       next: 'Local Jetson',
       highlight: true
     },
     'jetson': {
       title: 'Local Jetson (Bunker)',
-      class: 'Edge AI — Underground',
-      location: 'Underground bunker · climate controlled -20°C',
+      class: 'Edge AI â€” Underground',
+      location: 'Underground bunker Â· climate controlled -20Â°C',
       sensors: 'Ingest RTSP dari 4-8 pole CCTV',
-      uplink: 'CoT metadata only → Fiber Bridge',
-      tactical: 'Jetson Orin Nano 8GB · 40 TOPS · 7-15W',
-      next: 'Fiber Bridge → MW Hub',
+      uplink: 'CoT metadata only â†’ Fiber Bridge',
+      tactical: 'Jetson Orin Nano 8GB Â· 40 TOPS Â· 7-15W',
+      next: 'Fiber Bridge â†’ MW Hub',
       highlight: true
     },
     'fiber': {
@@ -529,8 +529,8 @@
     'mw-hub': {
       title: 'Middleware Hub',
       class: 'Regional Aggregator',
-      location: 'Balikpapan · 10.80.3.0/24',
-      sensors: 'Kafka · Redis Streams · Normalizer',
+      location: 'Balikpapan Â· 10.80.3.0/24',
+      sensors: 'Kafka Â· Redis Streams Â· Normalizer',
       uplink: '~1 Mbps aggregate',
       tactical: 'Cross-matra routing',
       next: 'IKN Central',
@@ -539,10 +539,10 @@
     'ikn-central': {
       title: 'IKN Central',
       class: 'Strategic Command',
-      location: 'IKN Kalimantan Timur · 10.90.1.0/24',
-      sensors: 'Multi-INT Fusion · Strategic Advisor',
+      location: 'IKN Kalimantan Timur Â· 10.90.1.0/24',
+      sensors: 'Multi-INT Fusion Â· Strategic Advisor',
       uplink: '~5 Mbps aggregate',
-      tactical: 'NVIDIA L40S ×4 · MiniMax M3 / DeepSeek V4',
+      tactical: 'NVIDIA L40S Ã—4 Â· MiniMax M3 / DeepSeek V4',
       next: 'COP Nasional',
       highlight: true
     },
@@ -551,8 +551,8 @@
       class: 'Matra: Angkatan Darat',
       location: 'Kodam Regional',
       sensors: 'Ground sensors',
-      uplink: '—',
-      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      uplink: 'â€”',
+      tactical: 'Jetson Orin Nano 8GB Â· SEPARATE PIPELINE',
       next: 'Tidak dalam jalur data ini',
       highlight: false
     },
@@ -561,8 +561,8 @@
       class: 'Matra: Angkatan Udara',
       location: 'Lanud Regional',
       sensors: 'Air surveillance',
-      uplink: '—',
-      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      uplink: 'â€”',
+      tactical: 'Jetson Orin Nano 8GB Â· SEPARATE PIPELINE',
       next: 'Tidak dalam jalur data ini',
       highlight: false
     },
@@ -571,8 +571,8 @@
       class: 'Matra: Angkatan Laut',
       location: 'Lantamal Regional',
       sensors: 'Naval sensors',
-      uplink: '—',
-      tactical: 'Jetson Orin Nano 8GB · SEPARATE PIPELINE',
+      uplink: 'â€”',
+      tactical: 'Jetson Orin Nano 8GB Â· SEPARATE PIPELINE',
       next: 'Tidak dalam jalur data ini',
       highlight: false
     }
@@ -583,7 +583,7 @@
     const n = NODES[nodeId];
     if (!n) return;
     detailsPanel.innerHTML = `
-      <h3>◈ Node Detail</h3>
+      <h3>â—ˆ Node Detail</h3>
       <div class="info-row"><span class="key">Node</span><span class="val ${n.highlight ? 'cctv' : ''}">${n.title}</span></div>
       <div class="info-row"><span class="key">Class</span><span class="val">${n.class}</span></div>
       <div class="info-row"><span class="key">Location</span><span class="val">${n.location}</span></div>
@@ -607,19 +607,19 @@
   const logStream = document.getElementById('log-stream');
 
   const LOG_TEMPLATES = [
-    { tag: 'cctv',   text: 'POLE Kaltim-01: multispectral scan — 0 motion, 0 heat anomaly' },
-    { tag: 'cctv',   text: 'POLE Kaltim-02: PTZ sweep sector 4-6 — clear' },
-    { tag: 'cctv',   text: 'POLE Papua-01: 60 GHz radar scan · 12 targets (wildlife)' },
-    { tag: 'alert',  text: 'POLE Kaltim-01: PERSON DETECTED — sector C3, conf 94%' },
-    { tag: 'jetson', text: 'JETSON: InfraVisNet-L inference (42ms) — confirm HUMAN, not wildlife' },
-    { tag: 'jetson', text: 'JETSON: alert CoT payload 1.2 KB → fiber uplink' },
-    { tag: 'fiber',  text: 'FIBER: 10G single-mode · latency 3.8ms · packet loss 0.00%' },
-    { tag: 'fiber',  text: 'FIBER: forward to mw-balikpapan · 10.80.3.1' },
-    { tag: 'mw',     text: 'MW-HUB: routing alert → IKN via BGP ASN 65309 → 65000' },
-    { tag: 'mw',     text: 'MW-HUB: cross-matra — notify AD perimeter response unit' },
-    { tag: 'ikn',    text: 'IKN: alert logged — Kaltim-01 sector C3 · personnel intrusion' },
-    { tag: 'ikn',    text: 'IKN: MiniMax M3 pattern analysis — 3rd incident this week (trend +40%)' },
-    { tag: 'ok',     text: 'PIPELINE: E2E latency 76ms · uptime 99.97% · all poles operational' }
+    { tag: 'cctv',   text: 'POLE Kaltim-01: multispectral scan â€” 0 motion, 0 heat anomaly' },
+    { tag: 'cctv',   text: 'POLE Kaltim-02: PTZ sweep sector 4-6 â€” clear' },
+    { tag: 'cctv',   text: 'POLE Papua-01: 60 GHz radar scan Â· 12 targets (wildlife)' },
+    { tag: 'alert',  text: 'POLE Kaltim-01: PERSON DETECTED â€” sector C3, conf 94%' },
+    { tag: 'jetson', text: 'JETSON: InfraVisNet-L inference (42ms) â€” confirm HUMAN, not wildlife' },
+    { tag: 'jetson', text: 'JETSON: alert CoT payload 1.2 KB â†’ fiber uplink' },
+    { tag: 'fiber',  text: 'FIBER: 10G single-mode Â· latency 3.8ms Â· packet loss 0.00%' },
+    { tag: 'fiber',  text: 'FIBER: forward to mw-balikpapan Â· 10.80.3.1' },
+    { tag: 'mw',     text: 'MW-HUB: routing alert â†’ IKN via BGP ASN 65309 â†’ 65000' },
+    { tag: 'mw',     text: 'MW-HUB: cross-matra â€” notify AD perimeter response unit' },
+    { tag: 'ikn',    text: 'IKN: alert logged â€” Kaltim-01 sector C3 Â· personnel intrusion' },
+    { tag: 'ikn',    text: 'IKN: MiniMax M3 pattern analysis â€” 3rd incident this week (trend +40%)' },
+    { tag: 'ok',     text: 'PIPELINE: E2E latency 76ms Â· uptime 99.97% Â· all poles operational' }
   ];
 
   const TAG_CLASSES = { cctv:'cctv', jetson:'jetson', fiber:'fiber', mw:'mw', ikn:'ikn', alert:'alert', ok:'ok' };
@@ -643,7 +643,7 @@
   for (let i = 0; i < 6; i++) pushLog();
   setInterval(pushLog, 1700);
 
-  console.log('[TOPO] CCTV/FLIR Perbatasan → IKN ready');
+  console.log('[TOPO] CCTV/FLIR Perbatasan â†’ IKN ready');
 })();
 </script>
 

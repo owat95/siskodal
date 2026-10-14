@@ -1,5 +1,5 @@
 /* ============================================================
- * DASHBOARD-LOGISTIK-AD.JS — TNI AD Logistics + AI
+ * DASHBOARD-LOGISTIK-AD.JS â€” TNI AD Logistics + AI
  * + RBAC (Zero Trust)
  * ============================================================ */
 
@@ -40,11 +40,11 @@ const DashboardLogistikAL = (() => {
     wireTabs();
     startClock();
 
-    console.log(`[LOG-AL] Initialized — ${analysis.summary.totalAlutsista} alutsista`);
+    console.log(`[LOG-AL] Initialized â€” ${analysis.summary.totalAlutsista} alutsista`);
   }
 
   // ============================================
-  // RBAC — ROLE SWITCHER
+  // RBAC â€” ROLE SWITCHER
   // ============================================
   function switchRole(roleKey, silent = false) {
     const role = LogisticsData.getRole(roleKey);
@@ -70,7 +70,7 @@ const DashboardLogistikAL = (() => {
           <em>Zero Trust: cross-matra access requires explicit authorization per UU No. 36/1999 & UU ITE.</em>
         `;
       }
-      console.warn(`[RBAC] Access denied for ${role.label} → Logistik AD`);
+      console.warn(`[RBAC] Access denied for ${role.label} â†’ Logistik AD`);
     } else {
       overlay.classList.remove('active');
       if (!silent) console.log(`[RBAC] Access granted for ${role.label}`);
@@ -103,23 +103,23 @@ const DashboardLogistikAL = (() => {
 
     if (s.criticalFuel > 0) {
       const names = analysis.criticalFuel.map(f => f.alutsista).join(', ');
-      lines.push(`⚠ <strong>${s.criticalFuel} alutsista</strong> butuh refuel segera: ${names}`);
+      lines.push(`âš  <strong>${s.criticalFuel} alutsista</strong> butuh refuel segera: ${names}`);
     }
     if (s.criticalParts > 0) {
-      lines.push(`🔧 <strong>${s.criticalParts} spare part</strong> diprediksi rusak dalam 14 hari`);
+      lines.push(`ðŸ”§ <strong>${s.criticalParts} spare part</strong> diprediksi rusak dalam 14 hari`);
     }
     if (s.autonomousOps > 0) {
-      lines.push(`🤖 <strong>${s.autonomousOps} misi autonomous resupply</strong> direkomendasikan (UAV/UGV)`);
+      lines.push(`ðŸ¤– <strong>${s.autonomousOps} misi autonomous resupply</strong> direkomendasikan (UAV/UGV)`);
     }
     if (s.supplyImbalances > 0) {
-      lines.push(`📦 <strong>${s.supplyImbalances} gudang</strong> perlu redistribusi stok`);
+      lines.push(`ðŸ“¦ <strong>${s.supplyImbalances} gudang</strong> perlu redistribusi stok`);
     }
     if (s.cyberThreats > 0) {
-      lines.push(`🛡️ <strong>${s.cyberThreats} anomali siber</strong> terdeteksi pada transmisi logistik`);
+      lines.push(`ðŸ›¡ï¸ <strong>${s.cyberThreats} anomali siber</strong> terdeteksi pada transmisi logistik`);
     }
 
     if (lines.length === 0) {
-      lines.push('✓ Semua sistem logistik nominal. Tidak ada tindakan prioritas.');
+      lines.push('âœ“ Semua sistem logistik nominal. Tidak ada tindakan prioritas.');
     }
 
     document.getElementById('ai-summary').innerHTML =
@@ -260,7 +260,7 @@ const DashboardLogistikAL = (() => {
             </div>
             <div>
               <div style="font-size:0.7rem;color:#94a3b8;">ITEM</div>
-              <div style="color:#fff;font-weight:600;">${r.itemType.replace('_', ' ')} · ${r.quantity} unit</div>
+              <div style="color:#fff;font-weight:600;">${r.itemType.replace('_', ' ')} Â· ${r.quantity} unit</div>
             </div>
             <div>
               <div style="font-size:0.7rem;color:#94a3b8;">ETA</div>
@@ -292,9 +292,9 @@ const DashboardLogistikAL = (() => {
         <div style="display:flex;justify-content:space-between;align-items:start;">
           <div>
             <div class="threat-type">${s.category.toUpperCase().replace('_', ' ')}</div>
-            <div class="threat-message"><strong>${s.gudang}</strong> — ${s.province}</div>
+            <div class="threat-message"><strong>${s.gudang}</strong> â€” ${s.province}</div>
             <div class="threat-meta">
-              Current: ${s.ratio}% · Avg: ${s.avgRatio}% · 
+              Current: ${s.ratio}% Â· Avg: ${s.avgRatio}% Â· 
               ${s.surplus > 0 ? `Surplus: ${s.surplus} unit` : `Deficit: ${s.deficit} unit`}
             </div>
           </div>
@@ -370,7 +370,7 @@ const DashboardLogistikAL = (() => {
           <td><span class="kpi-badge" style="background:${riskColor}22;color:${riskColor};">${r.risk}</span></td>
           <td class="mono" style="font-size:0.75rem;">${r.etaHours}h</td>
           <td class="mono" style="font-size:0.75rem;">${r.distanceKm} km</td>
-          <td><span style="color:${statusColor};">● ${r.status.toUpperCase()}</span></td>
+          <td><span style="color:${statusColor};">â— ${r.status.toUpperCase()}</span></td>
         </tr>
       `;
     }).join('');
@@ -399,7 +399,7 @@ const DashboardLogistikAL = (() => {
               </div>
               <div class="threat-message"><strong>${t.message}</strong></div>
               <div class="threat-meta">
-                MITRE: ${t.mitre} · ${t.timeAgo} · Threat Score: ${t.threatScore}/100
+                MITRE: ${t.mitre} Â· ${t.timeAgo} Â· Threat Score: ${t.threatScore}/100
               </div>
               <div style="margin-top:8px;padding:8px;background:rgba(34,197,94,0.08);border-left:2px solid #22c55e;border-radius:0 6px 6px 0;font-size:0.75rem;color:#cbd5e1;">
                 <strong style="color:#4ade80;">RESPONSE:</strong> ${t.response}
@@ -436,8 +436,8 @@ const DashboardLogistikAL = (() => {
         const titles = {
           overview: 'AI-Powered Supply Chain & Maintenance',
           alutsista: 'Daftar Alutsista TNI AD',
-          fuel: 'Predictive Fuel Depletion — AI Analysis',
-          maintenance: 'Digital Twin — Maintenance Scheduling',
+          fuel: 'Predictive Fuel Depletion â€” AI Analysis',
+          maintenance: 'Digital Twin â€” Maintenance Scheduling',
           autonomous: 'Autonomous Resupply Recommendation',
           supply: 'Supply Chain Optimization',
           gudang: 'Depo & Stok',

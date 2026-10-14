@@ -1,5 +1,5 @@
 /* ============================================================
- * KOMUNIKASI-CORE.JS — Mode, MAC Auth, Encryption Engine
+ * KOMUNIKASI-CORE.JS â€” Mode, MAC Auth, Encryption Engine
  * ============================================================ */
 
 const KomunikasiCore = (() => {
@@ -12,7 +12,7 @@ const KomunikasiCore = (() => {
     COMMAND: {
       code: 'COMMAND',
       label: 'COMMAND CENTER',
-      icon: '🔒',
+      icon: 'ðŸ”’',
       color: '#22c55e',
       bg: 'rgba(34,197,94,0.15)',
       latency: [20, 80],
@@ -23,7 +23,7 @@ const KomunikasiCore = (() => {
     MANET: {
       code: 'MANET',
       label: 'MANET MODE',
-      icon: '📡',
+      icon: 'ðŸ“¡',
       color: '#eab308',
       bg: 'rgba(234,179,8,0.15)',
       latency: [200, 2000],
@@ -34,7 +34,7 @@ const KomunikasiCore = (() => {
     HF: {
       code: 'HF',
       label: 'HF FALLBACK',
-      icon: '📻',
+      icon: 'ðŸ“»',
       color: '#ef4444',
       bg: 'rgba(239,68,68,0.15)',
       latency: [2000, 8000],
@@ -66,7 +66,7 @@ const KomunikasiCore = (() => {
   }
 
   function simulateEncryption(text) {
-    // Mock encryption — real implementation pakai libolm
+    // Mock encryption â€” real implementation pakai libolm
     let hash = 0;
     for (let i = 0; i < text.length; i++) {
       hash = ((hash << 5) - hash) + text.charCodeAt(i);
@@ -106,7 +106,7 @@ const KomunikasiCore = (() => {
       timestamp: Date.now()
     }));
 
-    console.log(`[KOM] Mode: ${prev} → ${newMode} (${reason})`);
+    console.log(`[KOM] Mode: ${prev} â†’ ${newMode} (${reason})`);
     return currentMode;
   }
 

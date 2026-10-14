@@ -1,6 +1,6 @@
 /* ============================================================
- * INTEL-DATA.JS — Strategic Intelligence Data
- * Country Profiles · OSINT Feed · Threat Matrix · Sources
+ * INTEL-DATA.JS â€” Strategic Intelligence Data
+ * Country Profiles Â· OSINT Feed Â· Threat Matrix Â· Sources
  * ============================================================ */
 
 const IntelData = (() => {
@@ -33,16 +33,16 @@ const IntelData = (() => {
   // ============================================
   const COUNTRIES = [
     {
-      id: 'CHN', name: 'China', flag: '🇨🇳',
+      id: 'CHN', name: 'China', flag: 'ðŸ‡¨ðŸ‡³',
       region: 'ASIA',
       threatLevel: 'HIGH',
       color: '#ef4444',
       summary: 'Aktivitas maritim agresif di Laut Natuna Utara (SCS). Klaim nine-dash line bersinggungan dengan ZEE Indonesia.',
       capabilities: [
-        'PLAN (People\'s Liberation Army Navy) — 355+ kapal',
-        'PLAAF — 2,800+ pesawat tempur',
+        'PLAN (People\'s Liberation Army Navy) â€” 355+ kapal',
+        'PLAAF â€” 2,800+ pesawat tempur',
         'APT groups: APT1, APT40, APT41 (cyber)',
-        'Coast Guard (CCG) — 150+ kapal besar'
+        'Coast Guard (CCG) â€” 150+ kapal besar'
       ],
       recentActivity: [
         { date: '2026-10-04', type: 'MARITIME', desc: 'CCG vessel patroli di ZEE Natuna', admiralty: 'A2' },
@@ -57,14 +57,14 @@ const IntelData = (() => {
       }
     },
     {
-      id: 'RUS', name: 'Russia', flag: '🇷🇺',
+      id: 'RUS', name: 'Russia', flag: 'ðŸ‡·ðŸ‡º',
       region: 'EURASIA',
       threatLevel: 'MEDIUM',
       color: '#f97316',
       summary: 'Aktivitas cyber operation dan arms sales ke Asia. Sentimen netral-positif dengan Indonesia.',
       capabilities: [
         'FSB / GRU cyber units (Sandworm, APT28)',
-        'Rosoboronexport — major arms supplier',
+        'Rosoboronexport â€” major arms supplier',
         'Naval presence terbatas di Asia Tenggara',
         'Information warfare capabilities tinggi'
       ],
@@ -80,14 +80,14 @@ const IntelData = (() => {
       }
     },
     {
-      id: 'USA', name: 'United States', flag: '🇺🇸',
+      id: 'USA', name: 'United States', flag: 'ðŸ‡ºðŸ‡¸',
       region: 'AMERICAS',
       threatLevel: 'LOW',
       color: '#3b82f6',
       summary: 'Partner strategis. Kerjasama militer melalui Garuda Shield, IMET, FMS. Naval presence di Indo-Pasifik.',
       capabilities: [
-        'US Navy 7th Fleet — 50-70 kapal di Indo-Pasifik',
-        'USPACOM — koordinasi regional',
+        'US Navy 7th Fleet â€” 50-70 kapal di Indo-Pasifik',
+        'USPACOM â€” koordinasi regional',
         'Intelligence sharing (Five Eyes partnership)',
         'FMS (Foreign Military Sales) program'
       ],
@@ -103,15 +103,15 @@ const IntelData = (() => {
       }
     },
     {
-      id: 'AUS', name: 'Australia', flag: '🇦🇺',
+      id: 'AUS', name: 'Australia', flag: 'ðŸ‡¦ðŸ‡º',
       region: 'OCEANIA',
       threatLevel: 'LOW',
       color: '#22c55e',
       summary: 'Partner strategis. Kerjasama maritime security, counter-terrorism, dan intelligence sharing.',
       capabilities: [
-        'RAN — Royal Australian Navy',
-        'RAAF — surveillance & patrol aircraft',
-        'ASIS — intelligence cooperation',
+        'RAN â€” Royal Australian Navy',
+        'RAAF â€” surveillance & patrol aircraft',
+        'ASIS â€” intelligence cooperation',
         'Joint maritime patrol di perbatasan'
       ],
       recentActivity: [
@@ -126,13 +126,13 @@ const IntelData = (() => {
       }
     },
     {
-      id: 'MYS', name: 'Malaysia', flag: '🇲🇾',
+      id: 'MYS', name: 'Malaysia', flag: 'ðŸ‡²ðŸ‡¾',
       region: 'ASIA',
       threatLevel: 'LOW',
       color: '#eab308',
       summary: 'Tetangga langsung. Kerjasama perbatasan, patroli bersama, dan penyelesaian sengketa via diplomasi.',
       capabilities: [
-        'RMN — Royal Malaysian Navy',
+        'RMN â€” Royal Malaysian Navy',
         'Border patrol di Kalimantan',
         'Joint Malindo exercises',
         'Cooperation on piracy & smuggling'
@@ -149,13 +149,13 @@ const IntelData = (() => {
       }
     },
     {
-      id: 'VNM', name: 'Vietnam', flag: '🇻🇳',
+      id: 'VNM', name: 'Vietnam', flag: 'ðŸ‡»ðŸ‡³',
       region: 'ASIA',
       threatLevel: 'LOW',
       color: '#06b6d4',
       summary: 'Partner di SCS. Sama-sama menghadapi klaim China di Laut Natuna.',
       capabilities: [
-        'VPN — Vietnam People\'s Navy',
+        'VPN â€” Vietnam People\'s Navy',
         'Coastal defense systems',
         'Anti-access/area denial (A2/AD)',
         'Cooperation on SCS'
@@ -171,13 +171,13 @@ const IntelData = (() => {
       }
     },
     {
-      id: 'PHL', name: 'Philippines', flag: '🇵🇭',
+      id: 'PHL', name: 'Philippines', flag: 'ðŸ‡µðŸ‡­',
       region: 'ASIA',
       threatLevel: 'LOW',
       color: '#3b82f6',
       summary: 'Partner ASEAN. Aktif dalam SCS code of conduct negotiations.',
       capabilities: [
-        'PN — Philippine Navy',
+        'PN â€” Philippine Navy',
         'Coast guard cooperation',
         'US alliance (MDT)',
         'Cooperation on SCS'
@@ -193,13 +193,13 @@ const IntelData = (() => {
       }
     },
     {
-      id: 'PNG', name: 'Papua New Guinea', flag: '🇵🇬',
+      id: 'PNG', name: 'Papua New Guinea', flag: 'ðŸ‡µðŸ‡¬',
       region: 'OCEANIA',
       threatLevel: 'LOW',
       color: '#22c55e',
       summary: 'Tetangga perbatasan darat. Cooperation on border management.',
       capabilities: [
-        'PNGDF — PNG Defence Force',
+        'PNGDF â€” PNG Defence Force',
         'Border security',
         'Traditional border crossing',
         'Cooperation on refugees'
@@ -432,7 +432,7 @@ const IntelData = (() => {
     item.verifiedBy = analyst;
     item.verifiedAt = Date.now();
     item.dismissReason = reason;
-    console.log(`[INTEL] Dismissed: ${id} — ${reason}`);
+    console.log(`[INTEL] Dismissed: ${id} â€” ${reason}`);
     return { ok: true };
   }
 

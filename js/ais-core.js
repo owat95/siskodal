@@ -1,5 +1,5 @@
 /* ============================================================
- * AIS-CORE.JS — v1.0
+ * AIS-CORE.JS â€” v1.0
  * AIS 6-bit ASCII Decoder/Encoder + NMEA Parser
  * No dependencies. Works in browser + Node.
  * Spec: ITU-R M.1371-5
@@ -13,8 +13,8 @@ const AISCore = (() => {
   // 1. AIS 6-BIT ASCII CONVERSION
   // ============================================================
   // AIS payload uses 6-bit encoding:
-  //   Value 0-31  → '@','A'-'_'   (ord - 64)
-  //   Value 32-63 → ' '-'?'       (ord as-is)
+  //   Value 0-31  â†’ '@','A'-'_'   (ord - 64)
+  //   Value 32-63 â†’ ' '-'?'       (ord as-is)
   // ============================================================
 
   /**
@@ -23,8 +23,8 @@ const AISCore = (() => {
   function charToBits(c) {
     const code = c.charCodeAt(0);
     // Encoding ranges:
-    // '0'(48) to 'W'(87) → 0 to 39
-    // '`'(96) to 'w'(119) → 40 to 63
+    // '0'(48) to 'W'(87) â†’ 0 to 39
+    // '`'(96) to 'w'(119) â†’ 40 to 63
     const val = code < 96 ? (code - 48) : (code - 56);
     if (val < 0 || val > 63) {
       throw new Error(`Invalid AIS char: '${c}' (code ${code})`);
@@ -42,7 +42,7 @@ const AISCore = (() => {
   }
 
   /**
-   * Convert entire AIS payload string → bit string
+   * Convert entire AIS payload string â†’ bit string
    */
   function payloadToBits(payload) {
     let bits = '';
@@ -53,7 +53,7 @@ const AISCore = (() => {
   }
 
   /**
-   * Convert bit string → AIS payload string
+   * Convert bit string â†’ AIS payload string
    */
   function bitsToPayload(bits) {
     // Pad to multiple of 6
@@ -156,7 +156,7 @@ const AISCore = (() => {
 
     const parts = sentence.split(',');
     if (parts.length < 7) {
-      throw new Error('Malformed NMEA sentence (need ≥7 fields)');
+      throw new Error('Malformed NMEA sentence (need â‰¥7 fields)');
     }
 
     const type = parts[0]; // !AIVDM or !AIVDO
@@ -190,7 +190,7 @@ const AISCore = (() => {
   // ============================================================
 
   /**
-   * Type 1/2/3 — Position Report Class A
+   * Type 1/2/3 â€” Position Report Class A
    */
   function decodeType123(bits) {
     return {
@@ -214,7 +214,7 @@ const AISCore = (() => {
   }
 
   /**
-   * Type 5 — Static and Voyage Data (Class A)
+   * Type 5 â€” Static and Voyage Data (Class A)
    */
   function decodeType5(bits) {
     return {
@@ -243,7 +243,7 @@ const AISCore = (() => {
   }
 
   /**
-   * Type 18 — Standard Class B Position Report
+   * Type 18 â€” Standard Class B Position Report
    */
   function decodeType18(bits) {
     return {
@@ -262,7 +262,7 @@ const AISCore = (() => {
   }
 
   /**
-   * Type 24 — Static Data Report (Class B)
+   * Type 24 â€” Static Data Report (Class B)
    * Part A: name only
    * Part B: ship type + vendor + callsign + dims
    */
@@ -292,7 +292,7 @@ const AISCore = (() => {
   }
 
   /**
-   * Master decoder — dispatches by message type
+   * Master decoder â€” dispatches by message type
    */
   function decodePayload(payload, fillBits = 0) {
     let bits = payloadToBits(payload);
@@ -312,7 +312,7 @@ const AISCore = (() => {
   }
 
   /**
-   * Full pipeline: NMEA string → decoded object
+   * Full pipeline: NMEA string â†’ decoded object
    */
   function decodeNMEA(sentence) {
     const nmea = parseNMEA(sentence);
@@ -417,17 +417,17 @@ const AISCore = (() => {
     const bits = payloadToBits(payload);
     const back = bitsToPayload(bits);
     console.log('1. Payload round-trip:',
-      payload === back ? '✓ PASS' : `✗ FAIL (${payload} ≠ ${back})`);
+      payload === back ? 'âœ“ PASS' : `âœ— FAIL (${payload} â‰  ${back})`);
 
     // Test 2: decode known payload (Type 1)
     const decoded = decodePayload(payload);
     console.log('2. Decode Type 1:',
-      decoded._kind === 'position_class_a' ? '✓ PASS' : '✗ FAIL');
+      decoded._kind === 'position_class_a' ? 'âœ“ PASS' : 'âœ— FAIL');
     console.log('   MMSI:', decoded.mmsi);
     console.log('   Lat/Lon:', decoded.lat, decoded.lon);
     console.log('   SOG/COG:', decoded.sog, decoded.cog);
 
-    // Test 3: encode → decode round-trip
+    // Test 3: encode â†’ decode round-trip
     const encoded = encodeType1({
       mmsi: 525015810,
       lon: 106.8456,
@@ -439,16 +439,16 @@ const AISCore = (() => {
     const reDecoded = decodePayload(encoded);
     const dLon = Math.abs(reDecoded.lon - 106.8456) < 0.0001;
     const dLat = Math.abs(reDecoded.lat - (-6.2088)) < 0.0001;
-    console.log('3. Encode→Decode:',
-      (dLon && dLat) ? '✓ PASS' : '✗ FAIL');
+    console.log('3. Encodeâ†’Decode:',
+      (dLon && dLat) ? 'âœ“ PASS' : 'âœ— FAIL');
     console.log('   Original: 106.8456, -6.2088');
     console.log('   Decoded: ', reDecoded.lon, reDecoded.lat);
 
-    // Test 4: NMEA build → parse
+    // Test 4: NMEA build â†’ parse
     const nmea = buildNMEA(encoded, 'A');
     const parsed = parseNMEA(nmea);
-    console.log('4. NMEA build→parse:',
-      parsed.checksum === true ? '✓ PASS' : '✗ FAIL');
+    console.log('4. NMEA buildâ†’parse:',
+      parsed.checksum === true ? 'âœ“ PASS' : 'âœ— FAIL');
     console.log('   Generated:', nmea);
 
     console.groupEnd();

@@ -1,5 +1,5 @@
 /* ============================================================
- * KOMUNIKASI-VIZ.JS — Network Graph, Chat, Waterfall Visualizer
+ * KOMUNIKASI-VIZ.JS â€” Network Graph, Chat, Waterfall Visualizer
  * ============================================================ */
 
 const KomunikasiViz = (() => {
@@ -18,7 +18,7 @@ const KomunikasiViz = (() => {
     const cy = H / 2;
     const radius = Math.min(W, H) / 2 - 60;
 
-    // Positions — circle layout
+    // Positions â€” circle layout
     const positions = {};
     nodes.forEach((n, i) => {
       const angle = (i / nodes.length) * Math.PI * 2 - Math.PI / 2;
@@ -196,7 +196,7 @@ const KomunikasiViz = (() => {
     // TTL countdown
     const ageSec = (Date.now() - msg.timestamp) / 1000;
     const ttlRemaining = msg.ttl ? Math.max(0, Math.floor(msg.ttl - ageSec)) : 0;
-    const ttlText = ttlRemaining > 0 ? `⏱ ${Math.floor(ttlRemaining / 60)}m` : '';
+    const ttlText = ttlRemaining > 0 ? `â± ${Math.floor(ttlRemaining / 60)}m` : '';
 
     return `
       <div class="chat-bubble ${isMine ? 'mine' : 'theirs'}">
@@ -206,7 +206,7 @@ const KomunikasiViz = (() => {
           <span class="class-badge" style="background:${clsColor}22; color:${clsColor}; border:1px solid ${clsColor}55;">
             ${msg.classification}
           </span>
-          <span class="enc-badge" title="${cls}">🔒</span>
+          <span class="enc-badge" title="${cls}">ðŸ”’</span>
           ${ttlText ? `<span class="ttl-badge">${ttlText}</span>` : ''}
           <span class="chat-time">${time}</span>
         </div>
@@ -285,7 +285,7 @@ const KomunikasiViz = (() => {
   }
 
   function intensityToColor(v) {
-    // Color map: black → blue → cyan → yellow → red
+    // Color map: black â†’ blue â†’ cyan â†’ yellow â†’ red
     if (v < 20) return `rgb(${v * 2}, ${v * 2}, ${40 + v * 3})`;
     if (v < 50) return `rgb(0, ${80 + v * 3}, ${200 + v})`;
     if (v < 75) return `rgb(${(v - 50) * 10}, 240, ${150 - (v - 50) * 4})`;
@@ -313,7 +313,7 @@ const KomunikasiViz = (() => {
       const c = statusColors[d.status];
 
       const timeAgo = (ts) => {
-        if (!ts) return '—';
+        if (!ts) return 'â€”';
         const s = Math.floor((Date.now() - ts) / 1000);
         if (s < 60) return `${s}s ago`;
         if (s < 3600) return `${Math.floor(s / 60)}m ago`;
@@ -322,10 +322,10 @@ const KomunikasiViz = (() => {
       };
 
       const actions = d.status === 'pending'
-        ? `<button class="btn-approve" data-device="${d.id}" data-action="approve">✓ Approve</button>
-           <button class="btn-reject" data-device="${d.id}" data-action="reject">✗ Reject</button>`
+        ? `<button class="btn-approve" data-device="${d.id}" data-action="approve">âœ“ Approve</button>
+           <button class="btn-reject" data-device="${d.id}" data-action="reject">âœ— Reject</button>`
         : d.status === 'approved'
-        ? `<button class="btn-revoke" data-device="${d.id}" data-action="revoke">⊘ Revoke</button>`
+        ? `<button class="btn-revoke" data-device="${d.id}" data-action="revoke">âŠ˜ Revoke</button>`
         : `<span style="font-size:0.7rem;color:#64748b;">${d.reason || 'No action'}</span>`;
 
       return `
@@ -334,17 +334,17 @@ const KomunikasiViz = (() => {
           <td class="mono" style="font-size:0.7rem;color:#94a3b8;">${d.mac}</td>
           <td>
             <span class="platform-badge platform-${d.platform.toLowerCase()}">
-              ${d.platform === 'Android' ? '🤖' : d.platform === 'iOS' ? '🍎' : '💻'} ${d.platform}
+              ${d.platform === 'Android' ? 'ðŸ¤–' : d.platform === 'iOS' ? 'ðŸŽ' : 'ðŸ’»'} ${d.platform}
             </span>
           </td>
           <td style="font-size:0.75rem;">${d.model}</td>
           <td>
-            <div style="font-size:0.8rem;color:#e2e8f0;">${user?.callSign || '—'}</div>
-            <div style="font-size:0.7rem;color:#64748b;">${user?.nrp || '—'}</div>
+            <div style="font-size:0.8rem;color:#e2e8f0;">${user?.callSign || 'â€”'}</div>
+            <div style="font-size:0.7rem;color:#64748b;">${user?.nrp || 'â€”'}</div>
           </td>
           <td>
             <span class="status-badge" style="background:${c}22; color:${c}; border:1px solid ${c}55;">
-              ● ${d.status.toUpperCase()}
+              â— ${d.status.toUpperCase()}
             </span>
           </td>
           <td class="mono" style="font-size:0.7rem;color:#94a3b8;">${timeAgo(d.lastSeen)}</td>

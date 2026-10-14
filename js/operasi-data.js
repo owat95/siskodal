@@ -1,5 +1,5 @@
 /* ============================================================
- * OPERASI-DATA.JS — Mission, Units, Targets
+ * OPERASI-DATA.JS â€” Mission, Units, Targets
  * Data untuk C2 Operations Center
  * ============================================================ */
 
@@ -10,13 +10,13 @@ const OperasiData = (() => {
   // MISSION TYPES
   // ============================================
   const MISSION_TYPES = {
-    MARITIME_DEFENSE:   { code: 'MARITIME_DEFENSE',   label: 'Pertahanan Maritim',     icon: '⚓', color: '#1e40af' },
-    BORDER_SECURITY:    { code: 'BORDER_SECURITY',    label: 'Keamanan Perbatasan',    icon: '🚧', color: '#059669' },
-    AIR_PATROL:         { code: 'AIR_PATROL',         label: 'Patroli Udara',          icon: '✈️', color: '#3b82f6' },
-    COUNTER_TERRORISM:  { code: 'COUNTER_TERRORISM',  label: 'Kontra Terorisme',       icon: '🎯', color: '#ef4444' },
-    SAR:                { code: 'SAR',                label: 'Search & Rescue',        icon: '🆘', color: '#eab308' },
-    HUMANITARIAN:       { code: 'HUMANITARIAN',       label: 'Bantuan Kemanusiaan',    icon: '🏥', color: '#22c55e' },
-    CYBER_DEFENSE:      { code: 'CYBER_DEFENSE',      label: 'Pertahanan Siber',       icon: '🛡️', color: '#a855f7' }
+    MARITIME_DEFENSE:   { code: 'MARITIME_DEFENSE',   label: 'Pertahanan Maritim',     icon: 'âš“', color: '#1e40af' },
+    BORDER_SECURITY:    { code: 'BORDER_SECURITY',    label: 'Keamanan Perbatasan',    icon: 'ðŸš§', color: '#059669' },
+    AIR_PATROL:         { code: 'AIR_PATROL',         label: 'Patroli Udara',          icon: 'âœˆï¸', color: '#3b82f6' },
+    COUNTER_TERRORISM:  { code: 'COUNTER_TERRORISM',  label: 'Kontra Terorisme',       icon: 'ðŸŽ¯', color: '#ef4444' },
+    SAR:                { code: 'SAR',                label: 'Search & Rescue',        icon: 'ðŸ†˜', color: '#eab308' },
+    HUMANITARIAN:       { code: 'HUMANITARIAN',       label: 'Bantuan Kemanusiaan',    icon: 'ðŸ¥', color: '#22c55e' },
+    CYBER_DEFENSE:      { code: 'CYBER_DEFENSE',      label: 'Pertahanan Siber',       icon: 'ðŸ›¡ï¸', color: '#a855f7' }
   };
 
   // ============================================
@@ -44,23 +44,23 @@ const OperasiData = (() => {
   // UNIT CATEGORIES
   // ============================================
   const UNIT_CATEGORIES = {
-    KRI:        { code: 'KRI',        label: 'Kapal Perang',        matra: 'al', icon: '🚢' },
-    SUBMARINE:  { code: 'SUBMARINE',  label: 'Kapal Selam',         matra: 'al', icon: '🔻' },
-    PATROL:     { code: 'PATROL',     label: 'Kapal Patroli',       matra: 'al', icon: '⛵' },
-    FIGHTER:    { code: 'FIGHTER',    label: 'Pesawat Tempur',      matra: 'au', icon: '✈️' },
-    UAV:        { code: 'UAV',        label: 'UAV MALE',            matra: 'au', icon: '🛸' },
-    TRANSPORT:  { code: 'TRANSPORT',  label: 'Pesawat Angkut',      matra: 'au', icon: '🛬' },
-    INFANTRY:   { code: 'INFANTRY',   label: 'Batalyon Infanteri',  matra: 'ad', icon: '🪖' },
-    ARMOR:      { code: 'ARMOR',      label: 'Kavaleri',            matra: 'ad', icon: '🚙' },
-    ARTILLERY:  { code: 'ARTILLERY',  label: 'Artileri',            matra: 'ad', icon: '🎯' },
-    SPECIAL:    { code: 'SPECIAL',    label: 'Pasukan Khusus',      matra: 'ad', icon: '⚡' }
+    KRI:        { code: 'KRI',        label: 'Kapal Perang',        matra: 'al', icon: 'ðŸš¢' },
+    SUBMARINE:  { code: 'SUBMARINE',  label: 'Kapal Selam',         matra: 'al', icon: 'ðŸ”»' },
+    PATROL:     { code: 'PATROL',     label: 'Kapal Patroli',       matra: 'al', icon: 'â›µ' },
+    FIGHTER:    { code: 'FIGHTER',    label: 'Pesawat Tempur',      matra: 'au', icon: 'âœˆï¸' },
+    UAV:        { code: 'UAV',        label: 'UAV MALE',            matra: 'au', icon: 'ðŸ›¸' },
+    TRANSPORT:  { code: 'TRANSPORT',  label: 'Pesawat Angkut',      matra: 'au', icon: 'ðŸ›¬' },
+    INFANTRY:   { code: 'INFANTRY',   label: 'Batalyon Infanteri',  matra: 'ad', icon: 'ðŸª–' },
+    ARMOR:      { code: 'ARMOR',      label: 'Kavaleri',            matra: 'ad', icon: 'ðŸš™' },
+    ARTILLERY:  { code: 'ARTILLERY',  label: 'Artileri',            matra: 'ad', icon: 'ðŸŽ¯' },
+    SPECIAL:    { code: 'SPECIAL',    label: 'Pasukan Khusus',      matra: 'ad', icon: 'âš¡' }
   };
 
   // ============================================
   // AVAILABLE UNITS (from real-ish TNI units)
   // ============================================
   const AVAILABLE_UNITS = [
-    // ============ AL — Laut ============
+    // ============ AL â€” Laut ============
     { id: 'U-KRI-DIP', name: 'KRI Diponegoro-365', category: 'KRI', matra: 'al', base: 'Lantamal I Belawan', homeport: { lat: 3.783, lon: 98.683 }, crew: 120, speed: 28, readiness: 95, weapons: ['Meriam 76mm', 'Rudal Exocet'], status: 'READY' },
     { id: 'U-KRI-SUH', name: 'KRI Sultan Hasanuddin-366', category: 'KRI', matra: 'al', base: 'Lantamal II Makassar', homeport: { lat: -5.147, lon: 119.432 }, crew: 120, speed: 28, readiness: 88, weapons: ['Meriam 76mm', 'Rudal Exocet'], status: 'READY' },
     { id: 'U-KRI-JL',  name: 'KRI John Lie-358',   category: 'KRI', matra: 'al', base: 'Lantamal III Jakarta', homeport: { lat: -6.103, lon: 106.883 }, crew: 110, speed: 27, readiness: 92, weapons: ['Meriam 57mm', 'Rudal Mistral'], status: 'READY' },
@@ -70,7 +70,7 @@ const OperasiData = (() => {
     { id: 'U-KAL-NAT', name: 'KAL Natuna',         category: 'PATROL', matra: 'al', base: 'Lantamal IV Tanjungpinang', homeport: { lat: 3.950, lon: 108.383 }, crew: 30, speed: 25, readiness: 92, weapons: ['Meriam 20mm'], status: 'READY' },
     { id: 'U-KAL-MAR', name: 'KAL Marore',         category: 'PATROL', matra: 'al', base: 'Lantamal VIII Manado', homeport: { lat: 1.474, lon: 124.842 }, crew: 30, speed: 25, readiness: 88, weapons: ['Meriam 20mm'], status: 'READY' },
 
-    // ============ AU — Udara ============
+    // ============ AU â€” Udara ============
     { id: 'U-F16-01', name: 'F-16C Falcon TS-1601', category: 'FIGHTER', matra: 'au', base: 'Skadron Udara 3 Iswahjudi', homeport: { lat: -7.616, lon: 111.434 }, crew: 1, speed: 2400, readiness: 92, weapons: ['AIM-120 AMRAAM', 'AIM-9 Sidewinder'], status: 'READY' },
     { id: 'U-F16-02', name: 'F-16C Falcon TS-1602', category: 'FIGHTER', matra: 'au', base: 'Skadron Udara 3 Iswahjudi', homeport: { lat: -7.616, lon: 111.434 }, crew: 1, speed: 2400, readiness: 88, weapons: ['AIM-120 AMRAAM', 'AIM-9 Sidewinder'], status: 'READY' },
     { id: 'U-F16-03', name: 'F-16C Falcon TS-1603', category: 'FIGHTER', matra: 'au', base: 'Skadron Udara 3 Iswahjudi', homeport: { lat: -7.616, lon: 111.434 }, crew: 1, speed: 2400, readiness: 65, weapons: ['AIM-120 AMRAAM'], status: 'MAINTENANCE' },
@@ -80,7 +80,7 @@ const OperasiData = (() => {
     { id: 'U-UAV-RVN2',name: 'UAV MALE Raven-02',  category: 'UAV', matra: 'au', base: 'Lanud El Tari', homeport: { lat: -10.171, lon: 123.671 }, crew: 0, speed: 280, readiness: 92, weapons: ['EO/IR Sensor'], status: 'READY' },
     { id: 'U-C130-01', name: 'C-130H Hercules A-1310', category: 'TRANSPORT', matra: 'au', base: 'Skadron Udara 31 Halim', homeport: { lat: -6.266, lon: 106.891 }, crew: 5, speed: 600, readiness: 85, weapons: [], status: 'READY' },
 
-    // ============ AD — Darat ============
+    // ============ AD â€” Darat ============
     { id: 'U-YONIF-315', name: 'Yonif 315/Garuda',      category: 'INFANTRY', matra: 'ad', base: 'Kodam XVII/Cenderawasih', homeport: { lat: -2.533, lon: 140.717 }, crew: 750, speed: 20, readiness: 92, weapons: ['SS1', 'SS2', 'Grenade Launcher'], status: 'READY' },
     { id: 'U-YONIF-328', name: 'Yonif 328/Dirgahayu',   category: 'INFANTRY', matra: 'ad', base: 'Kodam Jaya', homeport: { lat: -6.175, lon: 106.827 }, crew: 750, speed: 20, readiness: 88, weapons: ['SS1', 'SS2'], status: 'READY' },
     { id: 'U-YONIF-600', name: 'Yonif 600/Modang',      category: 'INFANTRY', matra: 'ad', base: 'Kodam VI/Mulawarman', homeport: { lat: -1.267, lon: 116.831 }, crew: 750, speed: 20, readiness: 82, weapons: ['SS1', 'SS2'], status: 'READY' },

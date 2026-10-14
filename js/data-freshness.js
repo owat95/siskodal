@@ -1,5 +1,5 @@
 /* ============================================================
- * DATA-FRESHNESS.JS — Data Source Health & Sync Monitor
+ * DATA-FRESHNESS.JS â€” Data Source Health & Sync Monitor
  * Semua visualisasi wajib register di sini untuk tracking
  * ============================================================ */
 
@@ -44,7 +44,7 @@ const DataFreshness = (() => {
   }
 
   // ============================================
-  // HEARTBEAT — update source
+  // HEARTBEAT â€” update source
   // ============================================
   function heartbeat(id, count = 1) {
     const s = SOURCES.get(id);
@@ -138,12 +138,12 @@ const DataFreshness = (() => {
 
     container.innerHTML = `
       <div class="freshness-indicator" title="Klik untuk detail">
-        <span class="fi-icon" style="color:${healthColor};">●</span>
+        <span class="fi-icon" style="color:${healthColor};">â—</span>
         <span class="fi-text">
           DATA SYNC: <strong style="color:${healthColor};">${summary.overallHealth}%</strong>
         </span>
         <span class="fi-detail">
-          ${summary.fresh}✓ ${summary.stale > 0 ? summary.stale + '⚠ ' : ''}${summary.offline > 0 ? summary.offline + '✗' : ''}
+          ${summary.fresh}âœ“ ${summary.stale > 0 ? summary.stale + 'âš  ' : ''}${summary.offline > 0 ? summary.offline + 'âœ—' : ''}
         </span>
       </div>
     `;
@@ -221,7 +221,7 @@ const DataFreshness = (() => {
   function enterOfflineMode(reason) {
     isOfflineMode = true;
     document.body.classList.add('offline-mode');
-    console.warn(`[FRESHNESS] OFFLINE MODE — ${reason}`);
+    console.warn(`[FRESHNESS] OFFLINE MODE â€” ${reason}`);
     notifyOfflineListeners({ mode: 'offline', reason });
     renderOfflineBanner();
   }
@@ -251,9 +251,9 @@ const DataFreshness = (() => {
       banner.id = 'offline-banner';
       banner.className = 'offline-banner';
       banner.innerHTML = `
-        <span class="ob-icon">📡</span>
+        <span class="ob-icon">ðŸ“¡</span>
         <span class="ob-text">
-          <strong>MODE OFFLINE</strong> — Koneksi taktis terputus.
+          <strong>MODE OFFLINE</strong> â€” Koneksi taktis terputus.
           Menggunakan <em>cached data</em>. Data baru akan di-sync saat koneksi pulih.
         </span>
       `;

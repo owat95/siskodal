@@ -1,5 +1,5 @@
 /* ============================================================
- * TERITORIAL-DASHBOARD.JS — UI Logic for Teritorial Dashboard
+ * TERITORIAL-DASHBOARD.JS â€” UI Logic for Teritorial Dashboard
  * ============================================================ */
 
 const TeritorialDashboard = (() => {
@@ -176,14 +176,14 @@ const TeritorialDashboard = (() => {
         <div class="ki-head">
           <div style="flex:1; min-width:0;">
             <div class="ki-name">${kodam.shortName}</div>
-            <div class="ki-code">${kodam.code} · ${kodam.hq}</div>
+            <div class="ki-code">${kodam.code} Â· ${kodam.hq}</div>
           </div>
           ${badge}
         </div>
         <div class="ki-meta">
-          <span>👥 ${kodam.personnel.toLocaleString('id-ID')}</span>
-          <span>🎯 ${kodam.assets}</span>
-          <span>◈ ${kodam.korem.length} Korem</span>
+          <span>ðŸ‘¥ ${kodam.personnel.toLocaleString('id-ID')}</span>
+          <span>ðŸŽ¯ ${kodam.assets}</span>
+          <span>â—ˆ ${kodam.korem.length} Korem</span>
         </div>
         <div class="ki-readiness">
           <span style="min-width:80px;">Readiness</span>
@@ -228,28 +228,28 @@ const TeritorialDashboard = (() => {
             <div class="korem-hq"><i class="fas fa-map-marker-alt"></i> ${k.hq}</div>
           </li>
         `).join('')
-      : '<div style="padding:12px;color:#64748b;font-size:0.75rem;text-align:center;">Kodam baru — Korem belum terbentuk</div>';
+      : '<div style="padding:12px;color:#64748b;font-size:0.75rem;text-align:center;">Kodam baru â€” Korem belum terbentuk</div>';
 
     const provinceChips = kodam.provinces.map(p =>
       `<span class="dp-province-chip">${p}</span>`
     ).join('');
 
     panel.innerHTML = `
-      <button class="dp-close" onclick="TeritorialDashboard.closeDetail()">✕</button>
+      <button class="dp-close" onclick="TeritorialDashboard.closeDetail()">âœ•</button>
 
       <div class="dp-header" style="--accent:${region.accent};">
         <div class="dp-region-badge" style="background:${region.color}22; color:${region.accent}; border:1px solid ${region.color}55;">
           ${region.label}
         </div>
         <div class="dp-title">${kodam.name}</div>
-        <div class="dp-code">${kodam.code} · ORDER ${kodam.order}</div>
+        <div class="dp-code">${kodam.code} Â· ORDER ${kodam.order}</div>
         <div class="dp-hq"><i class="fas fa-map-marker-alt"></i> ${kodam.hq}</div>
         <div class="dp-panglima"><i class="fas fa-user-shield"></i> ${kodam.panglima}</div>
         ${kodam.isNew ? `<div style="margin-top:8px;"><span class="ki-badge ${kodam.formedYear === 2026 ? 'new-2026' : 'new-2025'}">KODAM BARU ${kodam.formedYear}</span></div>` : ''}
       </div>
 
       <div class="dp-section">
-        <div class="dp-section-title">◤ Statistik</div>
+        <div class="dp-section-title">â—¤ Statistik</div>
         <div class="dp-stats-grid">
           <div class="dp-stat" style="border-left-color:${region.accent};">
             <div class="value">${kodam.personnel.toLocaleString('id-ID')}</div>
@@ -271,7 +271,7 @@ const TeritorialDashboard = (() => {
       </div>
 
       <div class="dp-section">
-        <div class="dp-section-title">◤ Hierarki</div>
+        <div class="dp-section-title">â—¤ Hierarki</div>
         <div class="dp-hierarchy">
           <div class="dp-hierarchy-row">
             <span class="label">Korem</span>
@@ -289,14 +289,14 @@ const TeritorialDashboard = (() => {
       </div>
 
       <div class="dp-section">
-        <div class="dp-section-title">◤ Wilayah (${kodam.provinces.length} Provinsi)</div>
+        <div class="dp-section-title">â—¤ Wilayah (${kodam.provinces.length} Provinsi)</div>
         <div class="dp-provinces-list">
           ${provinceChips}
         </div>
       </div>
 
       <div class="dp-section">
-        <div class="dp-section-title">◤ Korem (${kodam.korem.length})</div>
+        <div class="dp-section-title">â—¤ Korem (${kodam.korem.length})</div>
         <ul class="dp-korem-list">
           ${koremHtml}
         </ul>

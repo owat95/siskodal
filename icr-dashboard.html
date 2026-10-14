@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ICR Dashboard — SISKODAL</title>
+  <title>ICR Dashboard â€” SISKODAL</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="./css/dashboard.css">
@@ -172,7 +172,7 @@
   <!-- SIDEBAR -->
   <aside class="dash-sidebar">
     <div class="brand">
-      <span class="brand-mark" style="color:#06b6d4;">🛰️</span>
+      <span class="brand-mark" style="color:#06b6d4;">ðŸ›°ï¸</span>
       <div class="brand-text">
         <strong>ICR</strong>
         <span>Siskodal</span>
@@ -223,7 +223,7 @@
       </div>
       <div class="stat-item">
         <span class="label">Status</span>
-        <span class="value" style="color:#4ade80;">● OPERATIONAL</span>
+        <span class="value" style="color:#4ade80;">â— OPERATIONAL</span>
       </div>
     </div>
   </header>
@@ -247,7 +247,7 @@
         <div class="icr-stat" style="border-left-color:#eab308;">
           <div class="label">Event Filter Rate</div>
           <div class="value" id="stat-reduction">--</div>
-          <div class="meta">Raw → Transmitted</div>
+          <div class="meta">Raw â†’ Transmitted</div>
         </div>
 
         <div class="icr-stat" style="border-left-color:#22c55e;">
@@ -274,16 +274,16 @@
 
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Recent Intel Feed</h3>
-          <span style="font-size:0.7rem;color:#22c55e;font-family:monospace;">● LIVE</span>
+          <h3>â—¤ Recent Intel Feed</h3>
+          <span style="font-size:0.7rem;color:#22c55e;font-family:monospace;">â— LIVE</span>
         </div>
         <div class="panel-body">
           <div class="scenario-bar">
             <div class="sb-label"><i class="fas fa-play-circle"></i> Trigger Scenario:</div>
-            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('intrusion')">🛡️ Border Intrusion</button>
-            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('hostile_radar')">📡 Hostile Radar</button>
-            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('vessel_anomaly')">⚓ Vessel Anomaly</button>
-            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('thermal_contact')">🌡️ Thermal Contact</button>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('intrusion')">ðŸ›¡ï¸ Border Intrusion</button>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('hostile_radar')">ðŸ“¡ Hostile Radar</button>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('vessel_anomaly')">âš“ Vessel Anomaly</button>
+            <button class="scenario-btn" onclick="ICREdgeAI.triggerScenario('thermal_contact')">ðŸŒ¡ï¸ Thermal Contact</button>
           </div>
           <div id="feed-list"></div>
         </div>
@@ -294,7 +294,7 @@
     <section class="tab-content" id="tab-pir">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Priority Intelligence Requirements</h3>
+          <h3>â—¤ Priority Intelligence Requirements</h3>
         </div>
         <div class="panel-body">
           <div id="pir-list"></div>
@@ -306,7 +306,7 @@
     <section class="tab-content" id="tab-edge">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Edge AI Sites — Jetson Orin Fleet</h3>
+          <h3>â—¤ Edge AI Sites â€” Jetson Orin Fleet</h3>
           <span style="font-size:0.7rem;color:#94a3b8;" id="edge-count">-- sites</span>
         </div>
         <div class="panel-body">
@@ -319,7 +319,7 @@
     <section class="tab-content" id="tab-feed">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Multi-INT Feed</h3>
+          <h3>â—¤ Multi-INT Feed</h3>
           <span style="font-size:0.7rem;color:#94a3b8;" id="feed-count">0 events</span>
         </div>
         <div class="panel-body">
@@ -332,7 +332,7 @@
     <section class="tab-content" id="tab-matra">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ Matra Profiling &amp; Capabilities</h3>
+          <h3>â—¤ Matra Profiling &amp; Capabilities</h3>
         </div>
         <div class="panel-body">
           <div id="matra-grid"></div>
@@ -344,7 +344,7 @@
     <section class="tab-content" id="tab-nato">
       <section class="panel">
         <div class="panel-header">
-          <h3>◤ NATO Standards &amp; Formats</h3>
+          <h3>â—¤ NATO Standards &amp; Formats</h3>
         </div>
         <div class="panel-body">
           <div id="nato-list"></div>
@@ -410,7 +410,7 @@
     ['ad', 'al', 'au'].forEach(matra => {
       const p = ICRCore.getProfile(matra);
       const pirs = ICRCore.getPIR(matra);
-      html += `<h4 style="font-size:0.85rem; color:${p.color}; margin:16px 0 10px; letter-spacing:1px;">◤ ${p.code} — ${p.name}</h4>`;
+      html += `<h4 style="font-size:0.85rem; color:${p.color}; margin:16px 0 10px; letter-spacing:1px;">â—¤ ${p.code} â€” ${p.name}</h4>`;
       html += `<table class="data-table" style="margin-bottom:20px;">
         <thead><tr>
           <th>ID</th><th>Priority</th><th>Domain</th><th>Requirement</th><th>Status</th>
@@ -422,8 +422,8 @@
           <td style="font-size:0.75rem;color:#94a3b8;">${pir.domain}</td>
           <td style="font-size:0.8rem;">${pir.text}</td>
           <td>${pir.active
-            ? '<span style="color:#4ade80;font-weight:700;font-size:0.75rem;">● ACTIVE</span>'
-            : '<span style="color:#64748b;font-size:0.75rem;">○ INACTIVE</span>'}</td>
+            ? '<span style="color:#4ade80;font-weight:700;font-size:0.75rem;">â— ACTIVE</span>'
+            : '<span style="color:#64748b;font-size:0.75rem;">â—‹ INACTIVE</span>'}</td>
         </tr>`;
       });
       html += `</tbody></table>`;
@@ -444,9 +444,9 @@
         <div class="ec-head">
           <div>
             <div class="ec-name">${s.name}</div>
-            <div class="ec-loc">📍 ${s.location}</div>
+            <div class="ec-loc">ðŸ“ ${s.location}</div>
           </div>
-          <span class="ec-badge">● ONLINE</span>
+          <span class="ec-badge">â— ONLINE</span>
         </div>
         <div class="ec-meta">
           <div><strong>${s.jetsonModel}</strong>Jetson</div>
@@ -483,12 +483,12 @@
             <div style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; background:${p.color}; color:#fff; border-radius:10px; font-size:1.4rem; font-weight:900;">${p.icon}</div>
             <div>
               <div style="font-size:1rem; font-weight:800; color:#fff;">${p.name}</div>
-              <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">${siteCount} edge sites · ${pirCount} active PIR</div>
+              <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">${siteCount} edge sites Â· ${pirCount} active PIR</div>
             </div>
           </div>
           <ul style="list-style:none; padding:0; margin:0;">
             ${p.strength.map(s => `<li style="font-size:0.8rem; color:#cbd5e1; padding:5px 0 5px 20px; position:relative;">
-              <span style="position:absolute; left:6px; color:${p.color};">▸</span>${s}
+              <span style="position:absolute; left:6px; color:${p.color};">â–¸</span>${s}
             </li>`).join('')}
           </ul>
           <div style="margin-top:14px; font-size:0.7rem; color:#64748b; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:6px;">NATO Formats</div>
@@ -524,7 +524,7 @@
         </tbody>
       </table>
       <div style="margin-top:20px; padding:16px; background:rgba(30,41,59,0.4); border-left:3px solid #a855f7; border-radius:0 8px 8px 0;">
-        <div style="font-size:0.75rem; color:#c084fc; letter-spacing:1px; font-weight:700; margin-bottom:8px;">◤ NATO ISR STACK</div>
+        <div style="font-size:0.75rem; color:#c084fc; letter-spacing:1px; font-weight:700; margin-bottom:8px;">â—¤ NATO ISR STACK</div>
         <div style="font-size:0.8rem; color:#cbd5e1; line-height:1.6;">
           R2 JOC mengadopsi standar NATO untuk interoperabilitas dengan sekutu dan
           joint operations. Data link menggunakan Link-16 (STANAG 5516), ISR produk
@@ -550,17 +550,17 @@
         <div class="ie-head">
           <div class="ie-source">
             <i class="fas ${getDiscIcon(disc.code)}" style="color:${disc.color};"></i>
-            ${disc.code} · ${evt.siteName}
+            ${disc.code} Â· ${evt.siteName}
           </div>
           <span class="ie-class" style="background:${cls.bg};color:${cls.color};">${cls.label}</span>
         </div>
         <div class="ie-msg">${evt.message}</div>
         <div class="ie-meta">
-          <span>📍 ${evt.lat.toFixed(3)}, ${evt.lon.toFixed(3)}</span>
-          <span>🎯 Conf: ${(evt.confidence * 100).toFixed(0)}%</span>
-          <span>⚡ Edge: ${evt.edgeLatencyMs?.toFixed(0) || '--'}ms</span>
-          <span>📉 Saved: ${(evt.bandwidthReduction * 100).toFixed(1)}%</span>
-          <span>🕐 ${new Date(evt.timestamp).toLocaleTimeString('id-ID')}</span>
+          <span>ðŸ“ ${evt.lat.toFixed(3)}, ${evt.lon.toFixed(3)}</span>
+          <span>ðŸŽ¯ Conf: ${(evt.confidence * 100).toFixed(0)}%</span>
+          <span>âš¡ Edge: ${evt.edgeLatencyMs?.toFixed(0) || '--'}ms</span>
+          <span>ðŸ“‰ Saved: ${(evt.bandwidthReduction * 100).toFixed(1)}%</span>
+          <span>ðŸ• ${new Date(evt.timestamp).toLocaleTimeString('id-ID')}</span>
         </div>
       </div>
     `;

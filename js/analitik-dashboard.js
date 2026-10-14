@@ -1,5 +1,5 @@
 /* ============================================================
- * ANALITIK-DASHBOARD.JS — Chart.js Renderer + AI Insights
+ * ANALITIK-DASHBOARD.JS â€” Chart.js Renderer + AI Insights
  * ============================================================ */
 
 const AnalitikDashboard = (() => {
@@ -57,7 +57,7 @@ const AnalitikDashboard = (() => {
     const container = document.getElementById('summary-stats');
     if (!container) return;
 
-    const trendIcons = { up: '▲', down: '▼', flat: '▬' };
+    const trendIcons = { up: 'â–²', down: 'â–¼', flat: 'â–¬' };
 
     container.innerHTML = stats.map(s => `
       <div class="ana-stat" style="border-left-color:${s.color};">
@@ -86,7 +86,7 @@ const AnalitikDashboard = (() => {
     });
 
     panel.innerHTML = `
-      <div class="ai-icon">🤖</div>
+      <div class="ai-icon">ðŸ¤–</div>
       <div class="ai-body">
         <div class="ai-title">
           <span>AI STRATEGIC ADVISOR</span>
@@ -99,10 +99,10 @@ const AnalitikDashboard = (() => {
         </div>
         <div class="ai-text">${top.text}</div>
         <div class="ai-meta">
-          <span>◈ Model: ${confidence.model.version}</span>
-          <span>◈ Data: FRESH (${new Date().toLocaleTimeString('id-ID')})</span>
-          <span>◈ Validated: ${AIConfidence.getValidationStatus(top.model).ageText} ago</span>
-          <span style="color:${confidence.color};">◈ ${confidence.level} CONFIDENCE</span>
+          <span>â—ˆ Model: ${confidence.model.version}</span>
+          <span>â—ˆ Data: FRESH (${new Date().toLocaleTimeString('id-ID')})</span>
+          <span>â—ˆ Validated: ${AIConfidence.getValidationStatus(top.model).ageText} ago</span>
+          <span style="color:${confidence.color};">â—ˆ ${confidence.level} CONFIDENCE</span>
         </div>
       </div>
     `;
@@ -459,7 +459,7 @@ const AnalitikDashboard = (() => {
             <div class="ic-text">${ins.text}</div>
             <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
               <span style="font-size:0.6rem; font-family:'Courier New',monospace; color:${conf.color}; font-weight:700;">
-                🤖 ${conf.confidencePct}% ${conf.level}
+                ðŸ¤– ${conf.confidencePct}% ${conf.level}
               </span>
               <span style="font-size:0.55rem; color:#475569; font-family:'Courier New',monospace;">
                 ${conf.model.name}
@@ -479,7 +479,7 @@ const AnalitikDashboard = (() => {
     if (!tbody) return;
 
     const performers = AnalitikData.getTopPerformers();
-    const trendIcons = { up: '▲', down: '▼', flat: '▬' };
+    const trendIcons = { up: 'â–²', down: 'â–¼', flat: 'â–¬' };
     const trendColors = { up: '#4ade80', down: '#f87171', flat: '#64748b' };
 
     tbody.innerHTML = performers.map((p, idx) => `

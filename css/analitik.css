@@ -1,5 +1,5 @@
 /* ============================================================ */
-/* ANALITIK.CSS — Strategic Analytics Dashboard                  */
+/* ANALITIK.CSS â€” Strategic Analytics Dashboard                  */
 /* ============================================================ */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -147,7 +147,7 @@ html, body {
   border-radius: 4px;
 }
 
-/* AI INSIGHT PANEL — TOP */
+/* AI INSIGHT PANEL â€” TOP */
 .ai-insight-panel {
   display: flex;
   gap: 16px;
@@ -345,7 +345,7 @@ html, body {
   font-weight: 700;
 }
 
-/* BOTTOM ROW — AI INSIGHTS */
+/* BOTTOM ROW â€” AI INSIGHTS */
 .insights-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

@@ -1,5 +1,5 @@
 /* ============================================================
- * SUCCESSION-AI.JS — AI Recommendation Engine
+ * SUCCESSION-AI.JS â€” AI Recommendation Engine
  * Mencocokkan personel terbaik dengan posisi yang akan kosong
  * ============================================================ */
 
@@ -141,7 +141,7 @@ const SuccessionAI = (() => {
     recommendations.sort((a, b) => b.score.total - a.score.total);
 
     const top = recommendations[0];
-    const text = `→ ${top.position.position} (${top.position.province}) — menggantikan ${top.position.currentHolder} (${top.position.reason})`;
+    const text = `â†’ ${top.position.position} (${top.position.province}) â€” menggantikan ${top.position.currentHolder} (${top.position.reason})`;
 
     return {
       text: text,

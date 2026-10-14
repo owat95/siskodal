@@ -1,5 +1,5 @@
 /* ============================================================
- * ASTERIX-CORE.JS — v1.0
+ * ASTERIX-CORE.JS â€” v1.0
  * Binary Decoder/Encoder for ASTERIX CAT-048
  * Spec: EUROCONTROL SUR.ET1.ST05.2000-STD-01-01
  * ============================================================ */
@@ -41,7 +41,7 @@ const ASTERIXCore = (() => {
   }
 
   // ============================================
-  // FSPEC — Field Specification Bitmap
+  // FSPEC â€” Field Specification Bitmap
   // ============================================
   // ASTERIX FSPEC: variable length (1+ bytes)
   // Each byte: 7 bits data + 1 bit FX (extension)
@@ -181,14 +181,14 @@ const ASTERIXCore = (() => {
   // CALLSIGN ENCODING (ICAO 6-bit)
   // ============================================
   function encodeCallsign(callsign) {
-    // 8 chars × 6 bits = 48 bits = 6 bytes
+    // 8 chars Ã— 6 bits = 48 bits = 6 bytes
     let bits = '';
     for (let i = 0; i < 8; i++) {
       const ch = callsign.charCodeAt(i);
       let val;
-      if (ch >= 65 && ch <= 90) val = ch - 64;        // A-Z → 1-26
-      else if (ch >= 48 && ch <= 57) val = ch - 48 + 48; // 0-9 → 48-57
-      else val = 32;                                   // space → 32
+      if (ch >= 65 && ch <= 90) val = ch - 64;        // A-Z â†’ 1-26
+      else if (ch >= 48 && ch <= 57) val = ch - 48 + 48; // 0-9 â†’ 48-57
+      else val = 32;                                   // space â†’ 32
       bits += val.toString(2).padStart(6, '0');
     }
     // Convert 48 bits to 6 bytes
@@ -327,13 +327,13 @@ const ASTERIXCore = (() => {
     };
 
     const encoded = encodeCat048(testRecord);
-    console.log('1. Encode CAT-048: ✓');
+    console.log('1. Encode CAT-048: âœ“');
     console.log('   Hex:', toHex(encoded));
     console.log('   Length:', encoded.length, 'bytes');
 
     // Test 2: Decode
     const decoded = decodeCat048(encoded);
-    console.log('2. Decode CAT-048: ✓');
+    console.log('2. Decode CAT-048: âœ“');
     console.log('   SAC/SIC:', decoded.sac, '/', decoded.sic);
     console.log('   RHO/THETA:', decoded.rho, '/', decoded.theta.toFixed(2));
     console.log('   Squawk:', decoded.squawk.toString(8));
@@ -344,7 +344,7 @@ const ASTERIXCore = (() => {
     const match = decoded.callsign === testRecord.callsign &&
                   Math.abs(decoded.rho - testRecord.rho) < 0.01 &&
                   decoded.fl === testRecord.fl;
-    console.log('3. Round-trip:', match ? '✓ PASS' : '✗ FAIL');
+    console.log('3. Round-trip:', match ? 'âœ“ PASS' : 'âœ— FAIL');
 
     console.groupEnd();
     return { encoded, decoded };

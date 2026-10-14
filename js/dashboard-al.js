@@ -1,5 +1,5 @@
 /* ============================================================
- * DASHBOARD-AL.JS — TNI Angkatan Laut
+ * DASHBOARD-AL.JS â€” TNI Angkatan Laut
  * ============================================================ */
 
 const DashboardAL = (() => {
@@ -35,7 +35,7 @@ const DashboardAL = (() => {
     wireTabs();
     startClock();
 
-    console.log(`[AL] Dashboard initialized — ${personnel.length} personnel`);
+    console.log(`[AL] Dashboard initialized â€” ${personnel.length} personnel`);
   }
 
   // ============================================
@@ -87,7 +87,7 @@ const DashboardAL = (() => {
           <div class="candidate-info">
             <div class="candidate-name">${c.person.name}</div>
             <div class="candidate-meta">
-              ${KPIEngine.getRankName(MATRA, c.person.rank)} · ${c.person.specialty}
+              ${KPIEngine.getRankName(MATRA, c.person.rank)} Â· ${c.person.specialty}
             </div>
           </div>
           <div class="candidate-score">${c.score.total}</div>
@@ -108,10 +108,10 @@ const DashboardAL = (() => {
             </span>
           </div>
           <div class="position-reason">
-            <strong>${pos.currentHolder}</strong> — ${pos.reason}
+            <strong>${pos.currentHolder}</strong> â€” ${pos.reason}
           </div>
           <div style="font-size:0.7rem;color:#64748b;margin-bottom:8px;font-family:'Courier New',monospace;">
-            Kebutuhan: ${KPIEngine.getRankName(MATRA, pos.neededRank)} · Min KPI: ${pos.minKpi}
+            Kebutuhan: ${KPIEngine.getRankName(MATRA, pos.neededRank)} Â· Min KPI: ${pos.minKpi}
           </div>
           ${candidateRows}
         </div>
@@ -143,10 +143,10 @@ const DashboardAL = (() => {
       // AI Recommendation
       const ai = SuccessionAI.generateAIText(p, MATRA);
       const aiHtml = ai.priority === 'LOW'
-        ? `<span style="font-size:0.7rem;color:#64748b;">—</span>`
+        ? `<span style="font-size:0.7rem;color:#64748b;">â€”</span>`
         : `<div class="ai-recommendation">
              <span class="ai-badge ${ai.priority.toLowerCase()}">
-               <i class="fas fa-brain"></i> ${ai.priority} ${ai.score ? '· ' + ai.score : ''}
+               <i class="fas fa-brain"></i> ${ai.priority} ${ai.score ? 'Â· ' + ai.score : ''}
              </span>
              <span class="ai-text">${ai.text}</span>
            </div>`;
@@ -252,7 +252,7 @@ const DashboardAL = (() => {
     const rows = withIntl.map(p => {
       const missions = p.intlAssignments.map(a => `
         <span class="intl-badge ${a.code.startsWith('MONUSCO') || a.code.startsWith('UN') || a.code.startsWith('DPKO') || a.code.startsWith('MINUSMA') ? 'pbb' : ''}">
-          ${a.code} · ${a.location} (${a.startYear}–${a.endYear})
+          ${a.code} Â· ${a.location} (${a.startYear}â€“${a.endYear})
         </span>
       `).join(' ');
 
@@ -369,7 +369,7 @@ const DashboardAL = (() => {
       ? p.education.map(e => `
           <div style="padding:6px 10px;background:rgba(168,85,247,0.1);border-left:2px solid #a855f7;border-radius:0 6px 6px 0;margin-bottom:4px;">
             <div style="font-size:0.75rem;color:#c084fc;font-weight:700;">${e.code}</div>
-            <div style="font-size:0.7rem;color:#94a3b8;">${e.name} — Tier ${e.tier}</div>
+            <div style="font-size:0.7rem;color:#94a3b8;">${e.name} â€” Tier ${e.tier}</div>
           </div>
         `).join('')
       : '<p style="color:#64748b;font-size:0.75rem;">Tidak ada data pendidikan</p>';
@@ -379,8 +379,8 @@ const DashboardAL = (() => {
       ? p.intlAssignments.map(a => `
           <div style="padding:6px 10px;background:rgba(6,182,212,0.1);border-left:2px solid #06b6d4;border-radius:0 6px 6px 0;margin-bottom:4px;">
             <div style="font-size:0.75rem;color:#22d3ee;font-weight:700;">${a.mission}</div>
-            <div style="font-size:0.7rem;color:#94a3b8;">${a.role} · ${a.location}</div>
-            <div style="font-size:0.65rem;color:#64748b;font-family:monospace;">${a.startYear}–${a.endYear} (${a.years} tahun)</div>
+            <div style="font-size:0.7rem;color:#94a3b8;">${a.role} Â· ${a.location}</div>
+            <div style="font-size:0.65rem;color:#64748b;font-family:monospace;">${a.startYear}â€“${a.endYear} (${a.years} tahun)</div>
           </div>
         `).join('')
       : '<p style="color:#64748b;font-size:0.75rem;">Tidak ada penugasan internasional</p>';
@@ -390,19 +390,19 @@ const DashboardAL = (() => {
     const aiHtml = ai.priority !== 'LOW'
       ? `<div class="ai-recommendation" style="margin-top:8px;">
            <span class="ai-badge ${ai.priority.toLowerCase()}">
-             <i class="fas fa-brain"></i> ${ai.priority} · ${ai.score}
+             <i class="fas fa-brain"></i> ${ai.priority} Â· ${ai.score}
            </span>
            <span class="ai-text">${ai.text}</span>
          </div>`
       : '<p style="color:#64748b;font-size:0.75rem;">Tidak ada rekomendasi saat ini</p>';
 
     detail.innerHTML = `
-      <button class="close-btn" onclick="DashboardAL.closeDetail()">✕</button>
+      <button class="close-btn" onclick="DashboardAL.closeDetail()">âœ•</button>
 
       <div class="detail-header">
         <h2>${p.name}</h2>
         <div class="rank-name">${KPIEngine.getRankName(MATRA, p.rank)}</div>
-        <div class="meta">NRP: ${p.nrp} · ${p.unit}</div>
+        <div class="meta">NRP: ${p.nrp} Â· ${p.unit}</div>
         <div style="margin-top:8px;">
           <span class="province-tag">${p.province}</span>
           <span style="margin-left:8px;font-size:0.72rem;color:#22d3ee;font-family:monospace;">${p.specialty}</span>
@@ -432,7 +432,7 @@ const DashboardAL = (() => {
       ${aiHtml}
 
       <div class="promotion-block ${getPromotionClass(promotion.status)}" style="margin-top:20px;">
-        <h4>◤ PROMOTION READINESS</h4>
+        <h4>â—¤ PROMOTION READINESS</h4>
         <div class="readiness-meter">${promotion.readiness}%</div>
         <div class="next-rank">
           ${promotion.nextRank ? `Next: ${promotion.nextRank.name}` : 'Pangkat tertinggi'}
@@ -442,16 +442,16 @@ const DashboardAL = (() => {
         </div>
         <div style="font-size:0.7rem;color:#64748b;margin-top:8px;font-family:monospace;">
           Years in rank: ${promotion.yearsInRank} / ${promotion.minYearsRequired}<br>
-          Time: ${promotion.timeOK ? '✓' : '✗'} ·
-          KPI: ${promotion.kpiOK ? '✓' : '✗'} ·
-          Discipline: ${promotion.noViolations ? '✓' : '✗'}
+          Time: ${promotion.timeOK ? 'âœ“' : 'âœ—'} Â·
+          KPI: ${promotion.kpiOK ? 'âœ“' : 'âœ—'} Â·
+          Discipline: ${promotion.noViolations ? 'âœ“' : 'âœ—'}
         </div>
       </div>
 
       <div style="margin-top:16px;font-size:0.75rem;color:#64748b;line-height:1.8;">
-        <div>Awards: <span style="color:#facc15;">${p.awards} ★</span></div>
+        <div>Awards: <span style="color:#facc15;">${p.awards} â˜…</span></div>
         <div>Violations: <span style="color:${p.violations > 0 ? '#f87171' : '#4ade80'};">
-          ${p.violations}${p.violations > 0 ? ' ⚠' : ' ✓'}</span></div>
+          ${p.violations}${p.violations > 0 ? ' âš ' : ' âœ“'}</span></div>
         <div>Est. Pensiun: <span style="color:#cbd5e1;">${p.yearsToRetirement} tahun</span></div>
       </div>
     `;
@@ -596,7 +596,7 @@ const DashboardAL = (() => {
       province: 'Distribusi Personel per Provinsi',
       education: 'Riwayat Pendidikan Militer',
       international: 'Penugasan Internasional',
-      succession: 'Succession Planning — AI Recommendation',
+      succession: 'Succession Planning â€” AI Recommendation',
       kpi: 'KPI Analytics & Top Performers',
       assets: 'Aset KRI & Pangkalan',
       reports: 'Laporan & Export'

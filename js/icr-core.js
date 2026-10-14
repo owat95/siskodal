@@ -1,5 +1,5 @@
 /* ============================================================
- * ICR-CORE.JS — NATO Common ICR Framework
+ * ICR-CORE.JS â€” NATO Common ICR Framework
  * Shared across AD/AL/AU. Reference: NATO AJP-2, STANAG series
  * ============================================================ */
 
@@ -10,14 +10,14 @@ const ICRCore = (() => {
   // NATO INTELLIGENCE DISCIPLINES
   // ============================================
   const INT_DISCIPLINES = {
-    IMINT:   { code: 'IMINT',   name: 'Imagery Intelligence',         color: '#3b82f6', icon: '📷' },
-    SIGINT:  { code: 'SIGINT',  name: 'Signals Intelligence',         color: '#a855f7', icon: '📡' },
-    HUMINT:  { code: 'HUMINT',  name: 'Human Intelligence',           color: '#eab308', icon: '👤' },
-    MASINT:  { code: 'MASINT',  name: 'Measurement & Signature',      color: '#f97316', icon: '📊' },
-    OSINT:   { code: 'OSINT',   name: 'Open Source Intelligence',     color: '#22c55e', icon: '🌐' },
-    GEOINT:  { code: 'GEOINT',  name: 'Geospatial Intelligence',      color: '#06b6d4', icon: '🗺️' },
-    TECHINT: { code: 'TECHINT', name: 'Technical Intelligence',       color: '#ef4444', icon: '🔧' },
-    CYBERINT:{ code: 'CYBERINT',name: 'Cyber Intelligence',           color: '#ec4899', icon: '💻' }
+    IMINT:   { code: 'IMINT',   name: 'Imagery Intelligence',         color: '#3b82f6', icon: 'ðŸ“·' },
+    SIGINT:  { code: 'SIGINT',  name: 'Signals Intelligence',         color: '#a855f7', icon: 'ðŸ“¡' },
+    HUMINT:  { code: 'HUMINT',  name: 'Human Intelligence',           color: '#eab308', icon: 'ðŸ‘¤' },
+    MASINT:  { code: 'MASINT',  name: 'Measurement & Signature',      color: '#f97316', icon: 'ðŸ“Š' },
+    OSINT:   { code: 'OSINT',   name: 'Open Source Intelligence',     color: '#22c55e', icon: 'ðŸŒ' },
+    GEOINT:  { code: 'GEOINT',  name: 'Geospatial Intelligence',      color: '#06b6d4', icon: 'ðŸ—ºï¸' },
+    TECHINT: { code: 'TECHINT', name: 'Technical Intelligence',       color: '#ef4444', icon: 'ðŸ”§' },
+    CYBERINT:{ code: 'CYBERINT',name: 'Cyber Intelligence',           color: '#ec4899', icon: 'ðŸ’»' }
   };
 
   // ============================================
@@ -37,8 +37,8 @@ const ICRCore = (() => {
   const INT_CYCLE = [
     { phase: 1, name: 'DIRECTION',      desc: 'Komandan tetapkan PIR & IR' },
     { phase: 2, name: 'COLLECTION',     desc: 'Tasking sensor & platform' },
-    { phase: 3, name: 'PROCESSING',     desc: 'Transform raw → usable' },
-    { phase: 4, name: 'EXPLOITATION',   desc: 'Analisis → intelligence' },
+    { phase: 3, name: 'PROCESSING',     desc: 'Transform raw â†’ usable' },
+    { phase: 4, name: 'EXPLOITATION',   desc: 'Analisis â†’ intelligence' },
     { phase: 5, name: 'DISSEMINATION',  desc: 'Distribusi ke consumer' },
     { phase: 6, name: 'FEEDBACK',       desc: 'Refinement & re-tasking' }
   ];
@@ -89,7 +89,7 @@ const ICRCore = (() => {
       code: 'AD',
       name: 'TNI ANGKATAN DARAT',
       color: '#059669',
-      icon: '★',
+      icon: 'â˜…',
       strength: [
         'Ground-based persistent surveillance 24/7',
         'Batalyon Intelijen lapangan (HUMINT kuat)',
@@ -104,9 +104,9 @@ const ICRCore = (() => {
       code: 'AL',
       name: 'TNI ANGKATAN LAUT',
       color: '#1e40af',
-      icon: '⚓',
+      icon: 'âš“',
       strength: [
-        'Maritime Domain Awareness (MDA) — 2/3 NKRI',
+        'Maritime Domain Awareness (MDA) â€” 2/3 NKRI',
         'Subsurface detection (sonar array)',
         'Coastal radar network 24/7',
         'MPA (Maritime Patrol Aircraft) integrated',
@@ -119,7 +119,7 @@ const ICRCore = (() => {
       code: 'AU',
       name: 'TNI ANGKATAN UDARA',
       color: '#2563eb',
-      icon: '✈',
+      icon: 'âœˆ',
       strength: [
         'Airspace surveillance (GCI Radar 200km)',
         'AWACS-like airborne early warning',
@@ -133,7 +133,7 @@ const ICRCore = (() => {
   };
 
   // ============================================
-  // CONFIG — Edge AI Thresholds
+  // CONFIG â€” Edge AI Thresholds
   // ============================================
   const EDGE_CONFIG = {
     confidenceThreshold: 0.7,     // Minimum AI confidence

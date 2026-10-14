@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>R2 JOC — Tactical Map NKRI</title>
+  <title>R2 JOC â€” Tactical Map NKRI</title>
 
   <!-- Cesium CSS -->
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.122/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
@@ -13,7 +13,7 @@
   <script data-cfasync="false" src="https://cesium.com/downloads/cesiumjs/releases/1.122/Build/Cesium/Cesium.js"></script>
   <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/milsymbol@3.0.0/dist/milsymbol.min.js"></script>
 
-  <!-- Modules (urutan PENTING — jangan diubah) -->
+  <!-- Modules (urutan PENTING â€” jangan diubah) -->
   <script data-cfasync="false" src="./js/nkri-config.js"></script>
   <script data-cfasync="false" src="./js/cesium-init.js"></script>
   <script data-cfasync="false" src="./js/milsymbol-layer.js"></script>
@@ -39,9 +39,9 @@
 
     <header id="hud-header">
       <div class="brand">
-        <span class="logo">◈</span>
+        <span class="logo">â—ˆ</span>
         <span class="title">R2 JOINT OPERATIONS CENTER</span>
-        <span class="subtitle">Common Operational Picture — NKRI</span>
+        <span class="subtitle">Common Operational Picture â€” NKRI</span>
       </div>
       <div class="status-bar">
         <div class="status-item">
@@ -64,12 +64,12 @@
     </header>
 
     <aside id="panel-left">
-      <div class="panel-header"><h3>◤ DOMAIN ASSETS</h3></div>
+      <div class="panel-header"><h3>â—¤ DOMAIN ASSETS</h3></div>
 
       <div class="domain-group" data-domain="au">
         <div class="domain-title">
-          <span class="domain-icon au">▲</span>
-          <span>AU — ANGKATAN UDARA</span>
+          <span class="domain-icon au">â–²</span>
+          <span>AU â€” ANGKATAN UDARA</span>
           <span class="count" id="count-au">0</span>
         </div>
         <ul class="asset-list" id="list-au"></ul>
@@ -77,8 +77,8 @@
 
       <div class="domain-group" data-domain="al">
         <div class="domain-title">
-          <span class="domain-icon al">■</span>
-          <span>AL — ANGKATAN LAUT</span>
+          <span class="domain-icon al">â– </span>
+          <span>AL â€” ANGKATAN LAUT</span>
           <span class="count" id="count-al">0</span>
         </div>
         <ul class="asset-list" id="list-al"></ul>
@@ -86,8 +86,8 @@
 
       <div class="domain-group" data-domain="ad">
         <div class="domain-title">
-          <span class="domain-icon ad">●</span>
-          <span>AD — ANGKATAN DARAT</span>
+          <span class="domain-icon ad">â—</span>
+          <span>AD â€” ANGKATAN DARAT</span>
           <span class="count" id="count-ad">0</span>
         </div>
         <ul class="asset-list" id="list-ad"></ul>
@@ -95,8 +95,8 @@
 
       <div class="domain-group" data-domain="laut">
         <div class="domain-title">
-          <span class="domain-icon laut">◆</span>
-          <span>LAUT — MDA</span>
+          <span class="domain-icon laut">â—†</span>
+          <span>LAUT â€” MDA</span>
           <span class="count" id="count-laut">0</span>
         </div>
         <ul class="asset-list" id="list-laut"></ul>
@@ -104,7 +104,7 @@
     </aside>
 
     <aside id="panel-right">
-      <div class="panel-header"><h3>◤ LAYER CONTROL</h3></div>
+      <div class="panel-header"><h3>â—¤ LAYER CONTROL</h3></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-au" checked><label for="layer-au">AU Assets</label></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-al" checked><label for="layer-al">AL Assets</label></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-ad" checked><label for="layer-ad">AD Assets</label></div>
@@ -113,15 +113,15 @@
       <div class="layer-toggle"><input type="checkbox" id="layer-net" checked><label for="layer-net">Network Links</label></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-cov"><label for="layer-cov">Coverage Radius</label></div>
 
-      <!-- ▼ TAMBAHAN BARU ▼ -->
-      <div class="panel-header mt-2"><h3>◤ LOGISTICS</h3></div>
+      <!-- â–¼ TAMBAHAN BARU â–¼ -->
+      <div class="panel-header mt-2"><h3>â—¤ LOGISTICS</h3></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-gudang-ad" checked><label for="layer-gudang-ad">Gudang AD</label></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-gudang-al" checked><label for="layer-gudang-al">Gudang AL</label></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-gudang-au" checked><label for="layer-gudang-au">Gudang AU</label></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-routes" checked><label for="layer-routes">Supply Routes</label></div>
       <div class="layer-toggle"><input type="checkbox" id="layer-alutsista"><label for="layer-alutsista">Alutsista</label></div>
-      <!-- ▲ TAMBAHAN BARU ▲ -->
-      <div class="panel-header mt-2"><h3>◤ ESCALATION</h3></div>
+      <!-- â–² TAMBAHAN BARU â–² -->
+      <div class="panel-header mt-2"><h3>â—¤ ESCALATION</h3></div>
       <div class="escalation-controls">
         <button class="esc-btn" data-level="1">NORMAL</button>
         <button class="esc-btn" data-level="2">ELEVATED</button>
@@ -138,7 +138,7 @@
       <div class="event-ticker">
         <span class="ticker-label">EVENT LOG:</span>
         <div class="ticker-content" id="ticker-content">
-          <span class="event-info">SYSTEM READY — Awaiting scenario load...</span>
+          <span class="event-info">SYSTEM READY â€” Awaiting scenario load...</span>
         </div>
       </div>
     </footer>

@@ -1,5 +1,5 @@
 /* ============================================================
- * STRATEGIC-ADVISOR.JS — v1.0
+ * STRATEGIC-ADVISOR.JS â€” v1.0
  * Rule-Based Tactical Advisor (Mock AI)
  * OODA Loop recommendation engine
  * ============================================================ */
@@ -13,7 +13,7 @@ const StrategicAdvisor = (() => {
   let assessmentHistory = [];
 
   // ============================================
-  // ANALYZE — Main entry
+  // ANALYZE â€” Main entry
   // ============================================
   function analyze() {
     if (!window.FusionEngine) return null;
@@ -108,7 +108,7 @@ const StrategicAdvisor = (() => {
 
     if (threats.severity === 'CRITICAL') {
       status = 'RED';
-      reason = 'Ancaman kritis terdeteksi — butuh respons taktis';
+      reason = 'Ancaman kritis terdeteksi â€” butuh respons taktis';
     } else if (threats.severity === 'HIGH') {
       status = 'ORANGE';
       reason = 'Ancaman tinggi terdeteksi';
@@ -135,7 +135,7 @@ const StrategicAdvisor = (() => {
       ooda.observe.push(`${threats.counts.FOREIGN_VESSEL} kapal asing terdeteksi`);
     }
     if (threats.counts.POSITION_MISMATCH > 0) {
-      ooda.observe.push(`${threats.counts.POSITION_MISMATCH} position mismatch — indikasi spoofing`);
+      ooda.observe.push(`${threats.counts.POSITION_MISMATCH} position mismatch â€” indikasi spoofing`);
     }
 
     // ORIENT
@@ -151,7 +151,7 @@ const StrategicAdvisor = (() => {
     }
 
     if (netStats && netStats.level >= 2) {
-      ooda.orient.push(`Network ${netStats.state.name} — PACE failover aktif`);
+      ooda.orient.push(`Network ${netStats.state.name} â€” PACE failover aktif`);
     }
 
     // DECIDE
@@ -201,9 +201,9 @@ const StrategicAdvisor = (() => {
   function formatAssessment(a) {
     if (!a) return 'No assessment yet.';
     const lines = [];
-    lines.push(`═══ SITUATION ASSESSMENT ═══`);
+    lines.push(`â•â•â• SITUATION ASSESSMENT â•â•â•`);
     lines.push(`Time: ${new Date(a.timestamp).toLocaleTimeString('id-ID')}`);
-    lines.push(`Posture: ${a.posture.status} — ${a.posture.reason}`);
+    lines.push(`Posture: ${a.posture.status} â€” ${a.posture.reason}`);
     lines.push(`Threat Level: ${a.threats.severity}`);
     lines.push('');
     lines.push(`Sensor Overview:`);
@@ -211,15 +211,15 @@ const StrategicAdvisor = (() => {
     lines.push(`  Fused Tracks: ${a.stats.fused}  Observations: ${a.stats.observations}`);
     lines.push(`  Network: ${a.stats.links}`);
     lines.push('');
-    lines.push(`OODA Loop — Priority: ${a.recommendation.priority}`);
+    lines.push(`OODA Loop â€” Priority: ${a.recommendation.priority}`);
     lines.push(`  [OBSERVE]`);
-    a.recommendation.ooda.observe.forEach(x => lines.push(`    • ${x}`));
+    a.recommendation.ooda.observe.forEach(x => lines.push(`    â€¢ ${x}`));
     lines.push(`  [ORIENT]`);
-    a.recommendation.ooda.orient.forEach(x => lines.push(`    • ${x}`));
+    a.recommendation.ooda.orient.forEach(x => lines.push(`    â€¢ ${x}`));
     lines.push(`  [DECIDE]`);
-    a.recommendation.ooda.decide.forEach(x => lines.push(`    • ${x}`));
+    a.recommendation.ooda.decide.forEach(x => lines.push(`    â€¢ ${x}`));
     lines.push(`  [ACT]`);
-    a.recommendation.ooda.act.forEach(x => lines.push(`    • ${x}`));
+    a.recommendation.ooda.act.forEach(x => lines.push(`    â€¢ ${x}`));
     return lines.join('\n');
   }
 
@@ -234,7 +234,7 @@ const StrategicAdvisor = (() => {
       const a = analyze();
       if (window.assetManager && a.threats.severity !== 'LOW') {
         window.assetManager.logEvent(
-          `AI Advisor: Posture ${a.posture.status} — ${a.posture.reason}`,
+          `AI Advisor: Posture ${a.posture.status} â€” ${a.posture.reason}`,
           a.threats.severity === 'CRITICAL' ? 'critical' : 'warning'
         );
       }

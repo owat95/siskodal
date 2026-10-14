@@ -1,5 +1,5 @@
 /* ============================================================
- * AIS-SIMULATOR.JS — v1.0
+ * AIS-SIMULATOR.JS â€” v1.0
  * Simulasi 40+ kapal Indonesia dengan AIS broadcasting
  * ============================================================ */
 
@@ -18,7 +18,7 @@ const AISSimulator = (() => {
   };
 
   // ============================================
-  // WAYPOINTS — Chokepoints NKRI
+  // WAYPOINTS â€” Chokepoints NKRI
   // ============================================
   const ROUTES = {
     MALAKA_NORTH: [
@@ -49,7 +49,7 @@ const AISSimulator = (() => {
   // SHIP ROSTER (40+ kapal)
   // ============================================
   const SHIP_DEFS = [
-    // === KRI (Frigate) — 6 kapal ===
+    // === KRI (Frigate) â€” 6 kapal ===
     { name: 'KRI Diponegoro',    type: 'FRIGATE', mmsi: 525015810, route: 'MALAKA_NORTH' },
     { name: 'KRI Sultan Hasanuddin', type: 'FRIGATE', mmsi: 525015811, route: 'MAKASSAR' },
     { name: 'KRI John Lie',      type: 'FRIGATE', mmsi: 525015812, route: 'NATUNA' },
@@ -57,7 +57,7 @@ const AISSimulator = (() => {
     { name: 'KRI Yos Sudarso',   type: 'FRIGATE', mmsi: 525015814, route: 'ARAFURU' },
     { name: 'KRI Frans Kaisiepo',type: 'FRIGATE', mmsi: 525015815, route: 'LOMBOK' },
 
-    // === KAL (Patrol) — 6 kapal ===
+    // === KAL (Patrol) â€” 6 kapal ===
     { name: 'KAL Natuna',        type: 'PATROL',  mmsi: 525016810, route: 'NATUNA' },
     { name: 'KAL Marore',        type: 'PATROL',  mmsi: 525016811, route: 'MALAKA_NORTH' },
     { name: 'KAL Arafuru',       type: 'PATROL',  mmsi: 525016812, route: 'ARAFURU' },
@@ -65,7 +65,7 @@ const AISSimulator = (() => {
     { name: 'KAL Sulawesi',      type: 'PATROL',  mmsi: 525016814, route: 'MAKASSAR' },
     { name: 'KAL Lombok',        type: 'PATROL',  mmsi: 525016815, route: 'LOMBOK' },
 
-    // === Merchant — 12 kapal ===
+    // === Merchant â€” 12 kapal ===
     { name: 'MV Ocean Star',     type: 'MERCHANT', mmsi: 525017810, route: 'MALAKA_NORTH' },
     { name: 'MV Samudra Jaya',   type: 'MERCHANT', mmsi: 525017811, route: 'MAKASSAR' },
     { name: 'MV Bahari Indah',   type: 'MERCHANT', mmsi: 525017812, route: 'SUNDA' },
@@ -79,7 +79,7 @@ const AISSimulator = (() => {
     { name: 'MV Prima Nusantara',type: 'MERCHANT', mmsi: 525017820, route: 'NATUNA' },
     { name: 'MV Merdeka 45',     type: 'MERCHANT', mmsi: 525017821, route: 'LOMBOK' },
 
-    // === Tanker — 6 kapal ===
+    // === Tanker â€” 6 kapal ===
     { name: 'MT Pertamina 01',   type: 'TANKER',  mmsi: 525018810, route: 'MALAKA_NORTH' },
     { name: 'MT Pertamina 02',   type: 'TANKER',  mmsi: 525018811, route: 'MAKASSAR' },
     { name: 'MT Gas Nusantara',  type: 'TANKER',  mmsi: 525018812, route: 'NATUNA' },
@@ -87,7 +87,7 @@ const AISSimulator = (() => {
     { name: 'MT LNG Badak',      type: 'TANKER',  mmsi: 525018814, route: 'LOMBOK' },
     { name: 'MT Arun Gas',       type: 'TANKER',  mmsi: 525018815, route: 'MALAKA_SOUTH' },
 
-    // === Fishing — 12 kapal ===
+    // === Fishing â€” 12 kapal ===
     { name: 'KM Nelayan 07',     type: 'FISHING', mmsi: 525019810, route: 'NATUNA' },
     { name: 'KM Mina Jaya',      type: 'FISHING', mmsi: 525019811, route: 'MALAKA_NORTH' },
     { name: 'KM Samudera 01',    type: 'FISHING', mmsi: 525019812, route: 'ARAFURU' },
@@ -112,7 +112,7 @@ const AISSimulator = (() => {
   let onAISCallback = null;
 
   // ============================================
-  // KONVERSI KM → DERAJAT (approx)
+  // KONVERSI KM â†’ DERAJAT (approx)
   // ============================================
   function kmToLatDeg(km) { return km / 111.32; }
   function kmToLonDeg(km, lat) { return km / (111.32 * Math.cos(lat * Math.PI / 180)); }
@@ -165,7 +165,7 @@ const AISSimulator = (() => {
     const route = ROUTES[ship.route];
 
     // Kecepatan dalam derajat per detik (approx)
-    const sogMs = ship.sog * 0.5144; // knot → m/s
+    const sogMs = ship.sog * 0.5144; // knot â†’ m/s
     const distM = sogMs * dtSec;
 
     // Target waypoint berikutnya
@@ -180,7 +180,7 @@ const AISSimulator = (() => {
     const distMTarget = distKmActual * 1000;
 
     if (distMTarget < distM) {
-      // Sampai waypoint → lanjut ke berikutnya
+      // Sampai waypoint â†’ lanjut ke berikutnya
       ship.lat = target[0];
       ship.lon = target[1];
       ship.routeIdx = nextIdx;
@@ -219,7 +219,7 @@ const AISSimulator = (() => {
 
     const nmea1 = AISCore.buildNMEA(positionPayload, 'A', 0);
 
-    // Encode Type 5 (static) — dipecah 2 fragmen
+    // Encode Type 5 (static) â€” dipecah 2 fragmen
     const staticPayload = AISCore.encodeType5({
       mmsi: ship.mmsi,
       vesselName: ship.name.substring(0, 20),
@@ -274,7 +274,7 @@ const AISSimulator = (() => {
     onAISCallback = aisCallback;
     running = true;
 
-    // Movement loop — 1 Hz
+    // Movement loop â€” 1 Hz
     let lastTime = Date.now();
     movementInterval = setInterval(() => {
       const now = Date.now();
@@ -295,7 +295,7 @@ const AISSimulator = (() => {
       }
     }, 1000);
 
-    // AIS broadcast loop — 10 Hz (check per ship)
+    // AIS broadcast loop â€” 10 Hz (check per ship)
     broadcastInterval = setInterval(() => {
       ships.forEach(ship => {
         ship.nextAIS -= 100;

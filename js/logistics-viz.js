@@ -1,6 +1,6 @@
 /* ============================================================
- * LOGISTICS-VIZ.JS — Cesium overlay untuk logistik militer
- * Gudang · Supply Routes · Alutsista positions
+ * LOGISTICS-VIZ.JS â€” Cesium overlay untuk logistik militer
+ * Gudang Â· Supply Routes Â· Alutsista positions
  * ============================================================ */
 
 const LogisticsViz = (() => {
@@ -126,7 +126,7 @@ const LogisticsViz = (() => {
     renderAllRoutes();
     renderAllAlutsista();
 
-    console.log(`[LOG-VIZ] Initialized — ${gudangEntities.ad.length + gudangEntities.al.length + gudangEntities.au.length} gudang · ${routeEntities.length} routes · ${alutsistaEntities.length} alutsista`);
+    console.log(`[LOG-VIZ] Initialized â€” ${gudangEntities.ad.length + gudangEntities.al.length + gudangEntities.au.length} gudang Â· ${routeEntities.length} routes Â· ${alutsistaEntities.length} alutsista`);
   }
 
   // ============================================
@@ -204,7 +204,7 @@ const LogisticsViz = (() => {
 
         const entity = viewer.entities.add({
           id: `route-${r.id}`,
-          name: `${r.from} → ${r.to}`,
+          name: `${r.from} â†’ ${r.to}`,
           polyline: {
             positions: Cesium.Cartesian3.fromDegreesArrayHeights([
               fromCoords.lon, fromCoords.lat, 15000,
@@ -327,13 +327,13 @@ const LogisticsViz = (() => {
   function showGudangPanel(g, matra) {
     // Reuse asset detail panel from map
     const detail = document.getElementById('panel-left') || document.querySelector('.detail-panel');
-    // For now, just log — user can extend
+    // For now, just log â€” user can extend
     console.log(`[GUDANG] ${g.name}`, g.stock);
 
     // Optional: show custom popup
     if (window.assetManager && window.assetManager.logEvent) {
       window.assetManager.logEvent(
-        `${matra.toUpperCase()} Gudang: ${g.name} — Amunisi ${g.stock.amunisi}, Fuel ${g.stock.bahan_bakar}`,
+        `${matra.toUpperCase()} Gudang: ${g.name} â€” Amunisi ${g.stock.amunisi}, Fuel ${g.stock.bahan_bakar}`,
         'info'
       );
     }

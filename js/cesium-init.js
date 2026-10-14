@@ -1,5 +1,5 @@
 /* ============================================================
- * CESIUM-INIT.JS — v3.0 — OSM Tiles (No Token Needed)
+ * CESIUM-INIT.JS â€” v3.0 â€” OSM Tiles (No Token Needed)
  * Server punya internet outbound, pakai tile OSM gratis
  * ============================================================ */
 
@@ -26,7 +26,7 @@ async function initCesium() {
       Promise.resolve(
         new Cesium.OpenStreetMapImageryProvider({
           url: 'https://tile.openstreetmap.org/',
-          credit: '© OpenStreetMap contributors',
+          credit: 'Â© OpenStreetMap contributors',
           maximumLevel: 19
         })
       )
@@ -51,7 +51,7 @@ async function initCesium() {
   if (credit) credit.style.display = 'none';
 
   // ============================================
-  // KAMERA — Fokus ke NKRI
+  // KAMERA â€” Fokus ke NKRI
   // ============================================
   viewer.camera.setView({
     destination: Cesium.Cartesian3.fromDegrees(
@@ -66,7 +66,7 @@ async function initCesium() {
     }
   });
 
-  console.log('[CESIUM] Viewer initialized — OSM Tiles Mode');
+  console.log('[CESIUM] Viewer initialized â€” OSM Tiles Mode');
   return viewer;
 }
 

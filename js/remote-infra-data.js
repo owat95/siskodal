@@ -1,6 +1,6 @@
 /* ============================================================
- * REMOTE-INFRA-DATA.JS — Remote Infrastructure Monitoring
- * Version:  v2.0 — Network Segmentation Fix (ISSUE-001)
+ * REMOTE-INFRA-DATA.JS â€” Remote Infrastructure Monitoring
+ * Version:  v2.0 â€” Network Segmentation Fix (ISSUE-001)
  * Build:    2026-10-05
  *
  * 40 sites total:
@@ -10,9 +10,9 @@
  *   -  1 IKN Central (strategic AI command)
  *
  * IP ALLOCATION SCHEME
- * ────────────────────
+ * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
  * Layer / Region        CIDR Block              Purpose
- * ─────────────────────────────────────────────────────────────
+ * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
  * SENSOR                10.20.0.0/16            Aggregated sensor layer
  * IKN_CENTRAL           10.90.0.0/16            Strategic AI command
  * MIDDLEWARE            10.80.0.0/16            Regional hubs
@@ -27,13 +27,13 @@
  * EDGE_AI               10.70.0.0/16            8 frontier sites
  *
  * HIERARCHY (uplink path)
- * ───────────────────────
- *  Kodam (region)  →  Middleware Hub  →  IKN Central
- *  Edge AI (front) →  Middleware Hub  →  IKN Central
- *  Kodam JAWA      →  IKN Central (direct — strategic)
+ * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+ *  Kodam (region)  â†’  Middleware Hub  â†’  IKN Central
+ *  Edge AI (front) â†’  Middleware Hub  â†’  IKN Central
+ *  Kodam JAWA      â†’  IKN Central (direct â€” strategic)
  *
  * VLAN SCHEME (per site)
- * ──────────────────────
+ * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
  *  VLAN  100  Management (SSH/HTTPS/SNMP)
  *  VLAN  200  Operational data (MQTT/CBOR)
  *  VLAN  300  CCTV / Video (RTSP)
@@ -45,7 +45,7 @@ const RemoteInfraData = (() => {
   'use strict';
 
   // ============================================
-  // NETWORK SCHEME — documentation constant
+  // NETWORK SCHEME â€” documentation constant
   // ============================================
   const NETWORK_SCHEME = {
     layers: {
@@ -83,7 +83,7 @@ const RemoteInfraData = (() => {
   // ============================================
   const SITES = [
     // ==================================================
-    // 27 KODAM  — sequential /24 per region
+    // 27 KODAM  â€” sequential /24 per region
     // ==================================================
 
     // ---------- JAWA (10.60.0.0/16) ----------
@@ -155,7 +155,7 @@ const RemoteInfraData = (() => {
       ip: '10.66.4.10',  subnet: '10.66.4.0/24',  gateway: '10.66.4.1',  vlan: 100, uplink: 'mw-jayapura', routing: 'OSPF', asn: 65107 },
 
     // ==================================================
-    // 8 EDGE AI SITES — frontier Jetson Orin AGX
+    // 8 EDGE AI SITES â€” frontier Jetson Orin AGX
     // Subnetted by geographic proximity to region
     // ==================================================
     { id: 'edge-sabang',   name: 'Edge AI Sabang',          shortName: 'Edge Sabang',  type: 'EDGE_AI', region: 'SUMATERA',   lat: 5.893,  lon: 95.321,  tier: 'SENSOR_EDGE',
@@ -176,7 +176,7 @@ const RemoteInfraData = (() => {
       ip: '10.70.53.10', subnet: '10.70.53.0/24', gateway: '10.70.53.1', vlan: 400, uplink: 'mw-jayapura',   routing: 'BGP', asn: 65253, hardware: 'Jetson Orin AGX 64GB' },
 
     // ==================================================
-    // 4 MIDDLEWARE HUBS — Kafka / Redis aggregation
+    // 4 MIDDLEWARE HUBS â€” Kafka / Redis aggregation
     // ==================================================
     { id: 'mw-medan',      name: 'Regional Hub Medan',      shortName: 'Hub Medan',      type: 'MIDDLEWARE', region: 'SUMATERA',   lat: 3.595,  lon: 98.672,  tier: 'REGIONAL_HUB',
       ip: '10.80.1.10', subnet: '10.80.1.0/24', gateway: '10.80.1.1', vlan: 200, uplink: 'ikn-ai', routing: 'BGP', asn: 65301 },
@@ -188,7 +188,7 @@ const RemoteInfraData = (() => {
       ip: '10.80.4.10', subnet: '10.80.4.0/24', gateway: '10.80.4.1', vlan: 200, uplink: 'ikn-ai', routing: 'BGP', asn: 65304 },
 
     // ==================================================
-    // 1 IKN CENTRAL — Strategic AI Command
+    // 1 IKN CENTRAL â€” Strategic AI Command
     // ==================================================
     { id: 'ikn-ai', name: 'IKN Central AI Server', shortName: 'IKN Central', type: 'CENTRAL', region: 'KALIMANTAN', lat: -0.500, lon: 117.000, tier: 'STRATEGIC',
       ip: '10.90.1.10', subnet: '10.90.1.0/24', gateway: '10.90.1.1', vlan: 100, uplink: null, routing: 'BGP', asn: 65000 }
@@ -301,11 +301,11 @@ const RemoteInfraData = (() => {
 
   function getTypeIcon(type) {
     return {
-      KODAM:      '★',
-      EDGE_AI:    '🧠',
-      MIDDLEWARE: '🔄',
-      CENTRAL:    '🎯'
-    }[type] || '◉';
+      KODAM:      'â˜…',
+      EDGE_AI:    'ðŸ§ ',
+      MIDDLEWARE: 'ðŸ”„',
+      CENTRAL:    'ðŸŽ¯'
+    }[type] || 'â—‰';
   }
 
   function getTierColor(tier) {

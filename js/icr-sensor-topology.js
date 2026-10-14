@@ -1,6 +1,6 @@
 /* ============================================================
- * ICR-SENSOR-TOPOLOGY.JS — Sensor placement at borders
- * CCTV · Radar · FLIR · LoRa · AIS + Edge AI sites
+ * ICR-SENSOR-TOPOLOGY.JS â€” Sensor placement at borders
+ * CCTV Â· Radar Â· FLIR Â· LoRa Â· AIS + Edge AI sites
  * ============================================================ */
 
 const ICRSensorTopology = (() => {
@@ -12,7 +12,7 @@ const ICRSensorTopology = (() => {
   const EDGE_SITES = [
     {
       id: 'edge-malaysia',
-      name: 'Edge AI — Perbatasan Malaysia',
+      name: 'Edge AI â€” Perbatasan Malaysia',
       location: 'Kalimantan Utara (Nunukan)',
       lat: 4.136, lon: 117.483,
       matra: 'ad',
@@ -26,7 +26,7 @@ const ICRSensorTopology = (() => {
     },
     {
       id: 'edge-png',
-      name: 'Edge AI — Perbatasan PNG',
+      name: 'Edge AI â€” Perbatasan PNG',
       location: 'Papua (Jayapura - Skouw)',
       lat: -2.533, lon: 140.717,
       matra: 'ad',
@@ -40,7 +40,7 @@ const ICRSensorTopology = (() => {
     },
     {
       id: 'edge-natuna',
-      name: 'Edge AI — Laut Natuna Utara',
+      name: 'Edge AI â€” Laut Natuna Utara',
       location: 'Natuna (Ranai)',
       lat: 3.950, lon: 108.383,
       matra: 'al',
@@ -54,7 +54,7 @@ const ICRSensorTopology = (() => {
     },
     {
       id: 'edge-malaka',
-      name: 'Edge AI — Selat Malaka',
+      name: 'Edge AI â€” Selat Malaka',
       location: 'Belawan (Sumatera Utara)',
       lat: 3.783, lon: 98.683,
       matra: 'al',
@@ -68,7 +68,7 @@ const ICRSensorTopology = (() => {
     },
     {
       id: 'edge-arafuru',
-      name: 'Edge AI — Laut Arafuru',
+      name: 'Edge AI â€” Laut Arafuru',
       location: 'Merauke',
       lat: -8.493, lon: 140.401,
       matra: 'al',
@@ -82,7 +82,7 @@ const ICRSensorTopology = (() => {
     },
     {
       id: 'edge-timor',
-      name: 'Edge AI — Perbatasan Timor Leste',
+      name: 'Edge AI â€” Perbatasan Timor Leste',
       location: 'Atambua',
       lat: -9.106, lon: 124.892,
       matra: 'ad',
@@ -96,7 +96,7 @@ const ICRSensorTopology = (() => {
     },
     {
       id: 'edge-biaksuk',
-      name: 'Edge AI — Biak & Supiori',
+      name: 'Edge AI â€” Biak & Supiori',
       location: 'Biak',
       lat: -1.000, lon: 136.000,
       matra: 'au',
@@ -110,7 +110,7 @@ const ICRSensorTopology = (() => {
     },
     {
       id: 'edge-sabang',
-      name: 'Edge AI — Sabang (Pintu Barat)',
+      name: 'Edge AI â€” Sabang (Pintu Barat)',
       location: 'Sabang (Aceh)',
       lat: 5.893, lon: 95.321,
       matra: 'al',
@@ -131,7 +131,7 @@ const ICRSensorTopology = (() => {
     cctv: {
       code: 'CCTV',
       name: 'CCTV Camera',
-      icon: '📹',
+      icon: 'ðŸ“¹',
       color: '#3b82f6',
       format: 'RTSP / H.265',
       dataRate: '4 Mbps',
@@ -141,7 +141,7 @@ const ICRSensorTopology = (() => {
     radar: {
       code: 'RADAR',
       name: 'Surveillance Radar',
-      icon: '📡',
+      icon: 'ðŸ“¡',
       color: '#a855f7',
       format: 'ASTERIX CAT-048',
       dataRate: '100 kbps',
@@ -151,7 +151,7 @@ const ICRSensorTopology = (() => {
     flir: {
       code: 'FLIR',
       name: 'Thermal Camera',
-      icon: '🌡️',
+      icon: 'ðŸŒ¡ï¸',
       color: '#f97316',
       format: 'MISB 0601 KLV + H.264',
       dataRate: '2 Mbps',
@@ -161,7 +161,7 @@ const ICRSensorTopology = (() => {
     lora: {
       code: 'LORA',
       name: 'LoRa Sensor Mesh',
-      icon: '📶',
+      icon: 'ðŸ“¶',
       color: '#eab308',
       format: 'MQTT / CBOR',
       dataRate: '5 kbps',
@@ -171,7 +171,7 @@ const ICRSensorTopology = (() => {
     ais: {
       code: 'AIS',
       name: 'AIS Receiver',
-      icon: '⚓',
+      icon: 'âš“',
       color: '#06b6d4',
       format: 'NMEA 0183 / AIVDM',
       dataRate: '10 kbps',
