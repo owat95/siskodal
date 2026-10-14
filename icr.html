@@ -6,7 +6,7 @@
   <title>Integrasi ICR — SISKODAL</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="/joc/css/portal.css">
+  <link rel="stylesheet" href="./css/portal.css">
   <style>
     .breadcrumb {
       display: flex; align-items: center; gap: 8px;
@@ -173,7 +173,7 @@
 <div class="portal-wrapper">
 
   <div class="breadcrumb">
-    <a href="/joc/"><i class="fas fa-home"></i> Portal SISKODAL</a>
+    <a href="./"><i class="fas fa-home"></i> Portal SISKODAL</a>
     <span class="sep">/</span>
     <span class="current">Integrasi ICR</span>
   </div>
@@ -240,11 +240,11 @@
 
   <!-- CTA -->
   <div class="back-wrapper" style="text-align:center; margin-top:40px;">
-    <a href="/joc/icr-dashboard.html" class="mp-cta" style="font-size:0.9rem; padding:12px 28px;">
+    <a href="./icr-dashboard.html" class="mp-cta" style="font-size:0.9rem; padding:12px 28px;">
       <i class="fas fa-satellite-dish"></i> Buka Dashboard ICR →
     </a>
     <div style="margin-top:20px;">
-      <a href="/joc/" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
+      <a href="./" style="display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.4); border-radius:10px; color:#60a5fa; text-decoration:none; font-family:inherit; font-size:0.85rem; font-weight:700; letter-spacing:1px;">
         <i class="fas fa-arrow-left"></i> Kembali ke Portal
       </a>
     </div>
@@ -268,8 +268,8 @@
 
 </div>
 
-<script src="/joc/js/icr-core.js" data-cfasync="false"></script>
-<script src="/joc/js/icr-sensor-topology.js" data-cfasync="false"></script>
+<script src="./js/icr-core.js" data-cfasync="false"></script>
+<script src="./js/icr-sensor-topology.js" data-cfasync="false"></script>
 <script>
   (function init() {
     // Render disciplines
@@ -312,7 +312,7 @@
         <div class="mp-tags">
           ${p.natoFormats.map(f => `<span class="mp-tag" style="background:rgba(168,85,247,0.15); color:#c084fc; border-color:rgba(168,85,247,0.3);">${f.replace('_',' ')}</span>`).join('')}
         </div>
-        <a href="/joc/icr-dashboard.html?matra=${matra}" class="mp-cta">
+        <a href="./icr-dashboard.html?matra=${matra}" class="mp-cta">
           <i class="fas fa-arrow-right"></i> Buka Dashboard ${p.code}
         </a>
       `;

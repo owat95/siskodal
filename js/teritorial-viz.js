@@ -81,14 +81,14 @@ const TeritorialViz = (() => {
     kodamData = window.TERITORIAL_DATA;
     if (!kodamData) {
       // Fallback: load via fetch
-      const resp = await fetch('/joc/data/teritorial-data.json');
+      const resp = await fetch('./data/teritorial-data.json');
       kodamData = await resp.json();
       window.TERITORIAL_DATA = kodamData;
     }
 
     // Load GeoJSON
     try {
-      const geoResp = await fetch('/joc/data/indonesia-provinces.geojson');
+      const geoResp = await fetch('./data/indonesia-provinces.geojson');
       geojsonData = await geoResp.json();
     } catch (err) {
       console.error('[TERITORIAL] Failed to load GeoJSON:', err);

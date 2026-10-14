@@ -139,7 +139,7 @@ if (typeof window !== 'undefined') window.Classification = Classification;
 if (typeof window !== 'undefined' && !window.__mobileNoticeLoaded) {
   window.__mobileNoticeLoaded = true;
   const s = document.createElement('script');
-  s.src = '/joc/js/mobile-notice.js?v=1.0';
+  s.src = './js/mobile-notice.js?v=1.0';
   s.setAttribute('data-cfasync', 'false');
   document.head.appendChild(s);
 }

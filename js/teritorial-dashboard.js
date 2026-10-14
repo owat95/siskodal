@@ -18,7 +18,7 @@ const TeritorialDashboard = (() => {
     console.log('[TER-DASH] Initializing...');
 
     // Load data
-    const resp = await fetch('/joc/data/teritorial-data.json');
+    const resp = await fetch('./data/teritorial-data.json');
     kodamData = await resp.json();
     window.TERITORIAL_DATA = kodamData;
 
@@ -303,10 +303,10 @@ const TeritorialDashboard = (() => {
       </div>
 
       <div class="dp-actions">
-        <a href="/joc/dashboard-ad.html" class="dp-action-btn primary">
+        <a href="./dashboard-ad.html" class="dp-action-btn primary">
           <i class="fas fa-users"></i> Lihat Personel
         </a>
-        <a href="/joc/dashboard-logistik-ad.html" class="dp-action-btn secondary">
+        <a href="./dashboard-logistik-ad.html" class="dp-action-btn secondary">
           <i class="fas fa-boxes"></i> Logistik
         </a>
       </div>
