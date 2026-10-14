@@ -142,7 +142,7 @@ function flagEmoji(cc) {
 
 
 function loadData() {
-  fetch('json/' + currentHost + '.json?t=' + Date.now())
+  fetch('/json/' + currentHost + '.json?t=' + Date.now())
     .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(function(data) {
       renderDashboard(data);
@@ -151,7 +151,7 @@ function loadData() {
     .catch(function(e) { console.error('[DASHBOARD]', e); });
 
   if (currentHost === 'all') {
-    fetch('json/cities.json?t=' + Date.now())
+    fetch('/json/cities.json?t=' + Date.now())
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data && data.cities) {

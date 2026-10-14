@@ -20,7 +20,7 @@
       "asn": 16509,
       "org": "Amazon.com, Inc.",
       "is_cloud": true,
-      "hits": 9
+      "hits": 10
     },
     {
       "ip": "216.73.216.196",
@@ -574,7 +574,7 @@
       "asn": 16509,
       "org": "Amazon.com, Inc.",
       "is_cloud": true,
-      "hits": 18,
+      "hits": 19,
       "ips": 3
     },
     {
