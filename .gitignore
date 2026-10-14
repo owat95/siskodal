@@ -1,0 +1,22 @@
+﻿# Backup files
+*.bak
+*.bak-*
+*.backup-*
+*.old
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# Sensitive (jaga-jaga)
+.env
+credentials.json
+secrets.json
